@@ -60,5 +60,24 @@
         </div>
       </div>
     </div>
+    <div class="row mb-5">
+      <div class="offset-1 col-10">
+        <div [hidden]="!chart2">
+          <canvas id="mainChart">{{ chart2 }}</canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="offset-1 col-5">
+        <div [hidden]="!chart3">
+          <canvas id="leftChart">{{ chart3 }}</canvas>
+        </div>
+      </div>
+      <div class="col-5">
+        <div [hidden]="!chart1">
+          <canvas id="rightChart">{{ chart1 }}</canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

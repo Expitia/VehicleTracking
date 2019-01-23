@@ -1,0 +1,112 @@
+/* BODY FONT */
+body {
+    font-size: 14px;
+    font-family: "proxima-nova",sans-serif;
+    font-weight: 500;
+}
+/* PRIMARY BUTTON COLOR */
+.btn-primary {
+    color: #fff;
+    background-color: #16a1a0;
+    border-color: #16a1a0;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #007e7e;
+    border-color: #007e7e;
+}
+.make-payment-content .btn {
+    background-color: #16a1a0 !important;
+}
+/* SECONDARY BUTTON COLOR */
+.btn-info {
+    background-color: #e5e5e5 !important;
+    border: 0px solid #e5e5e5 !important;
+    color: black !important;
+    font-weight: 600 !important;
+}
+.btn-secondary {
+    color: #fff;
+    background-color: #5b5b5b;
+    border-color: #5b5b5b;
+}
+/*HEADER COLOR */
+header>div.bg-white {
+    background-color:#f2f1f3 !important;
+}
+/* MAIN MENU COLORS */
+.menu-container {
+    background-color: #fff !important;
+}
+.menu-container a {
+    color: #404041 !important;
+}
+.menu-container nav > ul > li:hover > ul {
+    background-color: #16a1a0 !important;
+}
+.menu-container  nav  > ul  > li.active {
+    background-color: #007e7e !important;
+}
+.menu-container  nav  > ul  > li.active a {
+    color: #fff !important;
+}
+.menu-container nav > ul > li:hover {
+    background-color: #007e7e !important;
+}
+.menu-container nav > ul > li:hover a {
+    color: #fff !important;
+}
+.menu-container nav > ul > li > ul li:hover {
+    background-color: #007e7e !important;
+}
+.menu-container nav > ul > li > ul li:hover a {
+    color: #fff !important;
+}
+/* TABS COLOR */
+.menu-account li.active {
+    background-color: #16a1a0;
+    color: white;
+}
+/* PROFILE SIDE MENU */
+.profile-menu-container nav li a.active {
+    color: #ffffff !important;
+    background-color: #007e7e !important;
+}
+.profile-menu-container nav li a:hover {
+    background-color: #16a1a0 !important;
+    color: #fff !important;
+}
+/*DATA TABLES */
+.ngx-datatable.bootstrap .datatable-header {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+    border-bottom: 1px solid #d1d4d7; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
+    border-top: 0px solid #d1d4d7;
+    border-bottom: 1px solid lightgray;
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-even {
+    background-color:white; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-odd {
+    background-color:whitesmoke; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.active {
+    background-color: #1483ff;
+    color: #FFF; 
+}
+.ngx-datatable.bootstrap .datatable-footer {
+    background: white;
+    color: black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li {
+    color:black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a, .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager a {
+    color:black;
+}

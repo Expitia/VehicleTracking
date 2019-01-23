@@ -1,0 +1,112 @@
+/* BODY FONT */
+body {
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+}
+/* PRIMARY BUTTON COLOR */
+.btn-primary {
+    color: #fff;
+    background-color: #9abd4f;
+    border-color: #9abd4f;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #8eb53b;
+    border-color: #8eb53b;
+}
+.btn-primary:not(:disabled):not(.disabled).active, 
+.btn-primary:not(:disabled):not(.disabled):active, 
+.show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #8eb53b;
+    border-color: #8eb53b;
+}
+.make-payment-content .btn {
+    background-color: #9abd4f !important;
+}
+/* SECONDARY BUTTON COLOR */
+.btn-info {
+    background-color: #e5e5e5 !important;
+    border: 0px solid #e5e5e5 !important;
+    color: black !important;
+    font-weight: 600 !important;
+}
+.btn-secondary {
+    color: #fff;
+    background-color: #939393;
+    border-color: #939393;
+}
+/* MAIN MENU COLORS */
+.menu-container {
+    background-color: #939393 !important;
+}
+.menu-container nav > ul > li:hover > ul {
+    background-color: #939393 !important;
+}
+.menu-container  nav  > ul  > li.active {
+    background-color: #004d9b !important;
+}
+.menu-container nav > ul > li:hover {
+    background-color: #004d9b !important;
+}
+.menu-container nav > ul > li > ul li:hover {
+    background-color: #004d9b !important;
+}
+/* TABS COLOR */
+.menu-account li.active {
+    background-color: #8eb53b;
+    color: white;
+}
+/* PROFILE SIDE MENU */
+.profile-menu-container nav li a.active {
+    color: #ffffff !important;
+    background-color: #004d9b !important;
+}
+.profile-menu-container nav li a:hover {
+    background-color: #cccccc !important;
+    color: #666 !important;
+}
+/* BULLETS */
+.bullet.active {
+    background-color: #8eb53b;
+    border: 2px solid #8eb53b;
+}
+/* RADIO BUTTON */
+.radiocontainer .checkmark:after {
+    background: #8eb53b;
+}
+/*DATA TABLES */
+.ngx-datatable.bootstrap .datatable-header {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+    border-bottom: 1px solid #d1d4d7; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
+    border-top: 0px solid #d1d4d7;
+    border-bottom: 1px solid lightgray;
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-even {
+    background-color:white; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-odd {
+    background-color:whitesmoke; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.active {
+    background-color: #1483ff;
+    color: #FFF; 
+}
+.ngx-datatable.bootstrap .datatable-footer {
+    background: white;
+    color: black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li {
+    color:black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a, .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager a {
+    color:black;
+}

@@ -1,0 +1,96 @@
+/* BODY FONT */
+body {
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+}
+/* PRIMARY BUTTON COLOR */
+.btn-primary {
+    color: #fff;
+    background-color: #2870ac;
+    border-color: #2870ac;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #2870ac;
+    border-color: #2870ac;
+}
+.make-payment-content .btn {
+    background-color: #2870ac !important;
+}
+/* SECONDARY BUTTON COLOR */
+.btn-info {
+    background-color: #e5e5e5 !important;
+    border: 0px solid #e5e5e5 !important;
+    color: black !important;
+    font-weight: 600 !important;
+}
+.btn-secondary {
+    color: #fff;
+    background-color: #5b5b5b;
+    border-color: #5b5b5b;
+}
+/* MAIN MENU COLORS */
+.menu-container {
+    background-color: #5b5b5b !important;
+}
+.menu-container nav > ul > li:hover > ul {
+    background-color: #5b5b5b !important;
+}
+.menu-container  nav  > ul  > li.active {
+    background-color: #2870ac !important;
+}
+.menu-container nav > ul > li:hover {
+    background-color: #2870ac !important;
+}
+.menu-container nav > ul > li > ul li:hover {
+    background-color: #82bde7 !important;
+}
+/* TABS COLOR */
+.menu-account li.active {
+    background-color: #2870ac;
+    color: white;
+}
+/* PROFILE SIDE MENU */
+.profile-menu-container nav li a.active {
+    color: #ffffff !important;
+    background-color: #2870ac !important;
+}
+.profile-menu-container nav li a:hover {
+    background-color: #82bde7 !important;
+    color: #fff !important;
+}
+/*DATA TABLES */
+.ngx-datatable.bootstrap .datatable-header {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+    border-bottom: 1px solid #d1d4d7; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
+    border-top: 0px solid #d1d4d7;
+    border-bottom: 1px solid lightgray;
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-even {
+    background-color:white; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-odd {
+    background-color:whitesmoke; 
+}
+.ngx-datatable.bootstrap .datatable-body .datatable-body-row.active {
+    background-color: #1483ff;
+    color: #FFF; 
+}
+.ngx-datatable.bootstrap .datatable-footer {
+    background: white;
+    color: black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li {
+    color:black;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a, .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
+    background-color: lightgray;
+}
+.ngx-datatable.bootstrap .datatable-footer .datatable-pager a {
+    color:black;
+}

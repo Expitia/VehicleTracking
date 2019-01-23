@@ -1,0 +1,589 @@
+<div class="w-100 h-100">
+  <div class="container h-75 pt-4">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+                <span class="lead"><b>Usuarios</b></span>
+                <div class="d-flex justify-content-end align-items-center">
+                    <div class="d-flex justify-content-end align-items-center mr-2" style="cursor: pointer" [ngbPopover]="popSearch" [popoverTitle]="popSearchTitle" [autoClose]="'outside'" placement="bottom">
+                        <i class="fa fa-search nav-item-icon"></i>
+                        <span class="pl-2">Buscar</span>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center ml-2" style="cursor: pointer" [ngbPopover]="popOptions" [popoverTitle]="popOptionsTitle" [autoClose]="'outside'" #optionPopover="ngbPopover" placement="bottom">
+                        <i class="fa fa-plus-circle nav-item-icon"></i>
+                        <span class="pl-2">Opciones</span>
+                    </div>
+                </div>
+            </div>
+    <mat-tab-group>
+      <mat-tab label="Tipos de vehiculos">
+        <div
+          class="bg-white shadow border-left border-right border-bottom border-2"
+        >
+          <mat-table [dataSource]="typesSource" matSort>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell
+                style="max-width: 60px;"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                ID
+              </mat-header-cell>
+              <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                {{ row["ID"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Nombre
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Nombre"] }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="typesColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: typesColumns"> </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Modelos">
+        <div
+          class="bg-white shadow border-left border-right border-bottom border-2"
+        >
+          <mat-table [dataSource]="modelsSource" matSort>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell
+                style="max-width: 60px;"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                ID
+              </mat-header-cell>
+              <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                {{ row["ID"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Nombre
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Nombre"] }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="modelsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: modelsColumns"> </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Sistemas">
+        <div
+          class="bg-white shadow border-left border-right border-bottom border-2"
+        >
+          <mat-table [dataSource]="systemsSource" matSort>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell
+                style="max-width: 60px;"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                ID
+              </mat-header-cell>
+              <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                {{ row["ID"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Nombre
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Nombre"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Modelo">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Modelo
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Modelo"] }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="systemsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: systemsColumns"> </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Compartimientos">
+        <div
+          class="bg-white shadow border-left border-right border-bottom border-2"
+        >
+          <mat-table [dataSource]="componentsSource" matSort>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell
+                style="max-width: 60px;"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                ID
+              </mat-header-cell>
+              <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                {{ row["ID"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Nombre
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Nombre"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Sistema">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Sistema
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Sistema"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Modelo">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Modelo
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Modelo"] }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="componentsColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: componentsColumns">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Actividades">
+        <div
+          class="bg-white shadow border-left border-right border-bottom border-2"
+        >
+          <mat-table [dataSource]="activitiesSource" matSort>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell
+                style="max-width: 60px;"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                ID
+              </mat-header-cell>
+              <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                {{ row["ID"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Nombre
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Nombre"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Compartimiento">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Compartimiento
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Compartimiento"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Sistema">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Sistema
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Sistema"] }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Modelo">
+              <mat-header-cell
+                class="d-flex align-items-center justify-content-start"
+                *matHeaderCellDef
+                mat-sort-header
+              >
+                Modelo
+              </mat-header-cell>
+              <mat-cell
+                class="d-flex align-items-center justify-content-start"
+                *matCellDef="let row"
+              >
+                {{ row["Modelo"] }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="activitiesColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: activitiesColumns">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <ng-template #popOptions>
+            <div class="d-flex justify-content-start flex-column">
+                <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate1, 'md');
+                      optionPopover.close();
+                      onOpenCreate1()" style="cursor: pointer">
+                    <i class="fa fa-plus-circle nav-item-icon"></i>
+                    <span class="pl-2">Crear nuevo tipo de vehiculo</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mt-1"
+                      (click)="onOpenModal(contentCreate2, 'md');
+                      optionPopover.close();
+                      onOpenCreate2()"
+                    style="cursor: pointer">
+                    <i class="fa fa-plus-circle nav-item-icon"></i>
+                    <span class="pl-2">Crear nuevo modelo</span>
+                  </div>
+                  <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate3, 'md');
+                      optionPopover.close();
+                      onOpenCreate3()" style="cursor: pointer">
+                    <i class="fa fa-plus-circle nav-item-icon"></i>
+                    <span class="pl-2">Crear nuevo sistema</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate4, 'md');
+                      optionPopover.close();
+                      onOpenCreate4()" style="cursor: pointer">
+                    <i class="fa fa-plus-circle nav-item-icon"></i>
+                    <span class="pl-2">Crear nuevo compartimiento</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate5, 'md');
+                      optionPopover.close();
+                      onOpenCreate5()" style="cursor: pointer">
+                    <i class="fa fa-plus-circle nav-item-icon"></i>
+                    <span class="pl-2">Crear nueva actividad</span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #contentCreate1 let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Nuevo tipo de vehiculo</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="vehicleTypeModal" onsubmit="return false">
+        <span class="lead">Datos del nuevo tipo de vehiculo</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="vehicleTypeModal"
+            [fieldName]="'vehicle_type'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLength1"
+            [validationMessages]="validateMessages1"
+          >
+          </app-textfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate1(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentCreate2 let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Nuevo componente</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="modelModal" onsubmit="return false">
+        <span class="lead">Datos del nuevo componente</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="modelModal"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLength2"
+            [validationMessages]="validateMessages2"
+          >
+          </app-textfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate2(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentCreate3 let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Nuevo sistema</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="systemModal" onsubmit="return false">
+        <span class="lead">Datos del nuevo sistema</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="systemModal"
+            [fieldName]="'system'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLength3"
+            [validationMessages]="validateMessages3"
+          >
+          </app-textfield>
+          <app-selectfield
+            [inputForm]="systemModal"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages3"
+          >
+          </app-selectfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate3(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentCreate4 let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Nuevo compartimiento</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="componentModal" onsubmit="return false">
+        <span class="lead">Datos del nuevo compartimiento</span>
+        <hr/>
+        <section>
+          <app-textfield
+            [inputForm]="componentModal"
+            [fieldName]="'component'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLength4"
+            [validationMessages]="validateMessages4"
+          >
+          </app-textfield>
+          <app-selectfield
+            [inputForm]="componentModal"
+            [options]="systemList"
+            [fieldName]="'system'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages4"
+          >
+          </app-selectfield>
+          <app-selectfield
+            [inputForm]="componentModal"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages4"
+          >
+          </app-selectfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate4(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentCreate5 let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Nueva actividad</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="activityModal" onsubmit="return false">
+        <span class="lead">Datos de la nueva actividad</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="activityModal"
+            [fieldName]="'activity'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLength5"
+            [validationMessages]="validateMessages5"
+          >
+          </app-textfield>
+          <app-selectfield
+            [inputForm]="activityModal"
+            [options]="componentList"
+            [fieldName]="'component'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages5"
+          >
+          </app-selectfield>
+          <app-selectfield
+            [inputForm]="activityModal"
+            [options]="systemList"
+            [fieldName]="'system'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages5"
+          >
+          </app-selectfield>
+          <app-selectfield
+            [inputForm]="activityModal"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validateMessages5"
+          >
+          </app-selectfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate5(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+      </button>
+    </div>
+  </ng-template>
+  </div>
+</div>

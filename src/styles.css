@@ -1,0 +1,213 @@
+@import url("./assets/fonts/themify/themify.css");
+@import url("./assets/fonts/fontawesome-free-5.6.0-web/css/all.css");
+@import url("https://fonts.googleapis.com/css?family=Rubik:300,400,500,600,700");
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../node_modules/leaflet/dist/leaflet.css";
+
+body {
+  font-size: 14px;
+  font-family: "Rubik", sans-serif;
+  background-color: #f8f9fa !important;
+}
+
+.border-1 {
+  border-width: 1px !important;
+}
+.border-2 {
+  border-width: 2px !important;
+}
+.border-3 {
+  border-width: 3px !important;
+}
+
+.btn-green {
+  border-color: #8dc329;
+  background-color: #8dc329;
+}
+
+.bg-green {
+  border-color: #8dc329;
+  background-color: #d8f597 !important;
+}
+
+.bg-pink {
+  background-color: #faa399 !important;
+}
+
+.bg-purple {
+  background-color: #d096f7 !important;
+}
+
+.bg-gray {
+  background-color: #ededed !important;
+}
+
+.bg-darklight {
+  background-color: #343a40 !important;
+}
+
+.bg-darknight {
+  background-color: #1e2129 !important;
+}
+
+.bg-cian {
+  background-color: #34b8a1 !important;
+}
+
+.text-whitenight {
+  color: #7f879b !important;
+}
+
+.text-wrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overlay {
+  opacity: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1500;
+  position: absolute;
+  background: black;
+}
+
+.overlay.show-overlay {
+  opacity: 0.5;
+  transition: opacity 0.8s;
+  -o-transition: opacity 0.8s;
+  -moz-transition: opacity 0.8s;
+  -webkit-transition: opacity 0.8s;
+}
+
+.overlay.hide-overlay {
+  opacity: 0;
+  transition: opacity 0.8s;
+  -o-transition: opacity 0.8s;
+  -moz-transition: opacity 0.8s;
+  -webkit-transition: opacity 0.8s;
+}
+
+.float-content .navbar.main-menu {
+  height: 50px;
+}
+
+.float-content .navbar.main-menu .float-menu-desktop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 300px;
+  height: 100vh;
+  z-index: 1500;
+}
+
+.placeholder-dark::placeholder {
+  color: #343a40 !important;
+}
+
+.float-content .navbar.main-menu .float-menu-desktop.float-menu-close {
+  left: -240px;
+  transition: left 0.5s;
+  -o-transition: left 0.5s;
+  -moz-transition: left 0.5s;
+  -webkit-transition: left 0.5s;
+}
+
+.float-content .navbar.main-menu .float-menu-desktop.float-menu-open {
+  left: 0px;
+  transition: left 0.5s;
+  -o-transition: left 0.5s;
+  -moz-transition: left 0.5s;
+  -webkit-transition: left 0.5s;
+}
+
+.float-content .navbar.main-menu .float-menu .navbar-nav .nav-item {
+  height: 40px;
+  font-size: 0.875rem;
+}
+
+.float-content
+  .navbar.main-menu
+  .float-menu
+  .navbar-nav
+  .nav-item
+  .nav-item-icon {
+  font-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+  margin-right: 25px;
+}
+
+.float-content .navbar.main-menu .float-menu .navbar-nav .nav-item:hover {
+  cursor: pointer;
+}
+
+.float-content
+  .navbar.main-menu
+  .float-menu
+  .navbar-nav
+  .nav-item:hover
+  .text-whitenight {
+  color: white !important;
+}
+
+.float-content .navbar.main-menu .float-menu .nav-header {
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+.float-content .navbar.main-menu .float-menu .nav-header .navbar-button {
+  margin-right: 15px;
+}
+
+/* .slideThree */
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: #333;
+  position: relative;
+  border-radius: 50px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5),
+    0px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.slideThree:after {
+  content: "OFF";
+  color: #fff;
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+.slideThree:before {
+  content: "ON";
+  color: #27ae60;
+  position: absolute;
+  left: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+}
+.slideThree label {
+  display: block;
+  width: 34px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fcfff4;
+  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.slideThree input[type="checkbox"] {
+  visibility: hidden;
+}
+.slideThree input[type="checkbox"]:checked + label {
+  left: 43px;
+}

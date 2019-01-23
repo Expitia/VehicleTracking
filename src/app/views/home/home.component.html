@@ -1,0 +1,64 @@
+<div class="w-100 h-100">
+  <div class="container">
+    <div class="p-3">
+      <span class="lead"><b>Dashboard</b></span>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header">Total Usuarios</div>
+          <div class="card-body">
+            <i class="fa fa-users nav-item-icon text-white"></i> <br />
+            <span class="card-text mt-1">{{ users }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card text-white bg-danger mb-3">
+          <div class="card-header">Alertas Pendientes</div>
+          <div class="card-body">
+            <i class="fas fa-exclamation-triangle nav-item-icon text-white"></i>
+            <br />
+            <span class="card-text mt-1">{{ alerts }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">Sintomas Vehiculos</div>
+          <div class="card-body">
+            <i class="fas fa-exclamation nav-item-icon text-white"></i> <br />
+            <span class="card-text mt-1">{{ symptoms }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card text-white bg-cian mb-3">
+          <div class="card-header">Total Vehiculos</div>
+          <div class="card-body">
+            <i class="fas fa-truck-moving nav-item-icon text-white"></i> <br />
+            <span class="card-text mt-1">{{ vehicles }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card text-white bg-purple mb-3">
+          <div class="card-header">Mantenimientos Realizados</div>
+          <div class="card-body">
+            <i class="fas fa-wrench nav-item-icon text-white"></i> <br />
+            <span class="card-text mt-1">{{ maintenances }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-light mb-3">
+          <div class="card-header">Galones Consumidos</div>
+          <div class="card-body">
+            <i class="fas fa-gas-pump nav-item-icon"></i> <br />
+            <span class="card-text mt-1">{{ oils }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

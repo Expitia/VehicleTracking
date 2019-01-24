@@ -1,91 +1,86 @@
-import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
-import { BaseComponent } from '../base.component';
-import { toGTMformat } from '../../utils/dateutils';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExcelService } from '../../services/excel.services';
-import { UserService } from '../../services/user.services';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDatepicker, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from "@angular/router";
+import { FormBuilder } from "@angular/forms";
+import { BaseComponent } from "../base.component";
+import { toGTMformat } from "../../utils/dateutils";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ExcelService } from "../../services/excel.services";
+import { UserService } from "../../services/user.services";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html'
+  selector: "app-users",
+  templateUrl: "./users.component.html"
 })
 
 /**
  * @public
  * @class UsersComponent
- * 
+ *
  * Clase para la información de los usuarios
  */
 export class UsersComponent extends BaseComponent implements OnInit {
-
+  // Columnas de despliegue en la vista
   displayedColumns = [
-    'ID',
+    "ID",
     "Nombre",
     "Apellido",
     "Email usuario",
     "Fecha de registro",
     "Rol",
-    'Estado',
+    "Estado",
     "Detalle"
   ];
-
+  // Columnas de exportación de datos
   rowsExcel = {
-    'ID': false,
+    ID: true,
     "Email usuario": true,
     "Fecha de registro": true,
-    "Rol": true,
-    'Estado': true
-  }
-
-  statesList = [
-    "OK"
-  ];
-
-  roleList = [
-    "admin"
-  ];
-
-  searchData = {
-    "email": "",
-    "date": null,
-    "rol": "",
-    "estado": ""
+    Rol: true,
+    Estado: true
   };
-
+  // Lista de estados del usuario
+  statesList = [];
+  // Lista de roles del usuario
+  roleList = [];
+  // Objeto para el filtro de información
+  searchData = {
+    email: "",
+    date: null,
+    rol: "",
+    estado: ""
+  };
+  // Información de la tabla a visualizar
   dataSource: MatTableDataSource<any>;
-
+  // Paginador de la tabla de usuarios
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  // Ordenador de la tabla de usuarios
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-  
+
   /**
-	 * @private
-	 * @method constructor
-	 */	
-  constructor(router: Router, formBuilder: FormBuilder, private modalService: NgbModal, private excelService:ExcelService, private userService:UserService) { 
+   * @private
+   * @method constructor
+   */
+
+  constructor(
+    router: Router,
+    formBuilder: FormBuilder,
+    private modalService: NgbModal,
+    private excelService: ExcelService,
+    private userService: UserService
+  ) {
     super(router, formBuilder);
   }
-  
+
   /**
-	 * @private
-	 * @method ngOnInit 
-	 * Methodo del ciclo de vida de la vista
-	 */	
+   * @private
+   * @method ngOnInit
+   * Methodo del ciclo de vida de la vista
+   */
+
   ngOnInit() {
-    let users;
-
-     users = [{
-      'ID': 12,
-            "Email usuario": "test@lsa.com",
-            'Fecha de registro': new Date(),
-            "Rol": this.roleList[0],
-            "Estado": "OK"
-    }];
-
-     this.fieldProps = {
+    // Información del formulario
+    this.fieldProps = {
       id: {
         minlength: "",
         maxlength: "",
@@ -98,28 +93,28 @@ export class UsersComponent extends BaseComponent implements OnInit {
           required: ""
         }
       },
-      nombre: {
+      nombres: {
         minlength: "3",
         maxlength: "100",
         required: true,
         messages: {
           label: "",
           placeholder: "Nombre usuario",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
+          minlength: "Los nombres debe tener un mínimo de 3 carracteres",
+          maxlength: "Los nombres no puede superar los 100 carracteres",
+          required: "Debe ingresar los nombres"
         }
       },
-      apellido: {
+      apellidos: {
         minlength: "3",
         maxlength: "100",
         required: true,
         messages: {
           label: "",
           placeholder: "Apellidos",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
+          minlength: "Los apellidos deben tener un mínimo de 3 carracteres",
+          maxlength: "Los apellidos no pueden superar los 100 carracteres",
+          required: "Debe ingresar los apellidos"
         }
       },
       email: {
@@ -129,9 +124,9 @@ export class UsersComponent extends BaseComponent implements OnInit {
         messages: {
           label: "",
           placeholder: "Email",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
+          minlength: "El email debe tener un mínimo de 3 carracteres",
+          maxlength: "El email no puede superar los 100 carracteres",
+          required: "Debe ingresar un email"
         }
       },
       register_date: {
@@ -167,79 +162,101 @@ export class UsersComponent extends BaseComponent implements OnInit {
           placeholder: "Estado",
           minlength: "",
           maxlength: "",
-          required: ""
+          required: "Seleccione un estado valido"
         }
       }
     };
-
-    this.dataSource = new MatTableDataSource(users);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
     super.ngOnInit();
   }
 
   /**
    * @private
-   * @method ngAfterViewInit 
+   * @method ngAfterViewInit
    * Methodo del ciclo de vida de la vista
-   */  
+   */
+
   ngAfterViewInit() {
-    //Se debe cargar de base de datos
-    let users = [];
-    
-    this.userService.userInfo().then((resp: any) => {
-      users = users.concat(resp.map((item: any) => {
-        return {
-            'ID': item.id,
-            "Nombre": item.nombres,
-            "Apellido": item.apellidos,
+    // Obtenemos la información de los usuarios
+    this.userService.userInfo().then(
+      (resp: any) => {
+        let users = resp.map((item: any) => {
+          return {
+            ID: item.id,
+            Nombre: item.nombres,
+            Apellido: item.apellidos,
             "Email usuario": item.email,
-            'Fecha de registro': item.fecha_registro,
-            "Rol": item.rol,
-            "Estado": item.estado
-          }; 
-      }));
-
-      this.dataSource = new MatTableDataSource(users);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }, (error: any) => {
-      console.error("Unable to load data");
-    });
-  }
-  
-  /**
-   * @private
-   * @method onOpenExport 
-   * Methodo handler lanzado al momento dar click sobre exportar
-   */  
-  onOpenExport(content) {
-    this.modalService.open(content, { centered: true, size: 'lg' });
-  }
-
-    /**
-   * @private
-   * @method onExport 
-   * Methodo handler lanzado al momento de exportar los estilos
-   */  
-  onExport = function() {
-
-    this.excelService.exportAsExcelFile(this.dataSource.data.map(item => {
-      let excelRow = {...item};
-
-      for(let key in this.rowsExcel){
-        if(!this.rowsExcel[key]) delete excelRow[key];
+            Rol: item.roles_id, // Identificador del rol
+            Estado: item.estados_id, // Identificador del estado
+            "Fecha de registro": item.fecha_registro
+          };
+        });
+        this.dataSource = new MatTableDataSource(users);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (error: any) => {
+        console.error("Unable to load users data");
       }
-      return excelRow;
-    }), 'Usuarios');
+    );
+    // Obtenemos la información de los estados
+    this.userService.stateList().then(
+      (resp: any) => {
+        this.statesList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+      },
+      (error: any) => {
+        console.error("Unable to load state data");
+      }
+    );
+    // Obtenemos la información de los roles
+    this.userService.rolsList().then(
+      (resp: any) => {
+        this.roleList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+      },
+      (error: any) => {
+        console.error("Unable to load rols data");
+      }
+    );
   }
 
   /**
    * @private
-   * @method onMaxHours 
+   * @method onExport
+   * Methodo handler lanzado al momento de exportar los estilos
+   */
+
+  onExport = function() {
+    this.excelService.exportAsExcelFile(
+      this.dataSource.data.map(item => {
+        let excelRow = { ...item };
+
+        excelRow["Rol"] = this.showRol(excelRow["Rol"]);
+        excelRow["Estado"] = this.showState(excelRow["Estado"]);
+
+        for (let key in this.rowsExcel) {
+          if (!this.rowsExcel[key]) delete excelRow[key];
+        }
+        return excelRow;
+      }),
+      "Usuarios"
+    );
+  };
+
+  /**
+   * @private
+   * @method onChangeFilter
    * Methodo handler lanzado al momento de escribir sobre un campo de filtro
-   */  
+   */
+
   onChangeFilter(filterValue: string, key: string) {
     this.searchData[key] = filterValue;
     this.dataSource.filter = filterValue;
@@ -262,79 +279,125 @@ export class UsersComponent extends BaseComponent implements OnInit {
    */
   onOpenCreate() {
     this.form.controls.id.setValue("");
+    this.form.controls.nombres.setValue("");
+    this.form.controls.apellidos.setValue("");
     this.form.controls.email.setValue("");
-    this.form.controls.register_date.setValue(this.showDate(new Date()));
     this.form.controls.role.setValue("");
     this.form.controls.status.setValue("");
+    this.form.controls.register_date.setValue("");
   }
 
   /**
    * @private
-   * @method onMaxHours 
+   * @method onChangeCheck
    * Methodo handler lanzado al momento de hacer click sobre un check
-   */  
+   */
+
   onChangeCheck(key: string) {
     this.rowsExcel[key] = !this.rowsExcel[key];
   }
 
-  
   /**
    * @private
-   * @method onMaxHours 
+   * @method showDate
    * Methodo para visualizar las fechas
-   */  
-  showDate(date: Date){
-    return date ? toGTMformat(date): "-";
+   */
+
+  showDate(date: Date) {
+    return date ? toGTMformat(date) : "-";
   }
 
-  onCreate(){
-    let index = -1;
+  /**
+   * @private
+   * @method showState
+   * Methodo para visualizar un estado dado el identificador
+   */
 
+  showState(id: number) {
+    return this.statesList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
+   * @method showRol
+   * Methodo para visualizar un rol dado el identificador
+   */
+
+  showRol(id: number) {
+    return this.roleList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
+   * @method onEdit
+   * Methodo para editar un usuario
+   */
+  onEdit() {
+    let index = -1;
     this.formSubmitted = true;
 
-    if (this.form.valid){
-      debugger;
-      if (this.form.value.id){
-        index = this.dataSource.data.findIndex(item => {
-          return item.ID === this.form.value.id; 
+    if (this.form.valid) {
+      index = this.dataSource.data.findIndex(item => {
+        return item.ID === this.form.value.id;
+      });
+      this.dataSource.data = this.dataSource.data.map((item, idx) => {
+        let newItem = item;
+        // En caso de corresponder al identificador que estamos buscando
+        if (index === idx) {
+          // Consumimos el servicio para editarlo
+          this.userService.editUser({
+            id: this.form.value.id,
+            nombres: this.form.value.nombres,
+            apellidos: this.form.value.apellidos,
+            email: this.form.value.email,
+            estados_id: this.form.value.status
+          });
+          // Si se cumple exitosamente editamos el objeto
+          newItem = {
+            ID: this.form.value.id,
+            Nombre: this.form.value.nombres,
+            Apellido: this.form.value.apellidos,
+            "Email usuario": this.form.value.email,
+            "Fecha de registro": item["Fecha de registro"],
+            Rol: item["Rol"],
+            Estado: this.form.value.status,
+            Detalle: this.form.value.id
+          };
+        }
+        return newItem;
+      });
+    }
+  }
+  /**
+   * @private
+   * @method onCreate
+   * Methodo para crear un usuario
+   */
+  onCreate() {
+    this.formSubmitted = true;
+
+    if (this.form.valid) {
+      this.userService
+        .saveUser({
+          nombres: this.form.value.nombres,
+          apellidos: this.form.value.apellidos,
+          email: this.form.value.email,
+          estados_id: this.form.value.status,
+          rol_id: this.form.value.role
+        })
+        .then((resp: any) => {
+          // Si existe un ID es porque se editara un registro
+          this.dataSource.data = this.dataSource.data.concat({
+            ID: resp.id,
+            Nombre: this.form.value.nombres,
+            Apellido: this.form.value.apellidos,
+            "Email usuario": this.form.value.email,
+            "Fecha de registro": resp.date,
+            Rol: this.form.value.role,
+            Estado: this.form.value.status,
+            Detalle: resp.id
+          });
         });
-        /*
-        this.dataSource.data[index] = {
-          ID: this.form.value.id,
-          Nombre: this.form.value.nombre,
-          Apellido: this.form.value.apellido,
-          "Email usuario": this.form.value.email,
-          "Fecha de registro": this.form.value.register_date,
-          Rol: this.form.value.role,
-          Estado: this.form.value.status
-        };
-        */
-        this.dataSource.data = this.dataSource.data.map((item, idx) => {
-          if (index === idx){
-            return {
-              ID: this.form.value.id,
-              Nombre: this.form.value.nombre,
-              Apellido: this.form.value.apellido,
-              "Email usuario": this.form.value.email,
-              "Fecha de registro": this.form.value.register_date,
-              Rol: this.form.value.role,
-              Estado: this.form.value.status
-            }
-          } else {
-            return item;
-          }
-        });
-      }else{
-        this.dataSource.data = this.dataSource.data.concat({
-          ID: Math.round(Math.random()*50),
-          Nombre: this.form.value.nombre,
-          Apellido: this.form.value.apellido,
-          "Email usuario": this.form.value.email,
-          "Fecha de registro": this.form.value.register_date,
-          Rol: this.form.value.role,
-          Estado: this.form.value.status
-        });
-      }
     }
   }
 
@@ -345,11 +408,10 @@ export class UsersComponent extends BaseComponent implements OnInit {
    */
   onOpenEdit(row) {
     this.form.controls.id.setValue(row["ID"]);
-    this.form.controls.nombre.setValue(row["Nombre"]);
-    this.form.controls.apellido.setValue(row["Apellido"]);
+    this.form.controls.nombres.setValue(row["Nombre"]);
+    this.form.controls.apellidos.setValue(row["Apellido"]);
     this.form.controls.email.setValue(row["Email usuario"]);
     this.form.controls.role.setValue(row["Rol"]);
     this.form.controls.status.setValue(row["Estado"]);
   }
-
 }

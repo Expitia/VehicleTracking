@@ -10,7 +10,7 @@ export class SelectfieldComponent implements OnInit {
   @Input() fieldName: string;
   @Input() showHelp: boolean;
   @Input() inputForm: FormGroup;
-  @Input() options: string[];
+  @Input() options: Array<any>;
   @Input() formSubmitted: boolean;
   @Input() validationMessages: any;
   @Input() disabled: boolean = false;
@@ -18,6 +18,8 @@ export class SelectfieldComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {}
 
   onClickOption(event: any) {}
 

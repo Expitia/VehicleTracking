@@ -1,32 +1,77 @@
 <div [formGroup]="inputForm">
-
-	<div class="form-group" 
-		[ngClass]="{
-           	'has-feedback': formSubmitted && inputForm.controls[fieldName].errors,
-			   'has-error': formSubmitted && inputForm.controls[fieldName].errors,
-			   'has-error': formSubmitted && inputForm.controls[fieldName].errors}">
-			   
-		<label *ngIf="validationMessages[fieldName]['label']"><span>{{validationMessages[fieldName]['label']}}<span *ngIf="validationMessages[fieldName]['required']">*</span></span></label>
-		<div class="help">
-			<select 
-				(blur)="onBlurMethod($event)"  
-				formControlName='{{fieldName}}' 
-				(change)="onClickOption($event)" 
-				[attr.disabled]="disabled ? '' : null"
-				value="{{!inputForm.controls[fieldName] ? '' : inputForm.controls[fieldName].value}}"
-				[ngClass]="{'border border-danger': formSubmitted && inputForm.controls[fieldName].errors}"
-				class="form-control txt border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0">
-				
-				<option value="">{{validationMessages[fieldName]['placeholder']}}</option>
-				<option *ngFor="let option of options" value="{{option}}">{{option}}</option>	
-			</select>			
-			<a *ngIf="showHelp" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content=""><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-		</div>
-		<span *ngIf="formSubmitted  && inputForm.controls[fieldName].errors" class="help-block text-danger" style="font-size: 9pt">
-				<span style="font-size: 9pt" [hidden]="!inputForm.controls[fieldName].errors.required">{{validationMessages[fieldName]['required']}}</span>
-				<span style="font-size: 9pt" [hidden]="!inputForm.controls[fieldName].errors.patternInvalid">{{validationMessages[fieldName]['regex']}}</span>
-				<span style="font-size: 9pt" [hidden]="!inputForm.controls[fieldName].errors.minlength">{{validationMessages[fieldName]['minlength']}}</span>
-				<span style="font-size: 9pt" [hidden]="!inputForm.controls[fieldName].errors.maxlength">{{validationMessages[fieldName]['maxlength']}}</span>
-		</span>
-	</div>
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-feedback': formSubmitted && inputForm.controls[fieldName].errors,
+      'has-error': formSubmitted && inputForm.controls[fieldName].errors,
+      'has-error': formSubmitted && inputForm.controls[fieldName].errors
+    }"
+  >
+    <label *ngIf="validationMessages[fieldName]['label']"
+      ><span
+        >{{ validationMessages[fieldName]["label"]
+        }}<span *ngIf="validationMessages[fieldName]['required']">*</span></span
+      ></label
+    >
+    <div class="help">
+      <select
+        (blur)="onBlurMethod($event)"
+        formControlName="{{ fieldName }}"
+        (change)="onClickOption($event)"
+        [attr.disabled]="disabled ? '' : null"
+        value="{{
+          !inputForm.controls[fieldName]
+            ? ''
+            : inputForm.controls[fieldName].value
+        }}"
+        [ngClass]="{
+          'border border-danger':
+            formSubmitted && inputForm.controls[fieldName].errors
+        }"
+        class="form-control txt border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0"
+      >
+        <option value="">{{
+          validationMessages[fieldName]["placeholder"]
+        }}</option>
+        <option *ngFor="let option of options" value="{{ option.id }}"
+          >{{ option.description }}
+        </option>
+      </select>
+      <a
+        *ngIf="showHelp"
+        tabindex="0"
+        role="button"
+        data-toggle="popover"
+        data-trigger="focus"
+        data-content=""
+        ><i class="fa fa-info-circle" aria-hidden="true"></i
+      ></a>
+    </div>
+    <span
+      *ngIf="formSubmitted && inputForm.controls[fieldName].errors"
+      class="help-block text-danger"
+      style="font-size: 9pt"
+    >
+      <span
+        style="font-size: 9pt"
+        [hidden]="!inputForm.controls[fieldName].errors.required"
+        >{{ validationMessages[fieldName]["required"] }}</span
+      >
+      <span
+        style="font-size: 9pt"
+        [hidden]="!inputForm.controls[fieldName].errors.patternInvalid"
+        >{{ validationMessages[fieldName]["regex"] }}</span
+      >
+      <span
+        style="font-size: 9pt"
+        [hidden]="!inputForm.controls[fieldName].errors.minlength"
+        >{{ validationMessages[fieldName]["minlength"] }}</span
+      >
+      <span
+        style="font-size: 9pt"
+        [hidden]="!inputForm.controls[fieldName].errors.maxlength"
+        >{{ validationMessages[fieldName]["maxlength"] }}</span
+      >
+    </span>
+  </div>
 </div>

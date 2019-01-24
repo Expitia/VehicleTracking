@@ -1,216 +1,376 @@
-<div class= "w-100 h-100">
-        <div class="container h-75">
-            <div class="p-3 d-flex justify-content-between align-items-center">
-                <span class="lead"><b>Usuarios</b></span>
-                <div class="d-flex justify-content-end align-items-center">
-                    <div class="d-flex justify-content-end align-items-center mr-2" style="cursor: pointer" [ngbPopover]="popSearch" [popoverTitle]="popSearchTitle" [autoClose]="'outside'" placement="bottom">
-                        <i class="fa fa-search nav-item-icon"></i>
-                        <span class="pl-2">Buscar</span>
-                    </div>
-                    <div class="d-flex justify-content-end align-items-center ml-2" style="cursor: pointer" [ngbPopover]="popOptions" [popoverTitle]="popOptionsTitle" [autoClose]="'outside'" #optionPopover="ngbPopover" placement="bottom">
-                        <i class="fa fa-plus-circle nav-item-icon"></i>
-                        <span class="pl-2">Opciones</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white shadow border border-2">
-                    <mat-table [dataSource]="dataSource" matSort>
-
-                        <ng-container matColumnDef="ID">
-                            <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-                            <mat-cell style="max-width: 60px" *matCellDef="let row"> {{row["ID"]}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Nombre">
-                            <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell style="max-width: 60px" *matCellDef="let row"> {{row["Nombre"]}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Apellido">
-                            <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
-                            <mat-cell style="max-width: 60px" *matCellDef="let row"> {{row["Apellido"]}}</mat-cell>
-                        </ng-container>
-    
-                        <ng-container matColumnDef="Email usuario">
-                            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header> Email usuario </mat-header-cell>
-                            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row"> {{row["Email usuario"]}}</mat-cell>
-                        </ng-container>
-                            
-                        <ng-container matColumnDef="Fecha de registro">
-                            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header> Fecha de registro </mat-header-cell>
-                            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row"> {{row["Fecha de registro"]}}</mat-cell>
-                        </ng-container>
-                            
-                        <ng-container matColumnDef="Rol">
-                            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
-                            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row"> {{row["Rol"]}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Estado">
-                                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row"> {{row["Estado"]}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Detalle">
-                          <mat-header-cell
-                            class="d-flex align-items-center justify-content-center"
-                            *matHeaderCellDef
-                            mat-sort-header
-                          >
-                            Detalle
-                          </mat-header-cell>
-                          <mat-cell
-                            class="d-flex align-items-center justify-content-center"
-                            *matCellDef="let row"
-                          >
-                            <button
-                              (click)="onOpenModal(contentCreate, 'md'); onOpenEdit(row)"
-                              class="btn btn-outline-dark py-0 px-1 mx-1"
-                            >
-                              <i class="fa fa-edit nav-item-icon small"></i>
-                            </button>
-                          </mat-cell>
-                        </ng-container>
-    
-                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;">
-                        </mat-row>
-                    </mat-table>
-                    
-                    <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>  
-            </div>  
+<div class="w-100 h-100">
+  <div class="container h-75">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+      <span class="lead"><b>Usuarios</b></span>
+      <div class="d-flex justify-content-end align-items-center">
+        <div
+          class="d-flex justify-content-end align-items-center mr-2"
+          style="cursor: pointer"
+          [ngbPopover]="popSearch"
+          [popoverTitle]="popSearchTitle"
+          [autoClose]="'outside'"
+          placement="bottom"
+        >
+          <i class="fa fa-search nav-item-icon"></i>
+          <span class="pl-2">Buscar</span>
         </div>
-        
-        <ng-template #popSearch>
-            <div class="d-flex align-items-start flex-column pb-5">
-                <b>Usuario</b>
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <input  
-                        type="text"
-                        autocomplete="off"  
-                        placeholder="Email"
-                        value="{{this.searchData.email}}"
-                        (change)="onChangeFilter($event.currentTarget.value, 'email')"
-                        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0">
-                </div>
-                <b class="mt-2">Fecha de registro</b>
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <input 
-                        type="date"  
-                        autocomplete="off" 
-                        placeholder="Registro"
-                        value="{{this.searchData.date}}"
-                        (change)="onChangeFilter($event.currentTarget.value, 'date')"
-                        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0">
-                </div>
-                <select 
-                    value="{{this.searchData.estado}}"
-                    (change)="onChangeFilter($event.currentTarget.value, 'estado')" 
-                    class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
-                    
-                    <option selected value="">Estado</option>
-                    <option *ngFor="let option of statesList" value="{{option}}">{{option}}</option>
-                </select>
-                <select 
-                    value="{{this.searchData.rol}}"
-                    (change)="onChangeFilter($event.currentTarget.value, 'rol')" 
-                    class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
-                    
-                    <option selected value="">Rol</option>
-                    <option *ngFor="let option of roleList" value="{{option}}">{{option}}</option>
-                </select>
-            </div>
-        </ng-template>
-        <ng-template #popSearchTitle></ng-template>
-        
-        <ng-template #popOptions>
-            <div class="d-flex justify-content-start flex-column">
-                <div class="d-flex justify-content-start align-items-center" (click)="onOpenExport(content); optionPopover.close()" style="cursor: pointer">
-                    <i class="fa fa-download nav-item-icon"></i>
-                    <span class="pl-2">Descargar Excel</span>
-                </div>
-                <div
-                    class="d-flex justify-content-start align-items-center mt-1"
-                    (click)="
-                      onOpenModal(contentCreate, 'md');
-                      optionPopover.close();
-                      onOpenCreate()
-                    "
-                    style="cursor: pointer"
-                  >
-                    <i class="fa fa-plus-circle nav-item-icon"></i>
-                    <span class="pl-2">Crear Nuevo</span>
-                  </div>
-            </div>
-        </ng-template>
-        <ng-template #popOptionsTitle></ng-template>
-        
-        <ng-template #content let-modal>
-            <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
-                <span class="modal-title text-white"><b>Exportar</b></span>
-                <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
-            </div>
-            <div class="modal-body">
-                <span class="mt-2 mb-2">Selecciona las variables que desea exportar:</span>
-                <div class="row pl-3 pr-3">
-                    <div class="col-lg-4 col-md-12 pl-4 pr-4">
-                        <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
-                            <span class="text-wrap">ID:</span>
-                            <section title=".slideThree">
-                                <div class="slideThree">  
-                                    <input type="checkbox" id="idCheck" (change)="onChangeCheck('ID')" name="check" [checked]="rowsExcel['ID']" />
-                                    <label for="idCheck"></label>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
-                            <span class="text-wrap">Email:</span>
-                            <section title=".slideThree">
-                                <div class="slideThree">  
-                                    <input type="checkbox" id="carCheck" (change)="onChangeCheck('Email usuario')" name="check" [checked]="rowsExcel['Email usuario']" />
-                                    <label for="carCheck"></label>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
-                            <span class="text-wrap">Fecha de registro:</span>
-                            <section title=".slideThree">
-                                <div class="slideThree">  
-                                    <input type="checkbox" id="typeCarsCheck" name="check" (change)="onChangeCheck('Fecha de registro')" [checked]="rowsExcel['Fecha de registro']" />
-                                    <label for="typeCarsCheck"></label>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-3">
-                            <span class="text-wrap">Rol:</span>
-                            <section title=".slideThree">
-                                <div class="slideThree">  
-                                    <input type="checkbox" id="startCheck" name="check" (change)="onChangeCheck('Rol')" [checked]="rowsExcel['Rol']" />
-                                    <label for="startCheck"></label>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
-                        <span class="text-wrap">Estado:</span>
-                        <section title=".slideThree">
-                            <div class="slideThree">  
-                                <input type="checkbox" id="stateCheck" (change)="onChangeCheck('Estado')" name="check" [checked]="rowsExcel['Estado']" />
-                                <label for="stateCheck"></label>
-                            </div>
-                        </section>
-                    </div>
-                    </div>
-                    </div>
-                </div>
-                    
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onExport(); modal.close('Close click')">
-                    <i class="fa fa-plus-circle nav-item-icon"></i>
-                    Exportar
-                </button>
-            </div>
-        </ng-template>
-        <ng-template #contentCreate let-modal>
+        <div
+          class="d-flex justify-content-end align-items-center ml-2"
+          style="cursor: pointer"
+          [ngbPopover]="popOptions"
+          [popoverTitle]="popOptionsTitle"
+          [autoClose]="'outside'"
+          #optionPopover="ngbPopover"
+          placement="bottom"
+        >
+          <i class="fa fa-plus-circle nav-item-icon"></i>
+          <span class="pl-2">Opciones</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow border border-2">
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="ID">
+          <mat-header-cell
+            style="max-width: 60px"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            ID
+          </mat-header-cell>
+          <mat-cell style="max-width: 60px" *matCellDef="let row">
+            {{ row["ID"] }}</mat-cell
+          >
+        </ng-container>
+
+        <ng-container matColumnDef="Nombre">
+          <mat-header-cell
+            style="max-width: 150px"
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Nombre
+          </mat-header-cell>
+          <mat-cell
+            style="max-width: 150px"
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+          >
+            {{ row["Nombre"] }}</mat-cell
+          >
+        </ng-container>
+
+        <ng-container matColumnDef="Apellido">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 150px"
+          >
+            Apellido
+          </mat-header-cell>
+          <mat-cell
+            style="max-width: 150px"
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+          >
+            {{ row["Apellido"] }}</mat-cell
+          >
+        </ng-container>
+
+        <ng-container matColumnDef="Email usuario">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Email usuario
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+          >
+            {{ row["Email usuario"] }}</mat-cell
+          >
+        </ng-container>
+
+        <ng-container matColumnDef="Fecha de registro">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 100px"
+          >
+            Fecha de registro
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+            style="max-width: 100px"
+          >
+            {{ showDate(row["Fecha de registro"]) }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Rol">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 100px"
+          >
+            Rol
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-center"
+            *matCellDef="let row"
+            style="max-width: 100px"
+          >
+            {{ showRol(row["Rol"]) }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Estado">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 80px"
+          >
+            Estado
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-center"
+            *matCellDef="let row"
+            style="max-width: 80px"
+          >
+            {{ showState(row["Estado"]) }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Detalle">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 100px"
+          >
+            Detalle
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-end"
+            *matCellDef="let row"
+            style="max-width: 100px"
+          >
+            <button
+              (click)="onOpenModal(contentEdit, 'md'); onOpenEdit(row)"
+              class="btn btn-outline-dark py-0 px-1 mx-1"
+            >
+              <i class="fa fa-edit nav-item-icon small"></i>
+            </button>
+            <button class="btn btn-outline-dark py-0 px-1 mx-1">
+              <i class="fa fa-search nav-item-icon small"></i>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+    </div>
+  </div>
+
+  <ng-template #popSearch>
+    <div class="d-flex align-items-start flex-column pb-5">
+      <b>Usuario</b>
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <input
+          type="text"
+          autocomplete="off"
+          placeholder="Email"
+          value="{{ this.searchData.email }}"
+          (change)="onChangeFilter($event.currentTarget.value, 'email')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0"
+        />
+      </div>
+      <b class="mt-2">Fecha de registro</b>
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <input
+          type="date"
+          autocomplete="off"
+          placeholder="Registro"
+          value="{{ this.searchData.date }}"
+          (change)="onChangeFilter($event.currentTarget.value, 'date')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0"
+        />
+      </div>
+      <select
+        value="{{ this.searchData.estado }}"
+        (change)="onChangeFilter($event.currentTarget.value, 'estado')"
+        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
+      >
+        <option selected value="">Estado</option>
+        <option *ngFor="let option of statesList" value="{{ option.id }}">{{
+          option.description
+        }}</option>
+      </select>
+      <select
+        value="{{ this.searchData.rol }}"
+        (change)="onChangeFilter($event.currentTarget.value, 'rol')"
+        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
+      >
+        <option selected value="">Rol</option>
+        <option *ngFor="let option of roleList" value="{{ option.id }}">{{
+          option.description
+        }}</option>
+      </select>
+    </div>
+  </ng-template>
+  <ng-template #popSearchTitle></ng-template>
+
+  <ng-template #popOptions>
+    <div class="d-flex justify-content-start flex-column">
+      <div
+        class="d-flex justify-content-start align-items-center"
+        (click)="onOpenModal(content); optionPopover.close()"
+        style="cursor: pointer"
+      >
+        <i class="fa fa-download nav-item-icon"></i>
+        <span class="pl-2">Descargar Excel</span>
+      </div>
+      <div
+        class="d-flex justify-content-start align-items-center mt-1"
+        (click)="
+          onOpenModal(contentCreate, 'md');
+          optionPopover.close();
+          onOpenCreate()
+        "
+        style="cursor: pointer"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i>
+        <span class="pl-2">Crear Nuevo</span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #popOptionsTitle></ng-template>
+
+  <ng-template #content let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Exportar</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <span class="mt-2 mb-2"
+        >Selecciona las variables que desea exportar:</span
+      >
+      <div class="row pl-3 pr-3">
+        <div class="col-lg-4 col-md-12 pl-4 pr-4">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
+            <span class="text-wrap">ID:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="idCheck"
+                  (change)="onChangeCheck('ID')"
+                  name="check"
+                  [checked]="rowsExcel['ID']"
+                />
+                <label for="idCheck"></label>
+              </div>
+            </section>
+          </div>
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
+            <span class="text-wrap">Email:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="carCheck"
+                  (change)="onChangeCheck('Email usuario')"
+                  name="check"
+                  [checked]="rowsExcel['Email usuario']"
+                />
+                <label for="carCheck"></label>
+              </div>
+            </section>
+          </div>
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
+            <span class="text-wrap">Fecha de registro:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="typeCarsCheck"
+                  name="check"
+                  (change)="onChangeCheck('Fecha de registro')"
+                  [checked]="rowsExcel['Fecha de registro']"
+                />
+                <label for="typeCarsCheck"></label>
+              </div>
+            </section>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mt-3">
+            <span class="text-wrap">Rol:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="startCheck"
+                  name="check"
+                  (change)="onChangeCheck('Rol')"
+                  [checked]="rowsExcel['Rol']"
+                />
+                <label for="startCheck"></label>
+              </div>
+            </section>
+          </div>
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
+            <span class="text-wrap">Estado:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="stateCheck"
+                  (change)="onChangeCheck('Estado')"
+                  name="check"
+                  [checked]="rowsExcel['Estado']"
+                />
+                <label for="stateCheck"></label>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onExport(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i> Exportar
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentCreate let-modal>
     <div
       class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
     >
@@ -227,7 +387,7 @@
         <section>
           <app-textfield
             [inputForm]="form"
-            [fieldName]="'nombre'"
+            [fieldName]="'nombres'"
             [formSubmitted]="formSubmitted"
             [validationLengths]="validationLengths"
             [validationMessages]="validationMessages"
@@ -235,7 +395,7 @@
           </app-textfield>
           <app-textfield
             [inputForm]="form"
-            [fieldName]="'apellido'"
+            [fieldName]="'apellidos'"
             [formSubmitted]="formSubmitted"
             [validationLengths]="validationLengths"
             [validationMessages]="validationMessages"
@@ -272,10 +432,70 @@
       <button
         type="button"
         class="btn btn-outline-dark pt-1 pb-1"
-        (click)="onCreate(); modal.close('Close click')"
+        (click)="Create(); modal.close('Close click')"
       >
-        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>
     </div>
   </ng-template>
+  <ng-template #contentEdit let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Editar usuario</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
     </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="form" onsubmit="return false">
+        <span class="lead">Datos del usuario</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'nombres'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'apellidos'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'email'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-selectfield
+            [inputForm]="form"
+            [options]="statesList"
+            [fieldName]="'status'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
+          </app-selectfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onEdit(); modal.close('Close click')"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
+      </button>
+    </div>
+  </ng-template>
+</div>

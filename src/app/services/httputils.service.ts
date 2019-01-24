@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 // import { Headers, RequestOptions } from "@angular/http";
 import { EventEmitter } from "@angular/core";
 import { environment } from "../../environments/environment";
-import { UserIdleService, UserIdleConfig } from "angular-user-idle";
+import { toParseDates } from "../utils/objectsutils";
 
 @Injectable({
   providedIn: "root"
@@ -34,14 +34,8 @@ export class HttputilsService {
         .toPromise()
         .then(
           (res: any) => {
-            let response = res.json();
-            if (res.status == 200) {
-              this.invokeService$.emit(true);
-              resolve(response);
-            } else {
-              this.invokeService$.emit(false);
-              reject(this.builderror());
-            }
+            this.invokeService$.emit(true);
+            resolve(toParseDates(res));
           },
           (msg: any) => {
             this.invokeService$.emit(false);
@@ -66,7 +60,7 @@ export class HttputilsService {
           (res: any) => {
             this.invokeService$.emit(true);
             localStorage.setItem("token", res.jwt);
-            resolve(res);
+            resolve(toParseDates(res));
           },
           (msg: any) => {
             this.invokeService$.emit(false);
@@ -93,7 +87,7 @@ export class HttputilsService {
         .then(
           (res: any) => {
             this.invokeService$.emit(true);
-            resolve(res);
+            resolve(toParseDates(res));
           },
           (msg: any) => {
             this.invokeService$.emit(false);

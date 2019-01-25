@@ -12,6 +12,7 @@ import {
   MatSort,
   MatTableDataSource
 } from "@angular/material";
+import { createPDFTable } from '../../utils/pdfgenerator';
 
 @Component({
   selector: "app-maintenance",
@@ -219,6 +220,10 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
 
   showDate(date: Date) {
     return date ? toGTMformat(date) : "-";
+  }
+
+  onDownloadPdf(row) {
+    createPDFTable(['a', 'b', 'c'], [['1', '2', '3'], ['4', '5', '6']]);
   }
 
   /**

@@ -197,6 +197,7 @@
                 row['Estado'] == 'En proceso' || row['Estado'] == 'Pendiente'
               "
               class="btn btn-outline-dark py-0 px-1 mx-1"
+              (click)="onDownloadPdf(row)"
             >
               <i class="fa fa-download nav-item-icon small"></i>
             </button>

@@ -1,39 +1,46 @@
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const logo = require('../../assets/img/logoPDF.png');
-const game = require('../../assets/img/logoGAME.png');
-
 export const createPDFTable = (
+  title: String,
   header: Array<String>,
   content: Array<Array<String>>
 ) => {
-  const pdfDocument = new jsPDF('l', 'pt', 'letter') as any;
+  const pdfDocument = new jsPDF('l', 'px', 'letter') as any;
+  const leftLogo = new Image();
+  const rightLogo = new Image();
+
+  leftLogo.src = '../../assets/img/LogoPDF.png';
+  rightLogo.src = '../../assets/img/LogoGAME.png';
 
   pdfDocument.autoTable({
     head: [header],
     body: content,
     didDrawPage: data => {
-      getImgFromUrl(logo, img => {
-        pdfDocument.addImage(img, 'pdf', 5, 10, 35, 25, '', 'FAST', 0);
-      });
-
-      pdfDocument.setFontSize(14);
-      pdfDocument.text('ORDEN DE SERVICIO - MANTENIMIENTO MECANICO', 40, 25);
-
-      getImgFromUrl(game, img => {
-        pdfDocument.addImage(img, 'pdf', 175, 10, 28, 25, '', 'FAST', 0);
-      });
-    }
+      pdfDocument.addImage(
+        leftLogo,
+        'PNG',
+        data.settings.margin.left,
+        15,
+        Math.round(leftLogo.width * 0.3),
+        Math.round(leftLogo.height * 0.3)
+      );
+      pdfDocument.text(
+        title,
+        leftLogo.width - data.settings.margin.left - 10,
+        25
+      );
+      pdfDocument.addImage(
+        rightLogo,
+        'PNG',
+        data.table.width - data.settings.margin.left,
+        15,
+        Math.round(leftLogo.width * 0.3),
+        Math.round(leftLogo.height * 0.3)
+      );
+    },
+    margin: { top: leftLogo.height * 0.3 + 20 }
   });
 
-  pdfDocument.save('report.pdf');
+  pdfDocument.save(`report_${title}.pdf`);
 };
-
-function getImgFromUrl(pdfLogo, callback: Function) {
-  const img = new Image();
-  img.src = pdfLogo;
-  img.onload = function() {
-    callback(img);
-  };
-}

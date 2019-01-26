@@ -223,7 +223,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
   }
 
   onDownloadPdf(row) {
-    createPDFTable(['a', 'b', 'c'], [['1', '2', '3'], ['4', '5', '6']]);
+    createPDFTable('ORDEN DE SERVICIO - MANTENIMIENTO MECANICO', ['a', 'b', 'c'], [['1', '2', '3'], ['4', '5', '6']]);
   }
 
   /**

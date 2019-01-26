@@ -1,3 +1,5 @@
+// jsAutotable: https://github.com/simonbengtsson/jsPDF-AutoTable
+
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 

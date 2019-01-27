@@ -87,7 +87,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         let car = resp[i];
         cars.push({
           ID: car.id,
-          Tipo: car.tipo,
+          Tipo: car.tipo_descripcion,
           Detalle: car.id,
           Nombre: car.nombre,
           Estado: car.estado_vehiculo,
@@ -95,7 +95,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           "Ultimo Reporte": car.ultima_solicitud,
           "Próximo Mantenimiento": car.proximo_mantenimiento,
           "No. Mantenimientos": car.numero_mantenimientos,
-          "ID Modelo": car.id_modelo, //Dato usaro para creación no se despliega en pantalla
+          "ID Modelo": car.modelo_id, //Dato usaro para creación no se despliega en pantalla
           "ID Tipo": car.id_tipo, //Dato usaro para creación no se despliega en pantalla
           "Horas Configuradas": car.horas_configuradas, //Dato usaro para creación no se despliega en pantalla
           "Distancia Configurada": car.distancia_configurada, //Dato usaro para creación no se despliega en pantalla

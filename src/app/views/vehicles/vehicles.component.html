@@ -93,7 +93,7 @@
               {{ row["Próximo Mantenimiento"] }}
               {{
                 row["Tipo Mantenimiento"] == "Horometro" ||
-                row["Tipo Mantenimiento"] == "horas"
+                row["Tipo Mantenimiento"] == "Horas"
                   ? "horas"
                   : "kilometros"
               }}
@@ -138,7 +138,6 @@
               [ngClass]="{
                 'bg-green': row['Estado'] == 'Trabajando',
                 'bg-pink': row['Estado'] == 'Mantenimiento',
-                'bg-pink': row['Estado'] == 'Pendiente',
                 'bg-purple': row['Estado'] == 'Desacoplado'
               }"
               class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
@@ -160,7 +159,7 @@
             class="d-flex align-items-center justify-content-center"
             *matCellDef="let row"
           >
-            {{ row["Disponibilidad"] }}%
+            {{ row["Disponibilidad"].substr(0, 6) }}%
           </mat-cell>
         </ng-container>
 
@@ -184,7 +183,8 @@
             </button>
             <button
               *ngIf="
-                row['Estado'] == 'Mantenimiento' || row['Estado'] == 'Pendiente'
+                row['Estado'] == 'Mantenimiento' ||
+                row['Próximo Mantenimiento'] <= 0
               "
               (click)="onDownload()"
               class="btn btn-outline-dark py-0 px-1 mx-1"

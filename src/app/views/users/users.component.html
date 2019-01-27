@@ -185,13 +185,14 @@
 
   <ng-template #popSearch>
     <div class="d-flex align-items-start flex-column pb-5">
-      <b>Usuario</b>
+      <b>Correo electronio</b>
       <div class="d-flex justify-content-between align-items-center w-100">
         <input
           type="text"
           autocomplete="off"
           placeholder="Email"
           value="{{ this.searchData.email }}"
+          (keyup)="onChangeFilter($event.currentTarget.value, 'email')"
           (change)="onChangeFilter($event.currentTarget.value, 'email')"
           class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0"
         />
@@ -425,6 +426,15 @@
             [validationMessages]="validationMessages"
           >
           </app-selectfield>
+          <app-textfield
+            [inputForm]="form"
+            [inputType]="'password'"
+            [fieldName]="'password'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
         </section>
       </form>
     </div>
@@ -432,7 +442,7 @@
       <button
         type="button"
         class="btn btn-outline-dark pt-1 pb-1"
-        (click)="Create(); modal.close('Close click')"
+        (click)="onCreate(); modal.close('Close click')"
       >
         <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>

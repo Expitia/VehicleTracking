@@ -164,6 +164,18 @@ export class UsersComponent extends BaseComponent implements OnInit {
           maxlength: "",
           required: "Seleccione un estado valido"
         }
+      },
+      password: {
+        minlength: "3",
+        maxlength: "100",
+        required: true,
+        messages: {
+          label: "",
+          placeholder: "Password",
+          minlength: "El password ingresado en demasiado corto",
+          maxlength: "",
+          required: "Debe ingresar una contraseña para continuar"
+        }
       }
     };
     super.ngOnInit();
@@ -190,9 +202,40 @@ export class UsersComponent extends BaseComponent implements OnInit {
             "Fecha de registro": item.fecha_registro
           };
         });
+
         this.dataSource = new MatTableDataSource(users);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = (data, filter) => {
+          let blFilter = true;
+
+          for (let key in this.searchData) {
+            if (this.searchData[key]) {
+              //El filtro por fecha
+              if (key == "date") {
+                const dateRow = data["Fecha de registro"]
+                  .toLocaleString()
+                  .split(" ")[0]
+                  .replace(/\//g, "-");
+
+                blFilter = blFilter && dateRow == this.searchData[key];
+                //Filtro por rol
+              } else if (key == "rol")
+                blFilter = blFilter && data["Rol"] == this.searchData[key];
+              //Filtro por estado
+              else if (key == "estado")
+                blFilter = blFilter && data["Estado"] == this.searchData[key];
+              //Filtro por email
+              else if (key == "email")
+                blFilter =
+                  blFilter &&
+                  data["Email usuario"]
+                    .toLowerCase()
+                    .includes(this.searchData[key].toLowerCase());
+            }
+          }
+          return blFilter;
+        };
       },
       (error: any) => {
         console.error("Unable to load users data");
@@ -259,7 +302,10 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   onChangeFilter(filterValue: string, key: string) {
     this.searchData[key] = filterValue;
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter =
+      this.dataSource.filter == filterValue || !filterValue
+        ? Math.random() + ""
+        : filterValue;
   }
 
   /**
@@ -285,6 +331,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.form.controls.role.setValue("");
     this.form.controls.status.setValue("");
     this.form.controls.register_date.setValue("");
+    this.formSubmitted = false;
   }
 
   /**
@@ -383,7 +430,8 @@ export class UsersComponent extends BaseComponent implements OnInit {
           apellidos: this.form.value.apellidos,
           email: this.form.value.email,
           estados_id: this.form.value.status,
-          rol_id: this.form.value.role
+          roles_id: this.form.value.role,
+          password: this.form.value.password
         })
         .then((resp: any) => {
           // Si existe un ID es porque se editara un registro
@@ -392,7 +440,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
             Nombre: this.form.value.nombres,
             Apellido: this.form.value.apellidos,
             "Email usuario": this.form.value.email,
-            "Fecha de registro": resp.date,
+            "Fecha de registro": resp.fecha_registro,
             Rol: this.form.value.role,
             Estado: this.form.value.status,
             Detalle: resp.id

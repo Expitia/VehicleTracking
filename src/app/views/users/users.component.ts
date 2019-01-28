@@ -61,7 +61,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @private
    * @method constructor
    */
-
   constructor(
     router: Router,
     formBuilder: FormBuilder,
@@ -77,7 +76,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method ngOnInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngOnInit() {
     // Información del formulario
     this.fieldProps = {
@@ -156,7 +154,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
       status: {
         minlength: "",
         maxlength: "",
-        required: false,
+        required: true,
         messages: {
           label: "",
           placeholder: "Estado",
@@ -186,7 +184,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method ngAfterViewInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngAfterViewInit() {
     // Obtenemos la información de los usuarios
     this.userService.userInfo().then(
@@ -276,7 +273,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method onExport
    * Methodo handler lanzado al momento de exportar los estilos
    */
-
   onExport = function() {
     this.excelService.exportAsExcelFile(
       this.dataSource.data.map(item => {
@@ -299,7 +295,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method onChangeFilter
    * Methodo handler lanzado al momento de escribir sobre un campo de filtro
    */
-
   onChangeFilter(filterValue: string, key: string) {
     this.searchData[key] = filterValue;
     this.dataSource.filter =
@@ -320,26 +315,9 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
-   * Methodo handler lanzado al momento dar click sobre la opción de crear
-   */
-  onOpenCreate() {
-    this.form.controls.id.setValue("");
-    this.form.controls.nombres.setValue("");
-    this.form.controls.apellidos.setValue("");
-    this.form.controls.email.setValue("");
-    this.form.controls.role.setValue("");
-    this.form.controls.status.setValue("");
-    this.form.controls.register_date.setValue("");
-    this.formSubmitted = false;
-  }
-
-  /**
-   * @private
    * @method onChangeCheck
    * Methodo handler lanzado al momento de hacer click sobre un check
    */
-
   onChangeCheck(key: string) {
     this.rowsExcel[key] = !this.rowsExcel[key];
   }
@@ -349,7 +327,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method showDate
    * Methodo para visualizar las fechas
    */
-
   showDate(date: Date) {
     return date ? toGTMformat(date) : "-";
   }
@@ -359,7 +336,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method showState
    * Methodo para visualizar un estado dado el identificador
    */
-
   showState(id: number) {
     return this.statesList.filter(item => item.id == id)[0].description;
   }
@@ -369,7 +345,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method showRol
    * Methodo para visualizar un rol dado el identificador
    */
-
   showRol(id: number) {
     return this.roleList.filter(item => item.id == id)[0].description;
   }
@@ -384,6 +359,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.valid) {
+      this.modalService.dismissAll();
       index = this.dataSource.data.findIndex(item => {
         return item.ID === this.form.value.id;
       });
@@ -415,6 +391,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
       });
     }
   }
+
   /**
    * @private
    * @method onCreate
@@ -424,6 +401,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.valid) {
+      this.modalService.dismissAll();
       this.userService
         .saveUser({
           nombres: this.form.value.nombres,
@@ -451,6 +429,23 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method onOpenCreate
+   * Methodo handler lanzado al momento dar click sobre la opción de crear
+   */
+  onOpenCreate() {
+    this.form.controls.id.setValue("");
+    this.form.controls.nombres.setValue("");
+    this.form.controls.apellidos.setValue("");
+    this.form.controls.email.setValue("");
+    this.form.controls.role.setValue("");
+    this.form.controls.status.setValue("");
+    this.form.controls.register_date.setValue("");
+    this.form.controls.password.setValue("");
+    this.formSubmitted = false;
+  }
+
+  /**
+   * @private
    * @method onOpenEdit
    * Methodo handler lanzado al momento dar click sobre la opción de editar
    */
@@ -461,5 +456,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.form.controls.email.setValue(row["Email usuario"]);
     this.form.controls.role.setValue(row["Rol"]);
     this.form.controls.status.setValue(row["Estado"]);
+    this.form.controls.password.setValue(".....");
+    this.formSubmitted = false;
   }
 }

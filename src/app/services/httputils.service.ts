@@ -18,43 +18,16 @@ export class HttputilsService {
     this.invokeService$ = new EventEmitter();
   }
 
-  get(url: string) {
-    let header = {
-      "Content-Type": "application/json"
-    } as any;
-
-    if (localStorage.getItem("token"))
-      header.Authorization = "Bearer " + localStorage.getItem("token");
-
-    const headers = new HttpHeaders(header);
-
-    let promise = new Promise((resolve, reject) => {
-      this.http
-        .get(this.HOST + url)
-        .toPromise()
-        .then(
-          (res: any) => {
-            this.invokeService$.emit(true);
-            resolve(toParseDates(res));
-          },
-          (msg: any) => {
-            this.invokeService$.emit(false);
-            reject(this.builderror());
-          }
-        );
-    });
-
-    return promise;
-  }
-
   loginPost(url: string, body: any) {
     const headers = new HttpHeaders({
       "Content-Type": "application/x-www-form-urlencoded"
     });
 
+    console.log(body);
+
     return new Promise((resolve, reject) => {
       this.http
-        .post(this.HOST + url, JSON.stringify(body), { headers })
+        .post(this.HOST + url, body, { headers })
         .toPromise()
         .then(
           (res: any) => {
@@ -75,14 +48,17 @@ export class HttputilsService {
       "Content-Type": "application/json"
     } as any;
 
-    if (localStorage.getItem("token"))
+    if (localStorage.getItem("token")) {
       header.Authorization = "Bearer " + localStorage.getItem("token");
+    }
 
     const headers = new HttpHeaders(header);
 
+    console.log(body)
+
     return new Promise((resolve, reject) => {
       this.http
-        .post(this.HOST + url, JSON.stringify(body), { headers })
+        .post(this.HOST + url, body, { headers })
         .toPromise()
         .then(
           (res: any) => {

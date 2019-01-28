@@ -24,8 +24,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     "ID",
     "Nombre",
     "Tipo",
+    "Modelo",
     "Próximo Mantenimiento",
-    "Ultimo Reporte",
     "Estado",
     "Disponibilidad",
     "Detalle"
@@ -35,19 +35,21 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     ID: true,
     Nombre: true,
     Tipo: true,
+    Modelo: true,
     Estado: true,
     Disponibilidad: true,
     "Próximo Mantenimiento": true,
     "No. Mantenimientos": true
   };
 
-  //Se debe cargar de base de datos
-  modelList = ["UX-02", "UX-05", "UX-08"];
-  //Se debe cargar de base de datos
-  typeList = ["Tractocamion", "Camion", "Forgoneta"];
+  //Lista de modelos
+  modelList = [];
+  //Lista de tipos
+  typeList = [];
 
   searchData = {
     type: "",
+    model: "",
     state: "",
     minNext: "",
     maxNext: ""
@@ -87,16 +89,14 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         let car = resp[i];
         cars.push({
           ID: car.id,
-          Tipo: car.tipo_descripcion,
+          Tipo: car.tipo_id,
           Detalle: car.id,
           Nombre: car.nombre,
           Estado: car.estado_vehiculo,
           Disponibilidad: car.disponibilidad,
-          "Ultimo Reporte": car.ultima_solicitud,
           "Próximo Mantenimiento": car.proximo_mantenimiento,
           "No. Mantenimientos": car.numero_mantenimientos,
-          "ID Modelo": car.modelo_id, //Dato usaro para creación no se despliega en pantalla
-          "ID Tipo": car.id_tipo, //Dato usaro para creación no se despliega en pantalla
+          Modelo: car.modelo_id, //Dato usaro para creación no se despliega en pantalla
           "Horas Configuradas": car.horas_configuradas, //Dato usaro para creación no se despliega en pantalla
           "Distancia Configurada": car.distancia_configurada, //Dato usaro para creación no se despliega en pantalla
           "Horometro Configurado": car.horometro_configurado, //Dato usaro para creación no se despliega en pantalla
@@ -120,8 +120,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
                 blFilter &&
                 data["Próximo Mantenimiento"] <= this.searchData[key];
             else if (key == "type")
-              blFilter =
-                blFilter && data["Tipo"].includes(this.searchData[key]);
+              blFilter = blFilter && data["Tipo"] == this.searchData[key];
+            else if (key == "model")
+              blFilter = blFilter && data["Modelo"] == this.searchData[key];
             else if (key == "state")
               blFilter =
                 blFilter && data["Estado"].includes(this.searchData[key]);
@@ -130,6 +131,34 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         return blFilter;
       };
     });
+    // Obtenemos la información de los modelos
+    this.vehicleService.getModels().then(
+      (resp: any) => {
+        this.modelList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+      },
+      (error: any) => {
+        console.error("Unable to load models data");
+      }
+    );
+    // Obtenemos la información de los tipos
+    this.vehicleService.getTypes().then(
+      (resp: any) => {
+        this.typeList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+      },
+      (error: any) => {
+        console.error("Unable to load rols data");
+      }
+    );
   }
 
   /**
@@ -144,17 +173,36 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method showType
+   * Methodo para visualizar los tipos dado el identificador
+   */
+  showType(id: number) {
+    return this.typeList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
+   * @method showModel
+   * Methodo para visualizar un modelo dado el identificador
+   */
+  showModel(id: number) {
+    return this.modelList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
    * @method onOpenEdit
    * Methodo handler lanzado al momento dar click sobre la opción de editar
    */
   onOpenEdit(row) {
     this.form.controls.id.setValue(row["ID"]);
     this.form.controls.name.setValue(row["Nombre"]);
-    this.form.controls.hours.setValue("Horas Configuradas");
-    this.form.controls.distance.setValue("Distancia Configurada");
-    this.form.controls.typeList.setValue("ID Tipo");
-    this.form.controls.modelList.setValue("ID Modelo");
-    this.form.controls.horometer.setValue("Horometro Configurado");
+    this.form.controls.type.setValue(row["Tipo"]);
+    this.form.controls.model.setValue(row["Modelo"]);
+    this.form.controls.distance.setValue(row["Distancia Configurada"]);
+    this.form.controls.horometer.setValue(row["Horometro Configurado"]);
+    this.form.controls.hours.setValue(row["Horas Configuradas"]);
+    this.formSubmitted = false;
   }
 
   /**
@@ -165,11 +213,12 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   onOpenCreate() {
     this.form.controls.id.setValue("");
     this.form.controls.name.setValue("");
-    this.form.controls.hours.setValue("");
+    this.form.controls.type.setValue("");
+    this.form.controls.model.setValue("");
     this.form.controls.distance.setValue("");
-    this.form.controls.typeList.setValue("");
-    this.form.controls.modelList.setValue("");
     this.form.controls.horometer.setValue("");
+    this.form.controls.hours.setValue("");
+    this.formSubmitted = false;
   }
 
   /**
@@ -188,7 +237,10 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
   onChangeFilter(filterValue: string, key: string) {
     this.searchData[key] = filterValue;
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter =
+      this.dataSource.filter == filterValue || !filterValue
+        ? Math.random() + ""
+        : filterValue;
   }
 
   /**
@@ -214,9 +266,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         excelRow["Disponibilidad"] = excelRow["Disponibilidad"] + "%";
         excelRow["Próximo Mantenimiento"] =
           excelRow["Próximo Mantenimiento"] + " Horas";
-
+        excelRow["Tipo"] = this.showType(excelRow["Tipo"]);
+        excelRow["Modelo"] = this.showType(excelRow["Modelo"]);
         delete excelRow["Detalle"];
-        delete excelRow["Ultimo Reporte"];
 
         for (let key in this.rowsExcel) {
           if (!this.rowsExcel[key]) delete excelRow[key];
@@ -229,23 +281,90 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method onEdit
+   * Methodo para editar un vehiculo
+   */
+  onEdit() {
+    let index = -1;
+    this.formSubmitted = true;
+
+    if (this.form.valid) {
+      this.modalService.dismissAll();
+      index = this.dataSource.data.findIndex(item => {
+        return item.ID === this.form.value.id;
+      });
+      this.dataSource.data = this.dataSource.data.map((item, idx) => {
+        let newItem = item;
+        // En caso de corresponder al identificador que estamos buscando
+        if (index === idx) {
+          // Consumimos el servicio para editarlo
+          this.vehicleService.updateVehicle({
+            id: this.form.value.id,
+            nombre: this.form.value.name,
+            tipos_id: this.form.value.type,
+            modelo_id: this.form.value.model,
+            distancia: this.form.value.distance,
+            horometro: this.form.value.horometer,
+            intervalos_mantenimiento: this.form.value.hours
+          });
+          // Si se cumple exitosamente editamos el objeto
+          newItem = {
+            ID: this.form.value.id,
+            Tipo: this.form.value.type,
+            Detalle: this.form.value.id,
+            Nombre: this.form.value.name,
+            Estado: item["Estado"],
+            Disponibilidad: item["Disponibilidad"],
+            "Próximo Mantenimiento": item["Próximo Mantenimiento"],
+            "No. Mantenimientos": item["No. Mantenimientos"],
+            Modelo: this.form.value.model,
+            "Horas Configuradas": this.form.value.hours,
+            "Distancia Configurada": this.form.value.distance,
+            "Horometro Configurado": this.form.value.horometer,
+            "Tipo Mantenimiento": item["Tipo Mantenimiento"]
+          };
+        }
+        return newItem;
+      });
+    }
+  }
+
+  /**
+   * @private
    * @method onCreate
-   * Methodo lanzado por un evento, realiza la petición para registrar al usuario
+   * Methodo lanzado por un evento, realiza la petición para registrar un vehiculo
    */
   onCreate() {
     this.formSubmitted = true;
 
     if (this.form.valid) {
+      this.modalService.dismissAll();
       this.vehicleService
         .createVehicle({
-          name: this.form.value.name,
-          type: this.form.value.typeList,
-          model: this.form.value.modelList,
-          horometer: this.form.value.horometer,
-          hours: this.form.value.hours,
-          distance: this.form.value.distance
+          nombre: this.form.value.name,
+          tipos_id: this.form.value.type,
+          modelo_id: this.form.value.model,
+          distancia: this.form.value.distance,
+          horometro: this.form.value.horometer,
+          intervalos_mantenimiento: this.form.value.hours
         })
-        .then(response => {}, error => {});
+        .then(resp => {
+          this.dataSource.data = this.dataSource.data.concat({
+            ID: resp.id,
+            Tipo: this.form.value.type,
+            Detalle: resp.id,
+            Nombre: this.form.value.name,
+            Estado: "Trabajando",
+            Disponibilidad: 100,
+            "Próximo Mantenimiento": resp.proximo_mantenimiento,
+            "No. Mantenimientos": 0,
+            Modelo: this.form.value.model,
+            "Horas Configuradas": this.form.value.hours,
+            "Distancia Configurada": this.form.value.distance,
+            "Horometro Configurado": this.form.value.horometer,
+            "Tipo Mantenimiento": resp.tipo_mantenimiento
+          });
+        });
     }
   }
 

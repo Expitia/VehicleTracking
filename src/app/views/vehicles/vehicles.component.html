@@ -45,15 +45,17 @@
 
         <ng-container matColumnDef="Nombre">
           <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center justify-content-start"
             *matHeaderCellDef
             mat-sort-header
+            style="max-width: 150px;"
           >
             Nombre
           </mat-header-cell>
           <mat-cell
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center justify-content-start"
             *matCellDef="let row"
+            style="max-width: 150px;"
           >
             {{ row["Nombre"] }}
           </mat-cell>
@@ -61,22 +63,44 @@
 
         <ng-container matColumnDef="Tipo">
           <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center justify-content-start"
             *matHeaderCellDef
             mat-sort-header
+            style="max-width: 100px;"
           >
             Tipo
           </mat-header-cell>
           <mat-cell
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+            style="max-width: 100px;"
+          >
+            {{ showType(row["Tipo"]) }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Modelo">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Modelo
+          </mat-header-cell>
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
             *matCellDef="let row"
           >
-            {{ row["Tipo"] }}
+            {{ showModel(row["Modelo"]) }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Próximo Mantenimiento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="d-flex align-items-center justify-content-center"
+          >
             Próximo Mantenimiento
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
@@ -97,30 +121,6 @@
                   ? "horas"
                   : "kilometros"
               }}
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="Ultimo Reporte">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Reporte Averia
-          </mat-header-cell>
-          <mat-cell class="p-2" *matCellDef="let row">
-            <div
-              *ngIf="!row['Ultimo Reporte']"
-              class="w-100 pt-1 pb-1 bg-green border rounded border-secondary text-center text-wrap"
-            >
-              Ninguno
-            </div>
-            <div
-              *ngIf="row['Ultimo Reporte']"
-              class="w-100 pt-1 pb-1 bg-pink border rounded border-secondary text-center text-wrap"
-            >
-              {{ row["Ultimo Reporte"] }}
             </div>
           </mat-cell>
         </ng-container>
@@ -152,12 +152,14 @@
             class="d-flex align-items-center justify-content-center"
             *matHeaderCellDef
             mat-sort-header
+            style="max-width: 60px;"
           >
             Disponibilidad Mes
           </mat-header-cell>
           <mat-cell
             class="d-flex align-items-center justify-content-center"
             *matCellDef="let row"
+            style="max-width: 60px;"
           >
             {{ row["Disponibilidad"].substr(0, 6) }}%
           </mat-cell>
@@ -168,12 +170,14 @@
             class="d-flex align-items-center justify-content-center"
             *matHeaderCellDef
             mat-sort-header
+            style="max-width: 130px;"
           >
             Detalle
           </mat-header-cell>
           <mat-cell
             class="d-flex align-items-center justify-content-end"
             *matCellDef="let row"
+            style="max-width: 130px;"
           >
             <button
               (click)="navigate('detailsvehicles')"
@@ -192,7 +196,7 @@
               <i class="fa fa-download nav-item-icon small"></i>
             </button>
             <button
-              (click)="onOpenModal(contentCreate, 'md'); onOpenEdit(row)"
+              (click)="onOpenModal(contentEdit, 'md'); onOpenEdit(row)"
               class="btn btn-outline-dark py-0 px-1 mx-1"
             >
               <i class="fa fa-edit nav-item-icon small"></i>
@@ -349,6 +353,21 @@
             </section>
           </div>
           <div class="d-flex align-items-center justify-content-between mt-3">
+            <span class="text-wrap">Modelo:</span>
+            <section title=".slideThree">
+              <div class="slideThree">
+                <input
+                  type="checkbox"
+                  id="modelCheck"
+                  name="check"
+                  (change)="onChangeCheck('Modelo')"
+                  [checked]="rowsExcel['Modelo']"
+                />
+                <label for="stateCheck"></label>
+              </div>
+            </section>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mt-3">
             <span class="text-wrap">Estado:</span>
             <section title=".slideThree">
               <div class="slideThree">
@@ -434,7 +453,7 @@
     <div
       class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
     >
-      <span class="modal-title text-white"><b>Crear/Editar vehiculo</b></span>
+      <span class="modal-title text-white"><b>Nuevo vehiculo</b></span>
       <i
         class="text-white ti ti-close"
         (click)="modal.dismiss('Cross click')"
@@ -504,9 +523,89 @@
       <button
         type="button"
         class="btn btn-outline-dark pt-1 pb-1"
-        (click)="onCreate(); modal.close('Close click')"
+        (click)="onCreate()"
       >
-        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #contentEdit let-modal>
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
+      <span class="modal-title text-white"><b>Editar vehiculo</b></span>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
+    </div>
+    <div class="modal-body">
+      <form class="p-3" [formGroup]="form" onsubmit="return false">
+        <span class="lead">Datos del vehiculo</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'name'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-selectfield
+            [inputForm]="form"
+            [options]="typeList"
+            [fieldName]="'type'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
+          </app-selectfield>
+          <app-selectfield
+            [inputForm]="form"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
+          </app-selectfield>
+        </section>
+        <span class="lead mt-2">Configuración de mantenimiento</span>
+        <hr />
+        <section>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'horometer'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'hours'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'distance'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
+          </app-textfield>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onEdit()"
+      >
+        <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>
     </div>
   </ng-template>

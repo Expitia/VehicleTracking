@@ -23,8 +23,6 @@ export class HttputilsService {
       "Content-Type": "application/x-www-form-urlencoded"
     });
 
-    console.log(body);
-
     return new Promise((resolve, reject) => {
       this.http
         .post(this.HOST + url, body, { headers })
@@ -54,11 +52,9 @@ export class HttputilsService {
 
     const headers = new HttpHeaders(header);
 
-    console.log(body)
-
     return new Promise((resolve, reject) => {
       this.http
-        .post(this.HOST + url, body, { headers })
+        .post(this.HOST + url, JSON.stringify(body), { headers })
         .toPromise()
         .then(
           (res: any) => {

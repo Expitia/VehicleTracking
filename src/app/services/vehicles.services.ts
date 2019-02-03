@@ -12,35 +12,45 @@ export class VehicleService {
   /**
    * Método que realiza petición para traer los vehiculos
    */
-  getVehicles(): any {
+  getVehicles() {
     return this.httputils.post(`${this.sbUrl}get_vehicles.php`, {});
   }
 
   /**
    * Método que realiza petición para traer los tipos de vehiculos
    */
-  getTypes(): any {
+  getTypes() {
     return this.httputils.post(`${this.sbUrl}get_types.php`, {});
   }
 
   /**
    * Método que realiza petición para traer los modelos de los vehiculos
    */
-  getModels(): any {
+  getModels() {
     return this.httputils.post(`${this.sbUrl}get_models.php`, {});
   }
 
   /**
    * Método que realiza petición para crear un nuevo vehiculo
    */
-  createVehicle(body): any {
-    return this.httputils.post(`${this.sbUrl}create_vehicle.php`, body);
+  createVehicle(parameters) {
+    return this.httputils.post(`${this.sbUrl}create_vehicle.php`, parameters);
   }
 
   /**
    * Método que realiza petición para crear un nuevo vehiculo
    */
-  updateVehicle(body): any {
-    return this.httputils.post(`${this.sbUrl}update_vehicle.php`, body);
+  updateVehicle(parameters) {
+    return this.httputils.post(`${this.sbUrl}update_vehicle.php`, parameters);
+  }
+
+  /**
+   * Método que realiza petición para crear un nuevo vehiculo
+   */
+  createMaintenance(parameters) {
+    return this.httputils.post(
+      `${this.sbUrl}create_maintenance.php`,
+      parameters
+    );
   }
 }

@@ -112,7 +112,8 @@
                 'bg-green': row['Próximo Mantenimiento'] > 50,
                 'bg-pink': row['Próximo Mantenimiento'] < 0
               }"
-              class="w-100 pt-1 pb-1 bg-green border rounded border-secondary text-center text-wrap"
+              *ngIf="row['Estado'] !== 'Mantenimiento'"
+              class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
             >
               {{ row["Próximo Mantenimiento"] }}
               {{
@@ -121,6 +122,12 @@
                   ? "horas"
                   : "kilometros"
               }}
+            </div>
+            <div
+              *ngIf="row['Estado'] == 'Mantenimiento'"
+              class="w-100 pt-1 pb-1 text-center text-wrap"
+            >
+              -
             </div>
           </mat-cell>
         </ng-container>
@@ -152,14 +159,12 @@
             class="d-flex align-items-center justify-content-center"
             *matHeaderCellDef
             mat-sort-header
-            style="max-width: 60px;"
           >
             Disponibilidad Mes
           </mat-header-cell>
           <mat-cell
             class="d-flex align-items-center justify-content-center"
             *matCellDef="let row"
-            style="max-width: 60px;"
           >
             {{ row["Disponibilidad"].substr(0, 6) }}%
           </mat-cell>
@@ -190,7 +195,7 @@
                 row['Estado'] == 'Mantenimiento' ||
                 row['Próximo Mantenimiento'] <= 0
               "
-              (click)="onDownload()"
+              (click)="onDownload(row)"
               class="btn btn-outline-dark py-0 px-1 mx-1"
             >
               <i class="fa fa-download nav-item-icon small"></i>

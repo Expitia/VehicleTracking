@@ -82,7 +82,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
 
   ngAfterViewInit() {
-    this.vehicleService.getVehicles().then(resp => {
+    this.vehicleService.getVehicles().then((resp: any) => {
       //Se debe cargar de base de datos
       let cars = [];
       for (let i = 0; i < resp.length; i++) {
@@ -223,11 +223,48 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
+   * @method onDownload
    * Methodo handler lanzado al momento dar click sobre la opción de descargar
    */
-  onDownload() {
-    Order.save("Orden de mantenimiento.pdf");
+  onDownload(row) {
+    let index = -1;
+
+    if (row["Estado"] != "Mantenimiento") {
+      this.vehicleService
+        .createMaintenance({
+          id: row["ID"]
+        })
+        .then((resp: any) => {
+          index = this.dataSource.data.findIndex(item => {
+            return item.ID === row["ID"];
+          });
+          this.dataSource.data = this.dataSource.data.map((item, idx) => {
+            // En caso de corresponder al identificador que estamos buscando
+            if (index === idx) {
+              // Si se cumple exitosamente editamos el objeto
+              return {
+                ID: item["ID"],
+                Tipo: item["Tipo"],
+                Detalle: item["ID"],
+                Nombre: item["Nombre"],
+                Estado: "Mantenimiento",
+                Modelo: item["Modelo"],
+                Disponibilidad: item["Disponibilidad"],
+                "Próximo Mantenimiento": resp.proximo_mantenimiento,
+                "No. Mantenimientos": item["No. Mantenimientos"],
+                "Horas Configuradas": item["Horas Configuradas"],
+                "Distancia Configurada": item["Distancia Configurada"],
+                "Horometro Configurado": item["Horometro"],
+                "Tipo Mantenimiento": resp.tipo_mantenimiento
+              };
+            }
+            return item;
+          });
+          Order.save("Orden de mantenimiento.pdf");
+        });
+    } else {
+      Order.save("Orden de mantenimiento.pdf");
+    }
   }
 
   /**
@@ -245,7 +282,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onMaxHours
+   * @method onChangeCheck
    * Methodo handler lanzado al momento de hacer click sobre un check
    */
 
@@ -290,42 +327,45 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
     if (this.form.valid) {
       this.modalService.dismissAll();
-      index = this.dataSource.data.findIndex(item => {
-        return item.ID === this.form.value.id;
-      });
-      this.dataSource.data = this.dataSource.data.map((item, idx) => {
-        let newItem = item;
-        // En caso de corresponder al identificador que estamos buscando
-        if (index === idx) {
-          // Consumimos el servicio para editarlo
-          this.vehicleService.updateVehicle({
-            id: this.form.value.id,
-            nombre: this.form.value.name,
-            tipos_id: this.form.value.type,
-            modelo_id: this.form.value.model,
-            distancia: this.form.value.distance,
-            horometro: this.form.value.horometer,
-            intervalos_mantenimiento: this.form.value.hours
+
+      // Consumimos el servicio para editarlo
+      this.vehicleService
+        .updateVehicle({
+          id: this.form.value.id,
+          nombre: this.form.value.name,
+          tipos_id: this.form.value.type,
+          modelo_id: this.form.value.model,
+          distancia: this.form.value.distance,
+          horometro: this.form.value.horometer,
+          intervalos_mantenimiento: this.form.value.hours
+        })
+        .then((resp: any) => {
+          index = this.dataSource.data.findIndex(item => {
+            return item["ID"] === this.form.value.id;
           });
-          // Si se cumple exitosamente editamos el objeto
-          newItem = {
-            ID: this.form.value.id,
-            Tipo: this.form.value.type,
-            Detalle: this.form.value.id,
-            Nombre: this.form.value.name,
-            Estado: item["Estado"],
-            Disponibilidad: item["Disponibilidad"],
-            "Próximo Mantenimiento": item["Próximo Mantenimiento"],
-            "No. Mantenimientos": item["No. Mantenimientos"],
-            Modelo: this.form.value.model,
-            "Horas Configuradas": this.form.value.hours,
-            "Distancia Configurada": this.form.value.distance,
-            "Horometro Configurado": this.form.value.horometer,
-            "Tipo Mantenimiento": item["Tipo Mantenimiento"]
-          };
-        }
-        return newItem;
-      });
+          this.dataSource.data = this.dataSource.data.map((item, idx) => {
+            // En caso de corresponder al identificador que estamos buscando
+            if (index === idx) {
+              // Si se cumple exitosamente editamos el objeto
+              return {
+                ID: this.form.value.id,
+                Tipo: this.form.value.type,
+                Detalle: this.form.value.id,
+                Nombre: this.form.value.name,
+                Estado: item["Estado"],
+                Disponibilidad: item["Disponibilidad"],
+                "Próximo Mantenimiento": resp.proximo_mantenimiento,
+                "No. Mantenimientos": item["No. Mantenimientos"],
+                Modelo: this.form.value.model,
+                "Horas Configuradas": this.form.value.hours,
+                "Distancia Configurada": this.form.value.distance,
+                "Horometro Configurado": this.form.value.horometer,
+                "Tipo Mantenimiento": resp.tipo_mantenimiento
+              };
+            }
+            return item;
+          });
+        });
     }
   }
 
@@ -348,7 +388,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           horometro: this.form.value.horometer,
           intervalos_mantenimiento: this.form.value.hours
         })
-        .then(resp => {
+        .then((resp: any) => {
           this.dataSource.data = this.dataSource.data.concat({
             ID: resp.id,
             Tipo: this.form.value.type,

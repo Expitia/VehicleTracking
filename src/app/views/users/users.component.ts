@@ -360,35 +360,38 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
     if (this.form.valid) {
       this.modalService.dismissAll();
-      index = this.dataSource.data.findIndex(item => {
-        return item.ID === this.form.value.id;
-      });
-      this.dataSource.data = this.dataSource.data.map((item, idx) => {
-        let newItem = item;
-        // En caso de corresponder al identificador que estamos buscando
-        if (index === idx) {
-          // Consumimos el servicio para editarlo
-          this.userService.editUser({
-            id: this.form.value.id,
-            nombres: this.form.value.nombres,
-            apellidos: this.form.value.apellidos,
-            email: this.form.value.email,
-            estados_id: this.form.value.status
+
+      // Consumimos el servicio para editarlo
+      this.userService
+        .editUser({
+          id: this.form.value.id,
+          nombres: this.form.value.nombres,
+          apellidos: this.form.value.apellidos,
+          email: this.form.value.email,
+          estados_id: this.form.value.status
+        })
+        .then((resp: any) => {
+          index = this.dataSource.data.findIndex(item => {
+            return item.ID === this.form.value.id;
           });
-          // Si se cumple exitosamente editamos el objeto
-          newItem = {
-            ID: this.form.value.id,
-            Nombre: this.form.value.nombres,
-            Apellido: this.form.value.apellidos,
-            "Email usuario": this.form.value.email,
-            "Fecha de registro": item["Fecha de registro"],
-            Rol: item["Rol"],
-            Estado: this.form.value.status,
-            Detalle: this.form.value.id
-          };
-        }
-        return newItem;
-      });
+          this.dataSource.data = this.dataSource.data.map((item, idx) => {
+            // En caso de corresponder al identificador que estamos buscando
+            if (index === idx) {
+              // Si se cumple exitosamente editamos el objeto
+              return {
+                ID: this.form.value.id,
+                Nombre: this.form.value.nombres,
+                Apellido: this.form.value.apellidos,
+                "Email usuario": this.form.value.email,
+                "Fecha de registro": item["Fecha de registro"],
+                Rol: item["Rol"],
+                Estado: this.form.value.status,
+                Detalle: this.form.value.id
+              };
+            }
+            return item;
+          });
+        });
     }
   }
 

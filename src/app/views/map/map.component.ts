@@ -69,9 +69,11 @@ export class MapComponent extends BaseComponent implements OnInit {
     overlays: {}
   };
 
+  layersVehicles = [];
+
   options = {
     layers: [this.streetMaps],
-    zoom: 18,
+    zoom: 0,
     center: latLng([46.879966, -121.726909])
   };
 
@@ -92,7 +94,7 @@ export class MapComponent extends BaseComponent implements OnInit {
     private anotherRouter: Router,
     router: Router,
     formBuilder: FormBuilder,
-    private mapService: MapService 
+    private mapService: MapService
   ) {
     super(router, formBuilder);
   }
@@ -104,31 +106,32 @@ export class MapComponent extends BaseComponent implements OnInit {
    */
 
   ngOnInit() {
-    // Solo para datos de pruebas debe eliminarse
-    const states = ["Trabajando", "Mantenimiento", "Desacoplado"];
-    // Solo para datos de pruebas debe eliminarse
-    const types = ["UX-02", "UX-08", "UX-05"];
-    for (let i = 0; i < 3; i++) {
-      const car = {
-        id: i,
-        lat: 46.879966 + i / 50,
-        long: -121.726909 + i / 50,
-        angle: Math.random() * 180,
-        type: types[Math.floor(Math.random() * 3)],
-        state: states[Math.floor(Math.random() * 3)]
-      };
+    this.mapService.getVehicles().then((resp: any) => {
+      // Solo para datos de pruebas debe eliminarse
+      for (let i = 0; i < resp.length; i++) {
+        const car = {
+          id: resp[i].equipo_id,
+          lat: resp[i].latitud,
+          long: resp[i].longitud,
+          angle: resp[i].angulo,
+          type: resp[i].tipo,
+          state: resp[i].estado,
+          icon: resp[i].icono
+        };
 
-      const newMarker = marker([car.lat, car.long], {
-        rotationAngle: car.angle,
-        icon: icon({
-          iconSize: [25, 60],
-          iconAnchor: [0, 0],
-          iconUrl: this.typesMapList.filter(item => item.type == car.type)[0]
-            .images[car.state]
-        })
-      } as any);
+        console.log(car);
 
-      this.options.layers = this.options.layers.concat([newMarker as any]);
-    }
+        const newMarker = marker([car.lat, car.long], {
+          rotationAngle: car.angle,
+          icon: icon({
+            iconSize: [25, 60],
+            iconAnchor: [0, 0],
+            iconUrl: car.icon
+          })
+        } as any);
+
+        this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
+      }
+    });
   }
 }

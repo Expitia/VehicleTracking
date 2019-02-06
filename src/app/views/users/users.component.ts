@@ -61,7 +61,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @private
    * @method constructor
    */
-
   constructor(
     router: Router,
     formBuilder: FormBuilder,
@@ -77,7 +76,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method ngOnInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngOnInit() {
     // Información del formulario
     this.fieldProps = {
@@ -156,13 +154,25 @@ export class UsersComponent extends BaseComponent implements OnInit {
       status: {
         minlength: "",
         maxlength: "",
-        required: false,
+        required: true,
         messages: {
           label: "",
           placeholder: "Estado",
           minlength: "",
           maxlength: "",
           required: "Seleccione un estado valido"
+        }
+      },
+      password: {
+        minlength: "3",
+        maxlength: "100",
+        required: true,
+        messages: {
+          label: "",
+          placeholder: "Password",
+          minlength: "El password ingresado en demasiado corto",
+          maxlength: "",
+          required: "Debe ingresar una contraseña para continuar"
         }
       }
     };
@@ -174,7 +184,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method ngAfterViewInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngAfterViewInit() {
     // Obtenemos la información de los usuarios
     this.userService.userInfo().then(
@@ -190,9 +199,40 @@ export class UsersComponent extends BaseComponent implements OnInit {
             "Fecha de registro": item.fecha_registro
           };
         });
+
         this.dataSource = new MatTableDataSource(users);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = (data, filter) => {
+          let blFilter = true;
+
+          for (let key in this.searchData) {
+            if (this.searchData[key]) {
+              //El filtro por fecha
+              if (key == "date") {
+                const dateRow = data["Fecha de registro"]
+                  .toLocaleString()
+                  .split(" ")[0]
+                  .replace(/\//g, "-");
+
+                blFilter = blFilter && dateRow == this.searchData[key];
+                //Filtro por rol
+              } else if (key == "rol")
+                blFilter = blFilter && data["Rol"] == this.searchData[key];
+              //Filtro por estado
+              else if (key == "estado")
+                blFilter = blFilter && data["Estado"] == this.searchData[key];
+              //Filtro por email
+              else if (key == "email")
+                blFilter =
+                  blFilter &&
+                  data["Email usuario"]
+                    .toLowerCase()
+                    .includes(this.searchData[key].toLowerCase());
+            }
+          }
+          return blFilter;
+        };
       },
       (error: any) => {
         console.error("Unable to load users data");
@@ -233,7 +273,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method onExport
    * Methodo handler lanzado al momento de exportar los estilos
    */
-
   onExport = function() {
     this.excelService.exportAsExcelFile(
       this.dataSource.data.map(item => {
@@ -256,10 +295,12 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * @method onChangeFilter
    * Methodo handler lanzado al momento de escribir sobre un campo de filtro
    */
-
   onChangeFilter(filterValue: string, key: string) {
     this.searchData[key] = filterValue;
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter =
+      this.dataSource.filter == filterValue || !filterValue
+        ? Math.random() + ""
+        : filterValue;
   }
 
   /**
@@ -270,6 +311,123 @@ export class UsersComponent extends BaseComponent implements OnInit {
   onOpenModal(content, long) {
     const size = long || "lg";
     this.modalService.open(content, { centered: true, size });
+  }
+
+  /**
+   * @private
+   * @method onChangeCheck
+   * Methodo handler lanzado al momento de hacer click sobre un check
+   */
+  onChangeCheck(key: string) {
+    this.rowsExcel[key] = !this.rowsExcel[key];
+  }
+
+  /**
+   * @private
+   * @method showDate
+   * Methodo para visualizar las fechas
+   */
+  showDate(date: Date) {
+    return date ? toGTMformat(date) : "-";
+  }
+
+  /**
+   * @private
+   * @method showState
+   * Methodo para visualizar un estado dado el identificador
+   */
+  showState(id: number) {
+    return this.statesList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
+   * @method showRol
+   * Methodo para visualizar un rol dado el identificador
+   */
+  showRol(id: number) {
+    return this.roleList.filter(item => item.id == id)[0].description;
+  }
+
+  /**
+   * @private
+   * @method onEdit
+   * Methodo para editar un usuario
+   */
+  onEdit() {
+    let index = -1;
+    this.formSubmitted = true;
+
+    if (this.form.valid) {
+      this.modalService.dismissAll();
+
+      // Consumimos el servicio para editarlo
+      this.userService
+        .editUser({
+          id: this.form.value.id,
+          nombres: this.form.value.nombres,
+          apellidos: this.form.value.apellidos,
+          email: this.form.value.email,
+          estados_id: this.form.value.status
+        })
+        .then((resp: any) => {
+          index = this.dataSource.data.findIndex(item => {
+            return item.ID === this.form.value.id;
+          });
+          this.dataSource.data = this.dataSource.data.map((item, idx) => {
+            // En caso de corresponder al identificador que estamos buscando
+            if (index === idx) {
+              // Si se cumple exitosamente editamos el objeto
+              return {
+                ID: this.form.value.id,
+                Nombre: this.form.value.nombres,
+                Apellido: this.form.value.apellidos,
+                "Email usuario": this.form.value.email,
+                "Fecha de registro": item["Fecha de registro"],
+                Rol: item["Rol"],
+                Estado: this.form.value.status,
+                Detalle: this.form.value.id
+              };
+            }
+            return item;
+          });
+        });
+    }
+  }
+
+  /**
+   * @private
+   * @method onCreate
+   * Methodo para crear un usuario
+   */
+  onCreate() {
+    this.formSubmitted = true;
+
+    if (this.form.valid) {
+      this.modalService.dismissAll();
+      this.userService
+        .saveUser({
+          nombres: this.form.value.nombres,
+          apellidos: this.form.value.apellidos,
+          email: this.form.value.email,
+          estados_id: this.form.value.status,
+          roles_id: this.form.value.role,
+          password: this.form.value.password
+        })
+        .then((resp: any) => {
+          // Si existe un ID es porque se editara un registro
+          this.dataSource.data = this.dataSource.data.concat({
+            ID: resp.id,
+            Nombre: this.form.value.nombres,
+            Apellido: this.form.value.apellidos,
+            "Email usuario": this.form.value.email,
+            "Fecha de registro": resp.fecha_registro,
+            Rol: this.form.value.role,
+            Estado: this.form.value.status,
+            Detalle: resp.id
+          });
+        });
+    }
   }
 
   /**
@@ -285,120 +443,8 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.form.controls.role.setValue("");
     this.form.controls.status.setValue("");
     this.form.controls.register_date.setValue("");
-  }
-
-  /**
-   * @private
-   * @method onChangeCheck
-   * Methodo handler lanzado al momento de hacer click sobre un check
-   */
-
-  onChangeCheck(key: string) {
-    this.rowsExcel[key] = !this.rowsExcel[key];
-  }
-
-  /**
-   * @private
-   * @method showDate
-   * Methodo para visualizar las fechas
-   */
-
-  showDate(date: Date) {
-    return date ? toGTMformat(date) : "-";
-  }
-
-  /**
-   * @private
-   * @method showState
-   * Methodo para visualizar un estado dado el identificador
-   */
-
-  showState(id: number) {
-    return this.statesList.filter(item => item.id == id)[0].description;
-  }
-
-  /**
-   * @private
-   * @method showRol
-   * Methodo para visualizar un rol dado el identificador
-   */
-
-  showRol(id: number) {
-    return this.roleList.filter(item => item.id == id)[0].description;
-  }
-
-  /**
-   * @private
-   * @method onEdit
-   * Methodo para editar un usuario
-   */
-  onEdit() {
-    let index = -1;
-    this.formSubmitted = true;
-
-    if (this.form.valid) {
-      index = this.dataSource.data.findIndex(item => {
-        return item.ID === this.form.value.id;
-      });
-      this.dataSource.data = this.dataSource.data.map((item, idx) => {
-        let newItem = item;
-        // En caso de corresponder al identificador que estamos buscando
-        if (index === idx) {
-          // Consumimos el servicio para editarlo
-          this.userService.editUser({
-            id: this.form.value.id,
-            nombres: this.form.value.nombres,
-            apellidos: this.form.value.apellidos,
-            email: this.form.value.email,
-            estados_id: this.form.value.status
-          });
-          // Si se cumple exitosamente editamos el objeto
-          newItem = {
-            ID: this.form.value.id,
-            Nombre: this.form.value.nombres,
-            Apellido: this.form.value.apellidos,
-            "Email usuario": this.form.value.email,
-            "Fecha de registro": item["Fecha de registro"],
-            Rol: item["Rol"],
-            Estado: this.form.value.status,
-            Detalle: this.form.value.id
-          };
-        }
-        return newItem;
-      });
-    }
-  }
-  /**
-   * @private
-   * @method onCreate
-   * Methodo para crear un usuario
-   */
-  onCreate() {
-    this.formSubmitted = true;
-
-    if (this.form.valid) {
-      this.userService
-        .saveUser({
-          nombres: this.form.value.nombres,
-          apellidos: this.form.value.apellidos,
-          email: this.form.value.email,
-          estados_id: this.form.value.status,
-          rol_id: this.form.value.role
-        })
-        .then((resp: any) => {
-          // Si existe un ID es porque se editara un registro
-          this.dataSource.data = this.dataSource.data.concat({
-            ID: resp.id,
-            Nombre: this.form.value.nombres,
-            Apellido: this.form.value.apellidos,
-            "Email usuario": this.form.value.email,
-            "Fecha de registro": resp.date,
-            Rol: this.form.value.role,
-            Estado: this.form.value.status,
-            Detalle: resp.id
-          });
-        });
-    }
+    this.form.controls.password.setValue("");
+    this.formSubmitted = false;
   }
 
   /**
@@ -413,5 +459,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.form.controls.email.setValue(row["Email usuario"]);
     this.form.controls.role.setValue(row["Rol"]);
     this.form.controls.status.setValue(row["Estado"]);
+    this.form.controls.password.setValue(".....");
+    this.formSubmitted = false;
   }
 }

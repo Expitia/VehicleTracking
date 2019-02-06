@@ -73,7 +73,7 @@ export class MapComponent extends BaseComponent implements OnInit {
 
   options = {
     layers: [this.streetMaps],
-    zoom: 0,
+    zoom: 18,
     center: latLng([46.879966, -121.726909])
   };
 

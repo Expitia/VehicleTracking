@@ -99,12 +99,40 @@ export class MapComponent extends BaseComponent implements OnInit {
     super(router, formBuilder);
   }
 
+  computeHeading(lat1, long1, lat2, long2)
+  {
+
+      const math = Math as any;
+      // Converts from degrees to radians.
+      math.radians = function(degrees) {
+          return degrees * Math.PI / 180;
+      };
+
+      // Converts from radians to degrees.
+      math.degrees = function(radians) {
+          return radians * 180 / Math.PI;
+      };
+
+
+     var rlat1 = math.radians(lat1);
+     var rlat2 = math.radians(lat2);
+
+     var dlong = math.radians(long2 - long1);
+
+     var y = math.cos(rlat2) * math.sin(dlong);
+     var x = math.cos(rlat1) * math.sin(rlat2) - math.sin(rlat1) * math.cos(rlat2) * math.cos(dlong);
+     var heading = math.round(math.degrees(math.atan2(y, x)) + 360, 4) % 360;
+
+      return heading;
+
+  }
+
+
   /**
    * @private
    * @method ngOnInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngOnInit() {
     this.mapService.getVehicles().then((resp: any) => {
       // Solo para datos de pruebas debe eliminarse
@@ -113,25 +141,69 @@ export class MapComponent extends BaseComponent implements OnInit {
           id: resp[i].equipo_id,
           lat: resp[i].latitud,
           long: resp[i].longitud,
-          angle: resp[i].angulo,
+          nextLat: resp[i].latitud_vehiculo,
+          nextLong: resp[i].longitud_vehiculo,
+          //angle: resp[i].angulo,
           type: resp[i].tipo,
           state: resp[i].estado,
-          icon: resp[i].icono
+          icon: resp[i].icono,
+          next: resp[i].siguiente,
+          horometer: resp[i].horometro_total,
+          typeNext: resp[i].tipo_mantenimiento,
+          isOpen: false
         };
 
-        console.log(car);
-
         const newMarker = marker([car.lat, car.long], {
-          rotationAngle: car.angle,
           icon: icon({
-            iconSize: [25, 60],
-            iconAnchor: [0, 0],
+            iconSize: [80, 80],
+            iconAnchor: [40, 40],
             iconUrl: car.icon
-          })
+          }),
+          rotationAngle: this.computeHeading(car.lat, car.long, car.nextLat, car.nextLong),
         } as any);
+
+        newMarker.bindTooltip(`
+            <div class="px-1" py-1>
+              <div class="w-100 py-1 border rounded border-secondary text-center text-wrap ${
+                car.state == "Trabajando"
+                  ? "bg-green"
+                  : car.state == "Mantenimiento"
+                  ? "bg-pink"
+                  : "bg-purple"
+              }">
+                ${car.state}
+              </div>
+              <div class="py-1 w-100 text-left">ID: ${car.id}</div>
+              <div class="py-1 w-100 text-left">
+                Horometro: 
+                ${car.horometer}
+              </div>
+              <div class="py-1 w-100 text-left">
+                Próximo Man.: 
+                ${car.next} 
+                ${
+                  car.typeNext == "Horometro" || car.typeNext == "Horas"
+                    ? "horas"
+                    : "kilometros"
+                } 
+              </div>
+              <div class="w-100">
+                <span class="w-100 text-truncate text-center">
+                  Da clic en el vehiculo para visualizar su información
+                </span>
+              </div>
+            <div>
+        `);
+
+        newMarker.on("click", function(ev){
+          debugger;
+          car.isOpen ? newMarker.closeTooltip() : newMarker.openTooltip()
+        })
 
         this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
       }
     });
+
+
   }
 }

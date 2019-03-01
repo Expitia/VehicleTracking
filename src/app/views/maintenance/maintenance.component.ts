@@ -12,7 +12,7 @@ import {
   MatSort,
   MatTableDataSource
 } from "@angular/material";
-import { createPDFTable } from '../../utils/pdfgenerator';
+import { generateOrder } from '../../utils/vehiclepdf';
 
 @Component({
   selector: "app-maintenance",
@@ -223,7 +223,8 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
   }
 
   onDownloadPdf(row) {
-    createPDFTable('ORDEN DE SERVICIO - MANTENIMIENTO MECANICO', ['a', 'b', 'c'], [['1', '2', '3'], ['4', '5', '6']]);
+    // createPDFTable('ORDEN DE SERVICIO - MANTENIMIENTO MECANICO', ['a', 'b', 'c'], [['1', '2', '3'], ['4', '5', '6']]);
+    generateOrder();
   }
 
   /**

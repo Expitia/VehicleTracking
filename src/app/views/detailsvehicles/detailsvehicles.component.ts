@@ -20,10 +20,10 @@ import { toGTMformat } from "src/app/utils/dateutils";
  * Clase para la vista e inventariado de vehiculos
  */
 export class DetailsvehicleComponent extends BaseComponent implements OnInit {
-  id: string = "53";
-  name: string = "Camion D53";
-  type: string = "Camion";
-  modelo: string = "UX-03";
+  id: string = "";
+  name: string = "";
+  type: string = "";
+  model: string = "";
   vehicleData: any = {};
 
   generalColumns = [
@@ -78,6 +78,7 @@ export class DetailsvehicleComponent extends BaseComponent implements OnInit {
    */
   constructor(
     router: Router,
+    private routerView: Router,
     formBuilder: FormBuilder,
     private modalService: NgbModal,
     private excelService: ExcelService,
@@ -92,17 +93,32 @@ export class DetailsvehicleComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
-    this.generalSource = new MatTableDataSource([
-      {
-        Horometro: 3005,
-        Temperatura: 25,
-        Combustible: 1240,
-        RPM: 340,
-        Estado: "Trabajando",
+    // Sistemas
+    debugger;
+    var vehicleId = parseInt(this.routerView.routerState.snapshot.root.queryParams.id);
+    
+    this.vehicleService.getVehicleDetail({id: vehicleId}).then((resp: any) => {
+      let general = [];
+      debugger;
+     
+      // Datos principales del vehículo
+      this.id = resp.id;
+      this.name = resp.nombre;
+      this.type = resp.tipo;
+      this.model = resp.modelo;
+
+      general.push({
+        Horometro: resp.horometro,
+        Temperatura: resp.temperatura,
+        Combustible: resp.combustible,
+        RPM: resp.rpm,
+        Estado: resp.estado,
         "Proximo Mantenimiento": 140,
         "Tipo Mantenimiento": "Horas" //Dato usado para calcular no se despliega en pantalla
-      }
-    ]);
+      });
+      this.generalSource = new MatTableDataSource(general);
+    });
+
     this.availableSource = new MatTableDataSource([
       {
         Mes: "Junio",

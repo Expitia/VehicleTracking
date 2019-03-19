@@ -90,72 +90,82 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
 
   ngAfterViewInit() {
     //Se debe cargar de base de datos
-
-    //this.maintenancesService.getMaintenances().then(resp => {
-      /*  maintenances = maintenances.concat(
-        resp.records.map(item => {
-          return {
-            ID: item.id,
-            Detalle: item.id,
-            "Fecha Final": item.fecha_salida
-              ? new Date(item.fecha_salida)
-              : "-",
-            Tipo: "Preventivo",
-            "Tipo Vehiculo": "Tractocamion",
-            "Fecha Inicial": item.fecha_entrada,
-            Usuario: "Juan Perez",
-            "ID Vehiculo": item.id_equipo,
-            "Tiempo Abajo": Math.floor(Math.random() * 100),
-            Estado: this.statesList[Math.floor(Math.random() * 2)]
-          };
-        })
-      );*/
-
+    this.maintenancesService.getMaintenances().then((resp: any) => {
       //Se debe cargar de base de datos
       let maintenances = [];
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 0; i < resp.length; i++) {
+        let maintenance = resp[i];
         maintenances.push({
           ID: i,
           Detalle: i,
-          "Fecha Final": null,
-          Tipo: "Preventivo",
+          "ID Vehiculo": maintenance.equipos_id,
+          "Fecha Final": maintenance.fecha_salida,
+          Tipo: maintenance.tipo,
           Usuario: "Juan Perez",
-          "Fecha Inicial": new Date(),
+          "Fecha Inicial": maintenance.fecha_entrada,
           "Tipo del Vehiculo": "Tractocamion",
-          "ID Vehiculo": Math.floor(Math.random() * 1000),
           "Tiempo Abajo": Math.floor(Math.random() * 100),
-          Estado: this.statesList[Math.floor(Math.random() * 2)]
+          Estado: maintenance.estado
         });
       }
       this.dataSource = new MatTableDataSource(maintenances);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
       this.dataSource.filterPredicate = (data, filter) => {
-        let blFilter = true;
+      let blFilter = true;
 
-        for (let key in this.searchData) {
-          if (this.searchData[key]) {
-            if (key == "start" || key == "end") {
-              let values = this.searchData[key].split("-"),
-                value = new Date(values[0], values[1] - 1, values[2]);
-
-              key == "end"
-                ? (blFilter = blFilter && data["Fecha Final"] <= value)
-                : null;
-              key == "start"
-                ? (blFilter = blFilter && data["Fecha Inicial"] >= value)
-                : null;
-            } else if (key == "type")
-              blFilter =
-                blFilter && data["Tipo"].includes(this.searchData[key]);
-            else if (key == "state")
-              blFilter =
-                blFilter && data["Estado"].includes(this.searchData[key]);
-          }
+      for (let key in this.searchData) {
+        if (this.searchData[key]) {
+          if (key == "minNext")
+            blFilter =
+              blFilter &&
+              data["Próximo Mantenimiento"] >= this.searchData[key];
+          else if (key == "maxNext")
+            blFilter =
+              blFilter &&
+              data["Próximo Mantenimiento"] <= this.searchData[key];
+          else if (key == "type")
+            blFilter = blFilter && data["Tipo"] == this.searchData[key];
+          else if (key == "model")
+            blFilter = blFilter && data["Modelo"] == this.searchData[key];
+          else if (key == "state")
+            blFilter =
+              blFilter && data["Estado"].includes(this.searchData[key]);
         }
-        return blFilter;
-      };
-    //});
+      }
+      return blFilter;
+    };
+
+    this.dataSource.filterPredicate = (data, filter) => {
+      let blFilter = true;
+
+      for (let key in this.searchData) {
+        if (this.searchData[key]) {
+          if (key == "start" || key == "end") {
+            let values = this.searchData[key].split("-"),
+              value = new Date(values[0], values[1] - 1, values[2]);
+
+            key == "end"
+              ? (blFilter = blFilter && data["Fecha Final"] <= value)
+              : null;
+            key == "start"
+              ? (blFilter = blFilter && data["Fecha Inicial"] >= value)
+              : null;
+          } else if (key == "type")
+            blFilter =
+              blFilter && data["Tipo"].includes(this.searchData[key]);
+          else if (key == "state")
+            blFilter =
+              blFilter && data["Estado"].includes(this.searchData[key]);
+        }
+      }
+      return blFilter;
+    };
+      
+    });
+
+    
   }
   /**
    * @private

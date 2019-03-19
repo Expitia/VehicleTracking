@@ -2,12 +2,12 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { BaseComponent } from '../base.component';
 import { toGTMformat } from '../../utils/dateutils';
-import { MaintenancesService } from '../../services/maintenances.services';
+import { UserService } from '../../services/user.services';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-detailsusers',
-  templateUrl: './detailsusers.component.html'
+  selector: 'app-detailsmaintenances',
+  templateUrl: './detailsmaintenances.component.html'
 })
 
 /**
@@ -21,8 +21,8 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
   statesList = [];
   // Lista de roles
   roleList = [];
-  // Mantenimiento actual
-  currentMaintenance = {
+  // Usuario actual
+  currentUser = {
     ID: null,
     email: null,
     date: null,
@@ -38,7 +38,7 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
     router: Router, 
     formBuilder: FormBuilder, 
     private routerView: Router,
-    private maintenanceService:MaintenancesService
+    private userService:UserService
     ) { 
     super(router, formBuilder);
   }
@@ -60,9 +60,9 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
     var userId = parseInt(this.routerView.routerState.snapshot.root.queryParams.id);
     
     // Petición a base de datos
-    this.maintenanceService.getMaintenanceDetail({id: userId}).then((resp: any) => {
+    this.userService.userDetail({id: userId}).then((resp: any) => {
       // Asignación de respuesta a usuario actual
-      this.currentMaintenance = {
+      this.currentUser = {
         ID: userId,
         email: resp.email,
         date: new Date(resp.fecha_registro),
@@ -73,7 +73,7 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
       console.error("Unable to load data");
     });
 
-     /* // Obtenemos la información de los estados
+     // Obtenemos la información de los estados
      this.userService.stateList().then(
       (resp: any) => {
         this.statesList = resp.map(item => {
@@ -86,9 +86,9 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
       (error: any) => {
         console.error("Unable to load state data");
       }
-    ); */
+    );
 
-    /* // Obtenemos la información de los roles
+    // Obtenemos la información de los roles
     this.userService.rolsList().then(
       (resp: any) => {
         this.roleList = resp.map(item => {
@@ -102,39 +102,38 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
         console.error("Unable to load rols data");
       }
     );
-  } */
+  }
 
   /**
    * @private
    * @method onMaxHours 
    * Methodo para visualizar las fechas
    */  
-  /* showDate(date: Date){
+  showDate(date: Date){
     return date ? toGTMformat(date) : "-";
-  } */
+  }
 
   /**
    * @private
    * @method showState
    * Metodo para visualizar un estado dado el identificador
    */
-  /* showState(id: number) {
+  showState(id: number) {
     if(this.statesList.length > 0){
       return this.statesList.filter(item => item.id == id)[0].description;
     }
-  } */
+  }
 
   /**
    * @private
    * @method showRol
    * Metodo para visualizar un rol dado el identificador
    */
- /*  showRol(id: number) {
+  showRol(id: number) {
     if(this.roleList.length > 0){
       return this.roleList.filter(item => item.id == id)[0].description;
     }
-  } */
+  }
 
 
-}
 }

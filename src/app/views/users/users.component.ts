@@ -238,6 +238,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
         console.error("Unable to load users data");
       }
     );
+
     // Obtenemos la información de los estados
     this.userService.stateList().then(
       (resp: any) => {
@@ -252,6 +253,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
         console.error("Unable to load state data");
       }
     );
+    
     // Obtenemos la información de los roles
     this.userService.rolsList().then(
       (resp: any) => {

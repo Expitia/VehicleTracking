@@ -48,9 +48,11 @@ export class VehicleService {
    * Método que realiza petición para crear un nuevo vehiculo
    */
   createMaintenance(parameters) {
-    return this.httputils.post(
-      `${this.sbUrl}create_maintenance.php`,
-      parameters
-    );
+    return this.httputils.post(`${this.sbUrl}create_maintenance.php`, parameters);
+  }
+
+  getVehicleDetail(parameters){
+    console.log("Este es ob",parameters);
+    return this.httputils.post(`${this.sbUrl}get_vehicle_detail.php`, parameters);
   }
 }

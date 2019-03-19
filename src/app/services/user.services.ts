@@ -23,6 +23,13 @@ export class UserService {
   }
 
   /**
+   * Método encargado de realizar la petición para obtener los usuarios.
+   */
+  userDetail(parameters) {
+    return this.httputils.post(`${this.sbUrl}get_user.php`, parameters);
+  }
+
+  /**
    * Método encargado de realizar la petición para obtener los estados de los usuarios.
    */
   stateList() {
@@ -47,6 +54,7 @@ export class UserService {
    * Método encargado de realizar la petición para crear un usuario.
    */
   saveUser(parameters) {
+    console.log(parameters);
     return this.httputils.post(`${this.sbUrl}create_user.php`, parameters);
   }
 }

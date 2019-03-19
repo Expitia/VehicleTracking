@@ -1,9 +1,14 @@
 import { Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
 import { BaseComponent } from "../base.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ExcelService } from "../../services/excel.services";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { VehicleService } from "src/app/services/vehicles.services";
+import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from "@angular/material";
+import Order from "../../utils/pdf";
+import { ComponentsService } from "src/app/services/components.service";
+
 
 @Component({
   selector: "app-components",
@@ -31,6 +36,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   activityModal = null;
 
   modelList = [];
+  typeList = [];
   systemList = [];
   componentList = [];
 
@@ -52,20 +58,34 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   componentsSource: MatTableDataSource<any>;
   activitiesSource: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) typesPaginator: MatPaginator;
+  searchData = {
+    type: "",
+    model: "",
+    state: "",
+    minNext: "",
+    maxNext: ""
+  };
+
+  @ViewChild('matGroup') matTabGroup: MatTabGroup;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild('typesPaginator') typesPaginator: MatPaginator;
   @ViewChild(MatSort) typesSort: MatSort;
 
-  @ViewChild(MatPaginator) modelsPaginator: MatPaginator;
+  @ViewChild('modelsPaginator') modelsPaginator: MatPaginator;
   @ViewChild(MatSort) modelsSort: MatSort;
 
-  @ViewChild(MatPaginator) systemsPaginator: MatPaginator;
+  @ViewChild('systemsPaginator') systemsPaginator: MatPaginator;
   @ViewChild(MatSort) systemsSort: MatSort;
 
-  @ViewChild(MatPaginator) componentsPaginator: MatPaginator;
+  @ViewChild('componentsPaginator') componentsPaginator: MatPaginator;
   @ViewChild(MatSort) componentsSort: MatSort;
 
-  @ViewChild(MatPaginator) activitiesPaginator: MatPaginator;
+  @ViewChild('activitiesPaginator') activitiesPaginator: MatPaginator;
   @ViewChild(MatSort) activitiesSort: MatSort;
+  
   /**
    * @private
    * @method constructor
@@ -74,140 +94,10 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     private anotherRouter: Router,
     router: Router,
     formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private componentsService: ComponentsService
   ) {
     super(router, formBuilder);
-
-    this.typesSource = new MatTableDataSource([
-      {
-        ID: 1,
-        Nombre: "Tractocamion"
-      },
-      {
-        ID: 2,
-        Nombre: "Tractomula"
-      },
-      {
-        ID: 3,
-        Nombre: "Camion"
-      },
-      {
-        ID: 4,
-        Nombre: "Delorian"
-      }
-    ]);
-
-    this.modelsSource = new MatTableDataSource([
-      {
-        ID: 1,
-        Nombre: "UX-02"
-      },
-      {
-        ID: 2,
-        Nombre: "UX-03"
-      },
-      {
-        ID: 3,
-        Nombre: "UX-04"
-      },
-      {
-        ID: 4,
-        Nombre: "UX-05"
-      }
-    ]);
-
-    this.modelList = this.modelsSource.data.map(item => {
-      return item.Nombre;
-    });
-
-    this.systemsSource = new MatTableDataSource([
-      {
-        ID: 1,
-        Nombre: "Refrigeración",
-        Modelo: "UX-02"
-      },
-      {
-        ID: 2,
-        Nombre: "Frenos",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 3,
-        Nombre: "Suspensión",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 4,
-        Nombre: "Propulsión",
-        Modelo: "UX-04"
-      }
-    ]);
-
-    this.systemList = this.systemsSource.data.map(item => {
-      return item.Nombre;
-    });
-
-    this.componentsSource = new MatTableDataSource([
-      {
-        ID: 1,
-        Nombre: "Aire condicionado",
-        Sistema: "Refrigeración",
-        Modelo: "UX-02"
-      },
-      {
-        ID: 2,
-        Nombre: "Caucho de parada",
-        Sistema: "Frenos",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 3,
-        Nombre: "Resortes de acero inoxidable",
-        Sistema: "Suspensión",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 4,
-        Nombre: "Motor AK-47",
-        Sistema: "Propulsión",
-        Modelo: "UX-04"
-      }
-    ]);
-
-    this.componentList = this.componentsSource.data.map(item => {
-      return item.Nombre;
-    });
-
-    this.activitiesSource = new MatTableDataSource([
-      {
-        ID: 1,
-        Nombre: "Cambiar liquido",
-        Compartimiento: "Aire condicionado",
-        Sistema: "Refrigeración",
-        Modelo: "UX-02"
-      },
-      {
-        ID: 2,
-        Nombre: "Torcer tambor",
-        Compartimiento: "Caucho de parada",
-        Sistema: "Frenos",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 3,
-        Nombre: "Girar tuercas",
-        Compartimiento: "Resortes de acero inoxidable",
-        Sistema: "Suspensión",
-        Modelo: "UX-05"
-      },
-      {
-        ID: 4,
-        Nombre: "Rotar aceite",
-        Compartimiento: "Motor AK-47",
-        Sistema: "Propulsión",
-        Modelo: "UX-04"
-      }
-    ]);
 
   }
 
@@ -217,20 +107,141 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
-    this.typesSource.paginator = this.typesPaginator;
-    this.typesSource.sort = this.typesSort;
+    // Carga tipos de vehículos
+    this.componentsService.getVehiclesType().then((resp: any) => {
+      let types = [];
 
-    this.modelsSource.paginator = this.modelsPaginator;
-    this.modelsSource.sort = this.modelsSort;
+      // Lista de tipos
+      this.typeList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.descripcion
+        };
+      });
 
-    this.systemsSource.paginator = this.systemsPaginator;
-    this.systemsSource.sort = this.systemsSort;
+      for (let i = 0; i < resp.length; i++) {
+        let type = resp[i];
+        types.push({
+          ID: type.id,
+          Nombre: type.descripcion
+        });
+      }
+      this.typesSource = new MatTableDataSource(types);
+      this.typesSource.paginator = this.typesPaginator;
+      this.typesSource.sort = this.typesSort;
+      this.typesSource.filterPredicate = (data, filter) => {
+        let blFilter = true;
 
-    this.componentsSource.paginator = this.componentsPaginator;
-    this.componentsSource.sort = this.componentsSort;
+        for (let key in this.searchData) {
+          if (this.searchData[key]) {
+            if (key == "minNext")
+              blFilter =
+                blFilter &&
+                data["Próximo Mantenimiento"] >= this.searchData[key];
+            else if (key == "maxNext")
+              blFilter =
+                blFilter &&
+                data["Próximo Mantenimiento"] <= this.searchData[key];
+            else if (key == "type")
+              blFilter = blFilter && data["Tipo"] == this.searchData[key];
+            else if (key == "model")
+              blFilter = blFilter && data["Modelo"] == this.searchData[key];
+            else if (key == "state")
+              blFilter =
+                blFilter && data["Estado"].includes(this.searchData[key]);
+          }
+        }
+        return blFilter;
+      };
+    });
 
-    this.activitiesSource.paginator = this.activitiesPaginator;
-    this.activitiesSource.sort = this.activitiesSort;
+    // Modelos
+    this.componentsService.getModels().then((resp: any) => {
+      let models = [];
+
+      // Lista de modelos
+      this.modelList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.descripcion
+        };
+      });
+
+      for (let i = 0; i < resp.length; i++) {
+        let model = resp[i];
+        models.push({
+          ID: model.id,
+          Nombre: model.descripcion
+        });
+      }
+      this.modelsSource = new MatTableDataSource(models);
+      this.modelsSource.paginator = this.modelsPaginator;
+      this.modelsSource.sort = this.modelsSort;
+    });
+
+    // Sistemas
+    this.componentsService.getSystems().then((resp: any) => {
+      // Lista de sistemas
+      this.systemList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.nombre
+        };
+      });
+
+      let systems = [];
+      for (let i = 0; i < resp.length; i++) {
+        let system = resp[i];
+        systems.push({
+          ID: system.id,
+          Nombre: system.nombre,
+          Modelo: system.modelo_id
+        });
+      }
+      this.systemsSource = new MatTableDataSource(systems);
+      this.systemsSource.paginator = this.systemsPaginator;
+      this.systemsSource.sort = this.systemsSort;
+    });
+
+    // Compartimientos
+    this.componentsService.getCompartments().then((resp: any) => {
+        // Lista de compartimientos
+        this.componentList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+
+      let compartments = [];
+      for (let i = 0; i < resp.length; i++) {
+        let compartment = resp[i];
+        compartments.push({
+          ID: compartment.id,
+          Nombre: compartment.descripcion,
+          Sistema: compartment.sistemas_id
+        });
+      }
+      this.componentsSource = new MatTableDataSource(compartments);
+      this.componentsSource.paginator = this.componentsPaginator;
+      this.componentsSource.sort = this.componentsSort;
+    });
+
+    // Actividades
+    this.componentsService.getActivities().then((resp: any) => {
+      let activities = [];
+      for (let i = 0; i < resp.length; i++) {
+        let activity = resp[i];
+        activities.push({
+          ID: activity.id,
+          Nombre: activity.descripcion,
+          Compartimiento: activity.compartimientos_id
+        });
+      }
+      this.activitiesSource = new MatTableDataSource(activities);
+      this.activitiesSource.paginator = this.activitiesPaginator;
+      this.activitiesSource.sort = this.activitiesSort;
+    });
   }
 
   /**
@@ -240,39 +251,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    */
   ngOnInit() {
 
-
-    const createForm1 = this.createForm(["id_veh_type", "vehicle_type"], {
-      id_veh_type: {
-        minlength: "",
-        maxlength: "",
-        required: false,
-        messages: {
-          label: "",
-          placeholder: "",
-          minlength: "",
-          maxlength: "",
-          required: ""
-        }
-      },
-      vehicle_type: {
-        minlength: "3",
-        maxlength: "100",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Tipo de vehiculo",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
-        }
-      }
-    });
-
-    this.vehicleTypeModal = createForm1.form;
-    this.validateLength1 = createForm1.validationLengths;
-    this.validateMessages1 = createForm1.validationMessages;
-
-    const createForm2 = this.createForm(["id_model", "model"], {
+    const createForm2 = this.createForm(["id_model", "modelo_id"], {
       id_model: {
         minlength: "",
         maxlength: "",
@@ -285,15 +264,15 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           required: ""
         }
       },
-      model: {
+      modelo_id: {
         minlength: "3",
-        maxlength: "100",
+        maxlength: "20",
         required: true,
         messages: {
           label: "",
           placeholder: "Modelo",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          minlength: "El nombre debe tener un mínimo de 3 caracteres",
+          maxlength: "El nombre no puede superar los 20 caracteres",
           required: "Debe ingresar un nombre"
         }
       }
@@ -304,7 +283,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.validateMessages2 = createForm2.validationMessages;
 
 
-    const createForm3 = this.createForm(["id_system", "system", "model"], {
+    const createForm3 = this.createForm(["id_system", "system", "modelo_id"], {
       id_system: {
         minlength: "",
         maxlength: "",
@@ -319,25 +298,25 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       },
       system: {
         minlength: "3",
-        maxlength: "100",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Sistema",
           minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          maxlength: "El nombre no puede superar los 30 carracteres",
           required: "Debe ingresar un nombre"
         }
       },
-      model: {
-        minlength: "3",
-        maxlength: "100",
+      modelo_id: {
+        minlength: "1",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Modelo",
           minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          maxlength: "El nombre no puede superar los 30 carracteres",
           required: "Debe ingresar un nombre"
         }
       }
@@ -348,7 +327,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.validateLength3 = createForm3.validationLengths;
     this.validateMessages3 = createForm3.validationMessages;
 
-    const createForm4 = this.createForm(["id_component", "component", "system", "model"], {
+    const createForm4 = this.createForm(["id_component", "component", "system"], {
       id_component: {
         minlength: "",
         maxlength: "",
@@ -363,37 +342,25 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       },
       component: {
         minlength: "3",
-        maxlength: "100",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Componente",
           minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          maxlength: "El nombre no puede superar los 30 carracteres",
           required: "Debe ingresar un nombre"
         }
       },
       system: {
-        minlength: "3",
-        maxlength: "100",
+        minlength: "1",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Sistema",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
-        }
-      },
-      model: {
-        minlength: "3",
-        maxlength: "100",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Modelo",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          minlength: "El nombre debe tener un mínimo de 1 carracteres",
+          maxlength: "El nombre no puede superar los 30 carracteres",
           required: "Debe ingresar un nombre"
         }
       }
@@ -403,7 +370,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.validateLength4 = createForm4.validationLengths;
     this.validateMessages4 = createForm4.validationMessages;
 
-    const createForm5 = this.createForm(["id_activity", "activity", "component", "system", "model"], {
+    const createForm5 = this.createForm(["id_activity", "activity", "component", "system", "modelo_id"], {
       id_activity: {
         minlength: "",
         maxlength: "",
@@ -428,8 +395,8 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           required: "Debe ingresar un nombre"
         }},
       component: {
-        minlength: "3",
-        maxlength: "100",
+        minlength: "1",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
@@ -439,25 +406,25 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           required: "Debe ingresar un nombre"
         }},
       system: {
-        minlength: "3",
-        maxlength: "100",
+        minlength: "1",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Sistema",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          minlength: "El nombre debe tener un mínimo de 1 caracter",
+          maxlength: "El nombre no puede superar los 30 caracteres",
           required: "Debe ingresar un nombre"
         }},
-      model: {
-        minlength: "3",
-        maxlength: "100",
+      modelo_id: {
+        minlength: "1",
+        maxlength: "30",
         required: true,
         messages: {
           label: "",
           placeholder: "Modelo",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
+          minlength: "El nombre debe tener un mínimo de 1 caracter",
+          maxlength: "El nombre no puede superar los 30 caracteres",
           required: "Debe ingresar un nombre"
         }
       }
@@ -480,22 +447,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
-   * Methodo handler lanzado al momento dar click sobre la opción de crear
-   */
-  onOpenCreate1() {
-    this.vehicleTypeModal.controls.id_veh_type.setValue("");
-    this.vehicleTypeModal.controls.vehicle_type.setValue("");
-  }
-
-  /**
-   * @private
-   * @method onOpenCreate
-   * Methodo handler lanzado al momento dar click sobre la opción de crear
+   * @method onOpenCreate2
+   * Methodo handler lanzado al momento dar click sobre la opción de crear un modelo
    */
   onOpenCreate2() {
     this.modelModal.controls.id_model.setValue("");
-    this.modelModal.controls.model.setValue("");
+    this.modelModal.controls.modelo_id.setValue("");
   }
 
   /**
@@ -506,7 +463,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   onOpenCreate3() {
     this.systemModal.controls.id_system.setValue("");
     this.systemModal.controls.system.setValue("");
-    this.systemModal.controls.model.setValue("");
+    this.systemModal.controls.modelo_id.setValue("");
   }
 
   /**
@@ -518,7 +475,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.componentModal.controls.id_component.setValue("");
     this.componentModal.controls.component.setValue("");
     this.componentModal.controls.system.setValue("");
-    this.componentModal.controls.model.setValue("");
   }
 
   /**
@@ -531,51 +487,147 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.activityModal.controls.activity.setValue("");
     this.activityModal.controls.component.setValue("");
     this.activityModal.controls.system.setValue("");
-    this.activityModal.controls.model.setValue("");
+    this.activityModal.controls.modelo_id.setValue("");
   }
 
-  onCreate1(){
-    this.typesSource.data = this.typesSource.data.concat({
-      ID: Math.round(Math.random() * 50),
-      Nombre: this.vehicleTypeModal.value.vehicle_type
-    });
-  }
-
+  /**
+   * @private
+   * @method onCreate2
+   * Metodo para crear un nuevo modelo
+   */
   onCreate2(){
-    this.modelsSource.data = this.modelsSource.data.concat({
-      ID: Math.round(Math.random() * 50),
-      Nombre: this.modelModal.value.model
-    });
-    this.modelList = this.modelList.concat(this.modelModal.value.model);
+    if (this.modelModal.valid) {
+      this.modalService.dismissAll();
+      this.componentsService
+        .createModel({
+          id: null,
+          descripcion: this.modelModal.value.modelo_id
+        })
+        .then((resp: any) => {
+          this.modelsSource.data = this.modelsSource.data.concat({
+            ID: resp.id,
+            Nombre: this.modelModal.value.modelo_id
+          });
+
+          // Posiciona en el tab de modelos
+          this.matTabGroup.selectedIndex = 1;
+        });
+    }
   }
 
+  /**
+   * @private
+   * @method onCreate3
+   * Metodo para crear un nuevo sistema
+   */
   onCreate3(){
-    this.systemsSource.data = this.systemsSource.data.concat({
-      ID: Math.round(Math.random() * 50),
-      Nombre: this.systemModal.value.system,
-      Modelo: this.systemModal.value.model
-    });
-    this.systemList = this.systemList.concat(this.systemModal.value.system);
+    if (this.systemModal.valid) {
+      this.modalService.dismissAll();
+      this.componentsService
+        .createSystem({
+          id: null,
+          nombre: this.systemModal.value.system,
+          modelo_id: this.systemModal.value.modelo_id
+        })
+        .then((resp: any) => {
+          this.systemsSource.data = this.systemsSource.data.concat({
+            ID: resp.id,
+            Nombre: this.systemModal.value.system,
+            Modelo: this.systemModal.value.modelo_id
+          });
+          // Posiciona en el tab de sistemas
+          this.matTabGroup.selectedIndex = 2;
+        });
+    }
   }
 
+  /**
+   * @private
+   * @method onCreate4
+   * Metodo para crear un nuevo compartimiento
+   */
   onCreate4(){
-    this.componentsSource.data = this.componentsSource.data.concat({
-      ID: Math.round(Math.random() * 50),
-      Nombre: this.componentModal.value.component,
-      Sistema: this.componentModal.value.system,
-      Modelo: this.componentModal.value.model
-    });
-    this.componentList = this.componentList.concat(this.componentModal.value.component);
+    if (this.componentModal.valid) {
+      this.modalService.dismissAll();
+      this.componentsService
+        .createCompartment({
+          id: null,
+          descripcion: this.componentModal.value.component,
+          sistemas_id: this.componentModal.value.system
+        })
+        .then((resp: any) => {
+           this.componentsSource.data = this.componentsSource.data.concat({
+            ID: resp.id,
+            Nombre: this.componentModal.value.component,
+            Sistema: this.componentModal.value.system,
+            Modelo: null
+          });
+
+          // Posiciona en el tab de compartimientos
+          this.matTabGroup.selectedIndex = 3;
+        });
+    }
   }
 
+  /**
+   * @private
+   * @method onCreate5
+   * Metodo para crear una nueva actividad
+   */
   onCreate5(){
-    this.activitiesSource.data = this.activitiesSource.data.concat({
-      ID: Math.round(Math.random() * 50),
-      Nombre: this.activityModal.value.activity,
-      Compartimiento: this.activityModal.value.component,
-      Sistema: this.activityModal.value.system,
-      Modelo: this.activityModal.value.model
-    });
+    if (this.activityModal.valid) {
+      this.modalService.dismissAll();
+      this.componentsService
+        .createActivity({
+          id: null,
+          descripcion: this.activityModal.value.activity,
+          compartimientos_id: this.activityModal.value.component
+        })
+        .then((resp: any) => {
+           this.activitiesSource.data = this.activitiesSource.data.concat({
+            ID: resp.id,
+            Nombre: this.activityModal.value.activity,
+            Compartimiento: this.activityModal.value.component,
+            Sistema: this.activityModal.value.system,
+            Modelo: this.activityModal.value.modelo_id
+          });
+
+          // Posiciona en el tab de actividades
+          this.matTabGroup.selectedIndex = 4;
+        });
+    }
   }
 
+  /**
+   * @private
+   * @method showModel
+   * Metodo para visualizar un modelo dado el identificador
+  */
+  showModel(id: number) {
+    if(this.modelList.length > 0 && id > 0){
+      return this.modelList.filter(item => item.id == id)[0].description;
+    }
+  } 
+
+  /**
+   * @private
+   * @method showSystem
+   * Metodo para visualizar un sistema dado el identificador
+  */
+  showSystem(id: number) {
+    if(this.systemList.length > 0 && id > 0){
+      return this.systemList.filter(item => item.id == id)[0].description;
+    } 
+  } 
+
+  /**
+   * @private
+   * @method showComponent
+   * Metodo para visualizar un compartimiento dado el identificador
+  */
+  showComponent(id: number) {
+    if(this.componentList.length > 0 && id > 0){
+      return this.componentList.filter(item => item.id == id)[0].description;
+    }
+  }
 }

@@ -31,6 +31,7 @@ import { HomeService } from "./services/home.services";
 import { TextfieldComponent } from "./components/forms/textfield/textfield.component";
 import { SelectfieldComponent } from "./components/forms/selectfield/selectfield.component";
 import { PasswordComponent } from "./components/forms/password/password.component";
+import { GridComponent } from "./components/grid/grid.component";
 //Vistas
 import { LoginComponent } from "./views/login/login.component";
 import { HomeComponent } from "./views/home/home.component";
@@ -159,7 +160,7 @@ const appRoutes: Routes = [
 export class DemoMaterialModule {}
 
 export class MatPaginatorIntlCro extends MatPaginatorIntl {
-  itemsPerPageLabel = "Equipos por pagina: ";
+  itemsPerPageLabel = "Equipos por página: ";
   nextPageLabel = "Siguientes";
   previousPageLabel = "Anteriores";
 
@@ -192,6 +193,7 @@ export class MatPaginatorIntlCro extends MatPaginatorIntl {
     TextfieldComponent,
     SelectfieldComponent,
     PasswordComponent,
+    GridComponent,
     HomeComponent
   ],
   imports: [

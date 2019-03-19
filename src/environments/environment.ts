@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiurl: "http://50.116.15.116",
+  apiurl: "https://cors-anywhere.herokuapp.com/http://50.116.15.116",
   apikey: "xxxxxx",
   defaultState: "KS",
   defaultCity: "Kansas City",

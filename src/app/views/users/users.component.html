@@ -169,7 +169,10 @@
             >
               <i class="fa fa-edit nav-item-icon small"></i>
             </button>
-            <button class="btn btn-outline-dark py-0 px-1 mx-1">
+            <button (click)="this.router.navigate(['detailsusers'], { queryParams: { id: row.ID } })"
+            class="btn btn-outline-dark py-0 px-1 mx-1"
+            >
+              
               <i class="fa fa-search nav-item-icon small"></i>
             </button>
           </mat-cell>

@@ -1,7 +1,7 @@
 <div class="w-100 h-100">
   <div class="container h-75 pt-4">
     <div class="p-3 d-flex justify-content-between align-items-center">
-                <span class="lead"><b>Usuarios</b></span>
+                <span class="lead"><b>Configuración de vehículos</b></span>
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="d-flex justify-content-end align-items-center mr-2" style="cursor: pointer" [ngbPopover]="popSearch" [popoverTitle]="popSearchTitle" [autoClose]="'outside'" placement="bottom">
                         <i class="fa fa-search nav-item-icon"></i>
@@ -13,7 +13,7 @@
                     </div>
                 </div>
             </div>
-    <mat-tab-group>
+    <mat-tab-group #matGroup>
       <mat-tab label="Tipos de vehiculos">
         <div
           class="bg-white shadow border-left border-right border-bottom border-2"
@@ -51,7 +51,7 @@
             <mat-header-row *matHeaderRowDef="typesColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: typesColumns"> </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #typesPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
 
@@ -92,7 +92,7 @@
             <mat-header-row *matHeaderRowDef="modelsColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: modelsColumns"> </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #modelsPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
 
@@ -142,14 +142,14 @@
                 class="d-flex align-items-center justify-content-start"
                 *matCellDef="let row"
               >
-                {{ row["Modelo"] }}
+                {{ showModel(row["Modelo"]) }}
               </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="systemsColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: systemsColumns"> </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #systemsPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
 
@@ -199,7 +199,7 @@
                 class="d-flex align-items-center justify-content-start"
                 *matCellDef="let row"
               >
-                {{ row["Sistema"] }}
+                {{ showSystem(row["Sistema"]) }}
               </mat-cell>
             </ng-container>
 
@@ -215,7 +215,7 @@
                 class="d-flex align-items-center justify-content-start"
                 *matCellDef="let row"
               >
-                {{ row["Modelo"] }}
+                {{ showModel(row["Modelo"]) }}
               </mat-cell>
             </ng-container>
 
@@ -225,7 +225,7 @@
             <mat-row *matRowDef="let row; columns: componentsColumns">
             </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #componentsPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
 
@@ -275,7 +275,7 @@
                 class="d-flex align-items-center justify-content-start"
                 *matCellDef="let row"
               >
-                {{ row["Compartimiento"] }}
+                {{ showComponent(row["Compartimiento"]) }}
               </mat-cell>
             </ng-container>
 
@@ -307,7 +307,7 @@
                 class="d-flex align-items-center justify-content-start"
                 *matCellDef="let row"
               >
-                {{ row["Modelo"] }}
+                {{ showModel(row["Modelo"]) }}
               </mat-cell>
             </ng-container>
 
@@ -317,18 +317,195 @@
             <mat-row *matRowDef="let row; columns: activitiesColumns">
             </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #activitiesPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
+
+      <mat-tab label="Catálogos">
+          <div
+            class="bg-white shadow border-left border-right border-bottom border-2"
+          >
+            <mat-table [dataSource]="activitiesSource" matSort>
+              <ng-container matColumnDef="ID">
+                <mat-header-cell
+                  style="max-width: 60px;"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  ID
+                </mat-header-cell>
+                <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                  {{ row["ID"] }}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="Nombre">
+                <mat-header-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Nombre
+                </mat-header-cell>
+                <mat-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matCellDef="let row"
+                >
+                  {{ row["Nombre"] }}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="Compartimiento">
+                <mat-header-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Compartimiento
+                </mat-header-cell>
+                <mat-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matCellDef="let row"
+                >
+                  {{ showComponent(row["Compartimiento"]) }}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="Sistema">
+                <mat-header-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Sistema
+                </mat-header-cell>
+                <mat-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matCellDef="let row"
+                >
+                  {{ row["Sistema"] }}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="Modelo">
+                <mat-header-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Modelo
+                </mat-header-cell>
+                <mat-cell
+                  class="d-flex align-items-center justify-content-start"
+                  *matCellDef="let row"
+                >
+                  {{ showModel(row["Modelo"]) }}
+                </mat-cell>
+              </ng-container>
+  
+              <mat-header-row
+                *matHeaderRowDef="activitiesColumns"
+              ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: activitiesColumns">
+              </mat-row>
+            </mat-table>
+            <mat-paginator #activitiesPaginator [pageSizeOptions]="[8]"></mat-paginator>
+          </div>
+        </mat-tab>
+        <mat-tab label="Síntomas">
+            <div
+              class="bg-white shadow border-left border-right border-bottom border-2"
+            >
+              <mat-table [dataSource]="activitiesSource" matSort>
+                <ng-container matColumnDef="ID">
+                  <mat-header-cell
+                    style="max-width: 60px;"
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    ID
+                  </mat-header-cell>
+                  <mat-cell style="max-width: 60px;" *matCellDef="let row">
+                    {{ row["ID"] }}
+                  </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="Nombre">
+                  <mat-header-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    Nombre
+                  </mat-header-cell>
+                  <mat-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matCellDef="let row"
+                  >
+                    {{ row["Nombre"] }}
+                  </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="Compartimiento">
+                  <mat-header-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    Compartimiento
+                  </mat-header-cell>
+                  <mat-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matCellDef="let row"
+                  >
+                    {{ showComponent(row["Compartimiento"]) }}
+                  </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="Sistema">
+                  <mat-header-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    Sistema
+                  </mat-header-cell>
+                  <mat-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matCellDef="let row"
+                  >
+                    {{ row["Sistema"] }}
+                  </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="Modelo">
+                  <mat-header-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    Modelo
+                  </mat-header-cell>
+                  <mat-cell
+                    class="d-flex align-items-center justify-content-start"
+                    *matCellDef="let row"
+                  >
+                    {{ showModel(row["Modelo"]) }}
+                  </mat-cell>
+                </ng-container>
+    
+                <mat-header-row
+                  *matHeaderRowDef="activitiesColumns"
+                ></mat-header-row>
+                <mat-row *matRowDef="let row; columns: activitiesColumns">
+                </mat-row>
+              </mat-table>
+              <mat-paginator #activitiesPaginator [pageSizeOptions]="[8]"></mat-paginator>
+            </div>
+          </mat-tab>
     </mat-tab-group>
     <ng-template #popOptions>
             <div class="d-flex justify-content-start flex-column">
-                <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate1, 'md');
-                      optionPopover.close();
-                      onOpenCreate1()" style="cursor: pointer">
-                    <i class="fa fa-plus-circle nav-item-icon"></i>
-                    <span class="pl-2">Crear nuevo tipo de vehiculo</span>
-                </div>
                 <div class="d-flex justify-content-start align-items-center mt-1"
                       (click)="onOpenModal(contentCreate2, 'md');
                       optionPopover.close();
@@ -357,47 +534,11 @@
                 </div>
             </div>
         </ng-template>
-        <ng-template #contentCreate1 let-modal>
-    <div
-      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
-    >
-      <span class="modal-title text-white"><b>Nuevo tipo de vehiculo</b></span>
-      <i
-        class="text-white ti ti-close"
-        (click)="modal.dismiss('Cross click')"
-      ></i>
-    </div>
-    <div class="modal-body">
-      <form class="p-3" [formGroup]="vehicleTypeModal" onsubmit="return false">
-        <span class="lead">Datos del nuevo tipo de vehiculo</span>
-        <hr />
-        <section>
-          <app-textfield
-            [inputForm]="vehicleTypeModal"
-            [fieldName]="'vehicle_type'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validateLength1"
-            [validationMessages]="validateMessages1"
-          >
-          </app-textfield>
-        </section>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-dark pt-1 pb-1"
-        (click)="onCreate1(); modal.close('Close click')"
-      >
-        <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
-      </button>
-    </div>
-  </ng-template>
   <ng-template #contentCreate2 let-modal>
     <div
       class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
     >
-      <span class="modal-title text-white"><b>Nuevo componente</b></span>
+      <span class="modal-title text-white"><b>Nuevo modelo</b></span>
       <i
         class="text-white ti ti-close"
         (click)="modal.dismiss('Cross click')"
@@ -405,12 +546,12 @@
     </div>
     <div class="modal-body">
       <form class="p-3" [formGroup]="modelModal" onsubmit="return false">
-        <span class="lead">Datos del nuevo componente</span>
+        <span class="lead">Datos del nuevo modelo</span>
         <hr />
         <section>
           <app-textfield
             [inputForm]="modelModal"
-            [fieldName]="'model'"
+            [fieldName]="'modelo_id'"
             [formSubmitted]="formSubmitted"
             [validationLengths]="validateLength2"
             [validationMessages]="validateMessages2"
@@ -455,7 +596,7 @@
           <app-selectfield
             [inputForm]="systemModal"
             [options]="modelList"
-            [fieldName]="'model'"
+            [fieldName]="'modelo_id'"
             [formSubmitted]="formSubmitted"
             [validationMessages]="validateMessages3"
           >
@@ -500,14 +641,6 @@
             [inputForm]="componentModal"
             [options]="systemList"
             [fieldName]="'system'"
-            [formSubmitted]="formSubmitted"
-            [validationMessages]="validateMessages4"
-          >
-          </app-selectfield>
-          <app-selectfield
-            [inputForm]="componentModal"
-            [options]="modelList"
-            [fieldName]="'model'"
             [formSubmitted]="formSubmitted"
             [validationMessages]="validateMessages4"
           >
@@ -567,7 +700,7 @@
           <app-selectfield
             [inputForm]="activityModal"
             [options]="modelList"
-            [fieldName]="'model'"
+            [fieldName]="'modelo_id'"
             [formSubmitted]="formSubmitted"
             [validationMessages]="validateMessages5"
           >

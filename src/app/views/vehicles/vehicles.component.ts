@@ -142,7 +142,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         });
       },
       (error: any) => {
-        console.error("Unable to load models data");
+        console.error("No es posible cargar los modelos");
       }
     );
     // Obtenemos la información de los tipos
@@ -156,7 +156,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         });
       },
       (error: any) => {
-        console.error("Unable to load rols data");
+        console.error("No es posible cargar los tipos");
       }
     );
   }
@@ -376,7 +376,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
   onCreate() {
     this.formSubmitted = true;
-
+debugger;
     if (this.form.valid) {
       this.modalService.dismissAll();
       this.vehicleService

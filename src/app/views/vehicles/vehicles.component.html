@@ -185,7 +185,7 @@
             style="max-width: 130px;"
           >
             <button
-              (click)="navigate('detailsvehicles')"
+              (click)="this.router.navigate(['detailsvehicles'], { queryParams: { id: row.ID } });"
               class="btn btn-outline-dark py-0 px-1 mx-1"
             >
               <i class="fa fa-search nav-item-icon small"></i>
@@ -493,6 +493,12 @@
             [validationMessages]="validationMessages"
           >
           </app-selectfield>
+          <app-grid
+          [nestedForm]="form"
+          [fieldName]="'modelo_id1'"
+          [formSubmitted]="formSubmitted"
+        >
+        </app-grid>
         </section>
         <span class="lead mt-2">Configuración de mantenimiento</span>
         <hr />

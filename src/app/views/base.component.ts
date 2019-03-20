@@ -55,7 +55,7 @@ export class BaseComponent {
 	 * @private
 	 * @method constructor 
 	 */	
-  constructor(private router: Router, private formBuilder: FormBuilder) {
+  constructor(private router: Router, protected formBuilder: FormBuilder) {
     //Indicamos que no existen errores en la forma
     this.errors = false;
     //Indicamos que el formulario no se envia 
@@ -101,13 +101,15 @@ export class BaseComponent {
 
     properties.map(field => {
       //Agregamos las validaciones de los campos
-      fieldsConfig[field] = ['', this.getValidator(fieldProps[field])];
-      //Agregamos sus mensajes de error
-      this.validationMessages[field] = fieldProps[field].messages
-      //Agregamos las validaciones de longitud
-      this.validationLengths[field] = {
-        maxLength: fieldProps[field].maxlength,
-        minLength: fieldProps[field].minlength
+      fieldsConfig[field] = fieldProps[field].value || ['', this.getValidator(fieldProps[field])];
+      if(!fieldsConfig[field].basicData){
+        //Agregamos sus mensajes de error
+        this.validationMessages[field] = fieldProps[field].messages
+        //Agregamos las validaciones de longitud
+        this.validationLengths[field] = {
+          maxLength: fieldProps[field].maxlength,
+          minLength: fieldProps[field].minlength
+        }
       }
     });
     //Creamos las reglas del formulario

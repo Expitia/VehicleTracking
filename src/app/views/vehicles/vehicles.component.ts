@@ -1,5 +1,5 @@
 import { Router } from "@angular/router";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormArray } from "@angular/forms";
 import { BaseComponent } from "../base.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ExcelService } from "../../services/excel.services";
@@ -42,6 +42,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     "No. Mantenimientos": true
   };
 
+  distances: Array<Number> = [10, 20];
+
   //Lista de modelos
   modelList = [];
   //Lista de tipos
@@ -54,6 +56,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     minNext: "",
     maxNext: ""
   };
+
+  auxFormLength: {}
+  auxFormMessage: {}
 
   dataSource: MatTableDataSource<any>;
 
@@ -177,7 +182,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * Methodo para visualizar los tipos dado el identificador
    */
   showType(id: number) {
-    return this.typeList.filter(item => item.id == id)[0].description;
+    const type = this.typeList.filter(item => item.id == id)[0] 
+    return (type && type.description) || "";
   }
 
   /**
@@ -186,7 +192,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * Methodo para visualizar un modelo dado el identificador
    */
   showModel(id: number) {
-    return this.modelList.filter(item => item.id == id)[0].description;
+    const model = this.modelList.filter(item => item.id == id)[0]
+    return (model && model.description) || "";
   }
 
   /**
@@ -199,9 +206,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     this.form.controls.name.setValue(row["Nombre"]);
     this.form.controls.type.setValue(row["Tipo"]);
     this.form.controls.model.setValue(row["Modelo"]);
-    this.form.controls.distance.setValue(row["Distancia Configurada"]);
-    this.form.controls.horometer.setValue(row["Horometro Configurado"]);
-    this.form.controls.hours.setValue(row["Horas Configuradas"]);
+    //this.form.controls.configuration.setValue([]);
+    //this.form.controls.horometer.setValue(row["Horometro Configurado"]);
+    //this.form.controls.hours.setValue(row["Horas Configuradas"]);
     this.formSubmitted = false;
   }
 
@@ -215,9 +222,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     this.form.controls.name.setValue("");
     this.form.controls.type.setValue("");
     this.form.controls.model.setValue("");
-    this.form.controls.distance.setValue("");
-    this.form.controls.horometer.setValue("");
-    this.form.controls.hours.setValue("");
+    //this.form.controls.configurations && this.form.controls.configurations.setValue([]);
+    //this.form.controls.horometer.setValue("");
+    //this.form.controls.hours.setValue("");
     this.formSubmitted = false;
   }
 
@@ -384,9 +391,7 @@ debugger;
           nombre: this.form.value.name,
           tipos_id: this.form.value.type,
           modelo_id: this.form.value.model,
-          distancia: this.form.value.distance,
-          horometro: this.form.value.horometer,
-          intervalos_mantenimiento: this.form.value.hours
+          configuraciones: this.form.value.configuraciones
         })
         .then((resp: any) => {
           this.dataSource.data = this.dataSource.data.concat({
@@ -464,11 +469,23 @@ debugger;
           maxlength: "",
           required: "Se debe registrar un tipo valido"
         }
+      },  
+      configuraciones: {
+        value: this.formBuilder.array([this.addConfigurationsGroup()]),
+        basicData: true
       },
-      horometer: {
+    };
+    super.ngOnInit();
+  }
+
+
+  addConfigurationsGroup() {
+
+    const formResult =  this.createForm(["horometro", "intervalos_mantenimiento", "distancia"], {
+      horometro: {
         minlength: "",
         maxlength: "",
-        required: false,
+        required: true,
         messages: {
           label: "",
           placeholder: "Unidades de horometro entre mantenimientos",
@@ -477,10 +494,10 @@ debugger;
           required: ""
         }
       },
-      hours: {
+      intervalos_mantenimiento: {
         minlength: "",
         maxlength: "",
-        required: false,
+        required: true,
         messages: {
           label: "",
           placeholder: "Horas entre mantenimientos",
@@ -489,10 +506,10 @@ debugger;
           required: ""
         }
       },
-      distance: {
+      distancia: {
         minlength: "",
         maxlength: "",
-        required: false,
+        required: true,
         messages: {
           label: "",
           placeholder: "Distancia recorrida entre mantenimientos",
@@ -501,7 +518,21 @@ debugger;
           required: ""
         }
       }
-    };
-    super.ngOnInit();
+    });
+    this.auxFormLength = formResult.validationLengths
+    this.auxFormMessage = formResult.validationMessages
+
+    return formResult.form
   }
+
+  addConfiguration() {
+    this.configurationsArray.push(this.addConfigurationsGroup());
+  }
+  removeConfiguration(index) {
+    this.configurationsArray.removeAt(index);
+  }
+  get configurationsArray() {
+    return <FormArray>this.form.get('configuraciones');
+  }
+
 }

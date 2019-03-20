@@ -32,6 +32,7 @@ import { TextfieldComponent } from "./components/forms/textfield/textfield.compo
 import { SelectfieldComponent } from "./components/forms/selectfield/selectfield.component";
 import { PasswordComponent } from "./components/forms/password/password.component";
 import { GridComponent } from "./components/grid/grid.component";
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 //Vistas
 import { LoginComponent } from "./views/login/login.component";
 import { HomeComponent } from "./views/home/home.component";

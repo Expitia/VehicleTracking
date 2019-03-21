@@ -8,6 +8,7 @@ export class MaintenancesService {
   constructor(public httputils: HttputilsService) {}
 
   sbUrl = "/safe/api/services/maintenances/get_maintenances.php";
+  sbAlertsUrl = "/safe/api/services/maintenances/get_alerts.php";
 
   /**
    * Método que realiza petición de mantenimientos
@@ -22,4 +23,12 @@ export class MaintenancesService {
   getMaintenanceDetail(parameters): any {
     return this.httputils.post(`${this.sbUrl}`, parameters);
   }
+
+  /**
+   * Método que realiza petición de alertas
+   */
+  getAlerts(): any {
+    return this.httputils.post(`${this.sbAlertsUrl}`, {});
+  }
+
 }

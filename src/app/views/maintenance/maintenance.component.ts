@@ -5,13 +5,9 @@ import { toGTMformat } from "../../utils/dateutils";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ExcelService } from "../../services/excel.services";
 import { MaintenancesService } from "../../services/maintenances.services";
+import { MatDatepicker, MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from "@angular/material";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDatepicker,
-  MatPaginator,
-  MatSort,
-  MatTableDataSource
-} from "@angular/material";
+
 
 @Component({
   selector: "app-maintenance",
@@ -25,6 +21,9 @@ import {
  * Clase para visualizar el listado de mantenimientos
  */
 export class MaintenanceComponent extends BaseComponent implements OnInit {
+
+
+
   displayedColumns = [
     "ID",
     "ID Vehiculo",
@@ -35,6 +34,12 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     "Usuario",
     "Tiempo Abajo",
     "Estado",
+    "Detalle"
+  ];
+
+  alertsColumns = [
+    "ID",
+    "Nombre",
     "Detalle"
   ];
 
@@ -61,8 +66,15 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     start: null
   };
 
+  
   dataSource: MatTableDataSource<any>;
+  alertsSource: MatTableDataSource<any>;
 
+  @ViewChild('matGroup') matTabGroup: MatTabGroup;
+  @ViewChild('alertsPaginator') alertsPaginator: MatPaginator;
+  @ViewChild(MatSort) alertsSort: MatSort;
+
+  
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -77,7 +89,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     formBuilder: FormBuilder,
     private modalService: NgbModal,
     private excelService: ExcelService,
-    private maintenancesService: MaintenancesService
+    private maintenancesService: MaintenancesService,
   ) {
     super(router, formBuilder);
   }
@@ -87,7 +99,6 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * @method ngAfterViewInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngAfterViewInit() {
     //Se debe cargar de base de datos
     this.maintenancesService.getMaintenances().then((resp: any) => {
@@ -165,6 +176,23 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
       
     });
 
+    // Actividades
+    this.maintenancesService.getAlerts().then((resp: any) => {
+      let alerts = [];
+      for (let i = 0; i < resp.length; i++) {
+        let alert = resp[i];
+        alerts.push({
+          ID: alert.id,
+          Nombre: alert.descripcion
+        });
+      }
+      this.alertsSource = new MatTableDataSource(alerts);
+      this.alertsSource.paginator = this.alertsPaginator;
+      this.alertsSource.sort = this.alertsSort;
+    });
+
+
+
     
   }
   /**
@@ -182,7 +210,6 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * @method onExport
    * Methodo handler lanzado al momento de exportar los estilos
    */
-
   onExport = function() {
     this.excelService.exportAsExcelFile(
       this.dataSource.data.map(item => {
@@ -198,6 +225,30 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
       }),
       "Mantenimientos"
     );
+  };
+
+  /**
+   * @private
+   * @method onExport
+   * Methodo handler lanzado al momento de exportar los estilos
+   */
+  onCreateMaintenance = function() {
+    debugger;
+
+    // Actividades
+    this.maintenancesService.createMaintenanceByAlert().then((resp: any) => {
+      let alerts = [];
+      for (let i = 0; i < resp.length; i++) {
+        let alert = resp[i];
+        alerts.push({
+          ID: alert.id,
+          Nombre: alert.descripcion
+        });
+      }
+      this.alertsSource = new MatTableDataSource(alerts);
+      this.alertsSource.paginator = this.alertsPaginator;
+      this.alertsSource.sort = this.alertsSort;
+    });
   };
 
   /**

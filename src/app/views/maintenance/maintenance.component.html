@@ -3,211 +3,164 @@
     <div class="p-3 d-flex justify-content-between align-items-center">
       <span class="lead"><b>Mantenimientos</b></span>
       <div class="d-flex justify-content-end align-items-center">
-        <div
-          class="d-flex justify-content-end align-items-center mr-2"
-          style="cursor: pointer"
-          [ngbPopover]="popSearch"
-          [popoverTitle]="popSearchTitle"
-          [autoClose]="'outside'"
-          placement="bottom"
-        >
+        <div class="d-flex justify-content-end align-items-center mr-2" style="cursor: pointer" [ngbPopover]="popSearch"
+          [popoverTitle]="popSearchTitle" [autoClose]="'outside'" placement="bottom">
           <i class="fa fa-search nav-item-icon"></i>
           <span class="pl-2">Buscar</span>
         </div>
-        <div
-          class="d-flex justify-content-end align-items-center ml-2"
-          style="cursor: pointer"
-          [ngbPopover]="popOptions"
-          [popoverTitle]="popOptionsTitle"
-          [autoClose]="'outside'"
-          #optionPopover="ngbPopover"
-          placement="bottom"
-        >
+        <div class="d-flex justify-content-end align-items-center ml-2" style="cursor: pointer" [ngbPopover]="popOptions"
+          [popoverTitle]="popOptionsTitle" [autoClose]="'outside'" #optionPopover="ngbPopover" placement="bottom">
           <i class="fa fa-plus-circle nav-item-icon"></i>
           <span class="pl-2">Opciones</span>
         </div>
       </div>
     </div>
+    <mat-tab-group #matGroup>
+      <mat-tab label="Mantenimientos">
+        <mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="ID">
+            <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header>
+              ID
+            </mat-header-cell>
+            <mat-cell style="max-width: 60px" *matCellDef="let row">
+              {{ row["ID"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="ID Vehiculo">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              ID Vehiculo
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["ID Vehiculo"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Tipo del Vehiculo">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Tipo del Vehiculo
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Tipo del Vehiculo"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Fecha Inicial">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Fecha Inicial
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ showDate(row["Fecha Inicial"]) }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Fecha Final">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Fecha Final
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ showDate(row["Fecha Final"]) }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Tipo">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Tipo
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Tipo"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Usuario">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Usuario
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Usuario"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Tiempo Abajo">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Tiempo Abajo
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Tiempo Abajo"] }} %</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Estado">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Estado
+            </mat-header-cell>
+            <mat-cell class="p-2" *matCellDef="let row">
+              <div [ngClass]="{
+                    'bg-green': row['Estado'] == 'Resuelto',
+                    'bg-pink': row['Estado'] == 'En proceso',
+                    'bg-gray': row['Estado'] == 'Pendiente'
+                  }"
+                class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap">
+                {{ row["Estado"] }}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Detalle">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Detalle
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row">
+              <button class="btn btn-outline-dark py-0 px-1 mx-1">
+                <i class="fa fa-search nav-item-icon small"></i>
+              </button>
+              <button *ngIf="
+                    row['Estado'] == 'En proceso' || row['Estado'] == 'Pendiente'
+                  "
+                class="btn btn-outline-dark py-0 px-1 mx-1">
+                <i class="fa fa-download nav-item-icon small"></i>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
+      </mat-tab>
+
+      <mat-tab label="Alertas">
+        <mat-table [dataSource]="alertsSource" matSort>
+          <ng-container matColumnDef="ID">
+            <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header>
+              ID
+            </mat-header-cell>
+            <mat-cell style="max-width: 60px" *matCellDef="let row">
+              {{ row["ID"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Nombre">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Nombre
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Nombre"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Detalle">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Detalle
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row">
+              <button (click)="onCreateMaintenance();" class="btn btn-outline-dark py-0 px-1 mx-1">
+                <i class="fa fa-download nav-item-icon small"></i>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="alertsColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: alertsColumns"> </mat-row>
+        </mat-table>
+        <!-- <mat-paginator [pageSizeOptions]="[8]"></mat-paginator> -->
+
+      </mat-tab>
+    </mat-tab-group>
     <div class="bg-white shadow border border-2">
-      <mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="ID">
-          <mat-header-cell
-            style="max-width: 60px"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            ID
-          </mat-header-cell>
-          <mat-cell style="max-width: 60px" *matCellDef="let row">
-            {{ row["ID"] }}</mat-cell
-          >
-        </ng-container>
 
-        <ng-container matColumnDef="ID Vehiculo">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            ID Vehiculo
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ row["ID Vehiculo"] }}</mat-cell
-          >
-        </ng-container>
 
-        <ng-container matColumnDef="Tipo del Vehiculo">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Tipo del Vehiculo
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ row["Tipo del Vehiculo"] }}</mat-cell
-          >
-        </ng-container>
 
-        <ng-container matColumnDef="Fecha Inicial">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Fecha Inicial
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ showDate(row["Fecha Inicial"]) }}</mat-cell
-          >
-        </ng-container>
-
-        <ng-container matColumnDef="Fecha Final">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Fecha Final
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ showDate(row["Fecha Final"]) }}</mat-cell
-          >
-        </ng-container>
-
-        <ng-container matColumnDef="Tipo">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Tipo
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ row["Tipo"] }}</mat-cell
-          >
-        </ng-container>
-
-        <ng-container matColumnDef="Usuario">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Usuario
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ row["Usuario"] }}</mat-cell
-          >
-        </ng-container>
-
-        <ng-container matColumnDef="Tiempo Abajo">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Tiempo Abajo
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-center"
-            *matCellDef="let row"
-          >
-            {{ row["Tiempo Abajo"] }} %</mat-cell
-          >
-        </ng-container>
-
-        <ng-container matColumnDef="Estado">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Estado
-          </mat-header-cell>
-          <mat-cell class="p-2" *matCellDef="let row">
-            <div
-              [ngClass]="{
-                'bg-green': row['Estado'] == 'Resuelto',
-                'bg-pink': row['Estado'] == 'En proceso',
-                'bg-gray': row['Estado'] == 'Pendiente'
-              }"
-              class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
-            >
-              {{ row["Estado"] }}
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="Detalle">
-          <mat-header-cell
-            class="d-flex align-items-center justify-content-center"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            Detalle
-          </mat-header-cell>
-          <mat-cell
-            class="d-flex align-items-center justify-content-end"
-            *matCellDef="let row"
-          >
-            <button class="btn btn-outline-dark py-0 px-1 mx-1">
-              <i class="fa fa-search nav-item-icon small"></i>
-            </button>
-            <button
-              *ngIf="
-                row['Estado'] == 'En proceso' || row['Estado'] == 'Pendiente'
-              "
-              class="btn btn-outline-dark py-0 px-1 mx-1"
-            >
-              <i class="fa fa-download nav-item-icon small"></i>
-            </button>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-      </mat-table>
-
-      <mat-paginator [pageSizeOptions]="[8]"></mat-paginator>
     </div>
   </div>
 
@@ -215,45 +168,25 @@
     <div class="d-flex align-items-start flex-column pb-5">
       <b>Fecha Inicial</b>
       <div class="d-flex justify-content-between align-items-center w-100">
-        <input
-          type="date"
-          autocomplete="off"
-          placeholder="Desde"
-          value="{{ this.searchData.start }}"
-          (change)="onChangeFilter($event.currentTarget.value, 'start')"
-          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0"
-        />
+        <input type="date" autocomplete="off" placeholder="Desde" value="{{ this.searchData.start }}" (change)="onChangeFilter($event.currentTarget.value, 'start')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0" />
       </div>
       <b class="mt-2">Fecha Final</b>
       <div class="d-flex justify-content-between align-items-center w-100">
-        <input
-          type="date"
-          autocomplete="off"
-          placeholder="Hasta"
-          value="{{ this.searchData.end }}"
-          (change)="onChangeFilter($event.currentTarget.value, 'end')"
-          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0"
-        />
+        <input type="date" autocomplete="off" placeholder="Hasta" value="{{ this.searchData.end }}" (change)="onChangeFilter($event.currentTarget.value, 'end')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0" />
       </div>
-      <select
-        value="{{ this.searchData.state }}"
-        (change)="onChangeFilter($event.currentTarget.value, 'state')"
-        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
-      >
+      <select value="{{ this.searchData.state }}" (change)="onChangeFilter($event.currentTarget.value, 'state')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
         <option selected value="">Estado</option>
         <option *ngFor="let option of statesList" value="{{ option }}">{{
           option
-        }}</option>
+          }}</option>
       </select>
-      <select
-        value="{{ this.searchData.type }}"
-        (change)="onChangeFilter($event.currentTarget.value, 'type')"
-        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
-      >
+      <select value="{{ this.searchData.type }}" (change)="onChangeFilter($event.currentTarget.value, 'type')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
         <option selected value="">Tipo de mantenimiento</option>
         <option *ngFor="let option of typeList" value="{{ option }}">{{
           option
-        }}</option>
+          }}</option>
       </select>
     </div>
   </ng-template>
@@ -261,11 +194,8 @@
 
   <ng-template #popOptions>
     <div class="d-flex justify-content-start flex-column">
-      <div
-        class="d-flex justify-content-start align-items-center"
-        (click)="onOpenExport(content); optionPopover.close()"
-        style="cursor: pointer"
-      >
+      <div class="d-flex justify-content-start align-items-center" (click)="onOpenExport(content); optionPopover.close()"
+        style="cursor: pointer">
         <i class="fa fa-download nav-item-icon"></i>
         <span class="pl-2">Descargar Excel</span>
       </div>
@@ -274,68 +204,38 @@
   <ng-template #popOptionsTitle></ng-template>
 
   <ng-template #content let-modal>
-    <div
-      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
-    >
+    <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
       <span class="modal-title text-white"><b>Exportar</b></span>
-      <i
-        class="text-white ti ti-close"
-        (click)="modal.dismiss('Cross click')"
-      ></i>
+      <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
     </div>
     <div class="modal-body">
-      <span class="mt-2 mb-2"
-        >Selecciona las variables que desea exportar:</span
-      >
+      <span class="mt-2 mb-2">Selecciona las variables que desea exportar:</span>
       <div class="row pl-3 pr-3">
         <div class="col-lg-4 col-md-12 pl-4 pr-4">
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">ID:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="idCheck"
-                  (change)="onChangeCheck('ID')"
-                  name="check"
-                  [checked]="rowsExcel['ID']"
-                />
+                <input type="checkbox" id="idCheck" (change)="onChangeCheck('ID')" name="check" [checked]="rowsExcel['ID']" />
                 <label for="idCheck"></label>
               </div>
             </section>
           </div>
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">ID Vehiculo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="carCheck"
-                  (change)="onChangeCheck('ID Vehiculo')"
-                  name="check"
-                  [checked]="rowsExcel['ID Vehiculo']"
-                />
+                <input type="checkbox" id="carCheck" (change)="onChangeCheck('ID Vehiculo')" name="check" [checked]="rowsExcel['ID Vehiculo']" />
                 <label for="carCheck"></label>
               </div>
             </section>
           </div>
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">Tipo del Vehiculo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="typeCarsCheck"
-                  name="check"
-                  (change)="onChangeCheck('Tipo del Vehiculo')"
-                  [checked]="rowsExcel['Tipo del Vehiculo']"
-                />
+                <input type="checkbox" id="typeCarsCheck" name="check" (change)="onChangeCheck('Tipo del Vehiculo')"
+                  [checked]="rowsExcel['Tipo del Vehiculo']" />
                 <label for="typeCarsCheck"></label>
               </div>
             </section>
@@ -344,66 +244,36 @@
             <span class="text-wrap">Fecha Inicial:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="startCheck"
-                  name="check"
-                  (change)="onChangeCheck('Fecha Inicial')"
-                  [checked]="rowsExcel['Fecha Inicial']"
-                />
+                <input type="checkbox" id="startCheck" name="check" (change)="onChangeCheck('Fecha Inicial')" [checked]="rowsExcel['Fecha Inicial']" />
                 <label for="startCheck"></label>
               </div>
             </section>
           </div>
         </div>
         <div class="col-lg-4 col-md-12 pl-4 pr-4">
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">Fecha Final:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="endCheck"
-                  (change)="onChangeCheck('Fecha Final')"
-                  name="check"
-                  [checked]="rowsExcel['Fecha Final']"
-                />
+                <input type="checkbox" id="endCheck" (change)="onChangeCheck('Fecha Final')" name="check" [checked]="rowsExcel['Fecha Final']" />
                 <label for="endCheck"></label>
               </div>
             </section>
           </div>
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">Tipo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="typeCheck"
-                  (change)="onChangeCheck('Tipo')"
-                  name="check"
-                  [checked]="rowsExcel['Tipo']"
-                />
+                <input type="checkbox" id="typeCheck" (change)="onChangeCheck('Tipo')" name="check" [checked]="rowsExcel['Tipo']" />
                 <label for="typeCheck"></label>
               </div>
             </section>
           </div>
-          <div
-            class="d-flex align-items-center justify-content-between mt-3 mb-3"
-          >
+          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
             <span class="text-wrap">Usuario:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="userCheck"
-                  name="check"
-                  (change)="onChangeCheck('Usuario')"
-                  [checked]="rowsExcel['Usuario']"
-                />
+                <input type="checkbox" id="userCheck" name="check" (change)="onChangeCheck('Usuario')" [checked]="rowsExcel['Usuario']" />
                 <label for="userCheck"></label>
               </div>
             </section>
@@ -412,13 +282,7 @@
             <span class="text-wrap">Tiempo Abajo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input
-                  type="checkbox"
-                  id="downCheck"
-                  name="check"
-                  (change)="onChangeCheck('Tiempo Abajo')"
-                  [checked]="rowsExcel['Tiempo Abajo']"
-                />
+                <input type="checkbox" id="downCheck" name="check" (change)="onChangeCheck('Tiempo Abajo')" [checked]="rowsExcel['Tiempo Abajo']" />
                 <label for="downCheck"></label>
               </div>
             </section>
@@ -426,19 +290,11 @@
         </div>
       </div>
       <div class="col-lg-4 col-md-12 pl-4 pr-4">
-        <div
-          class="d-flex align-items-center justify-content-between mt-3 mb-3"
-        >
+        <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
           <span class="text-wrap">Estado:</span>
           <section title=".slideThree">
             <div class="slideThree">
-              <input
-                type="checkbox"
-                id="stateCheck"
-                (change)="onChangeCheck('Estado')"
-                name="check"
-                [checked]="rowsExcel['Estado']"
-              />
+              <input type="checkbox" id="stateCheck" (change)="onChangeCheck('Estado')" name="check" [checked]="rowsExcel['Estado']" />
               <label for="stateCheck"></label>
             </div>
           </section>
@@ -446,11 +302,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-dark pt-1 pb-1"
-        (click)="onExport(); modal.close('Close click')"
-      >
+      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onExport(); modal.close('Close click')">
         <i class="fa fa-plus-circle nav-item-icon"></i> Exportar
       </button>
     </div>

@@ -3,7 +3,6 @@ import { Component, OnInit } from "@angular/core";
 import { BaseComponent } from "./views/base.component";
 import { Router, NavigationEnd } from "@angular/router";
 import { DeviceDetectorService } from "ngx-device-detector";
-import { debug } from "util";
 
 @Component({
   selector: "app-root",
@@ -20,7 +19,6 @@ export class AppComponent extends BaseComponent implements OnInit {
   title: string = "SAFE";
   isOpen: boolean;
   isLogin: boolean;
-  loading: boolean;
   isPhone: boolean;
 
   /**
@@ -53,7 +51,6 @@ export class AppComponent extends BaseComponent implements OnInit {
    * @method ngOnInit
    * Methodo handler lanzado al momento de realizar hover sobre el panel
    */
-
   onToggleMenu(isOpen?: boolean) {
     this.isOpen = typeof isOpen == "boolean" ? isOpen : !this.isOpen;
   }

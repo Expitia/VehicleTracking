@@ -57,8 +57,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     maxNext: ""
   };
 
-  auxFormLength: {}
-  auxFormMessage: {}
+  auxFormLength: {};
+  auxFormMessage: {};
 
   dataSource: MatTableDataSource<any>;
 
@@ -87,6 +87,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
 
   ngAfterViewInit() {
+    this.addMask("getVehicles");
     this.vehicleService.getVehicles().then((resp: any) => {
       //Se debe cargar de base de datos
       let cars = [];
@@ -135,7 +136,9 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         }
         return blFilter;
       };
+      this.removeMask("getVehicles");
     });
+    this.addMask("getModels");
     // Obtenemos la información de los modelos
     this.vehicleService.getModels().then(
       (resp: any) => {
@@ -145,11 +148,13 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("getModels");
       },
       (error: any) => {
         console.error("No es posible cargar los modelos");
       }
     );
+    this.addMask("getTypes");
     // Obtenemos la información de los tipos
     this.vehicleService.getTypes().then(
       (resp: any) => {
@@ -159,6 +164,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("getTypes");
       },
       (error: any) => {
         console.error("No es posible cargar los tipos");
@@ -182,7 +188,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * Methodo para visualizar los tipos dado el identificador
    */
   showType(id: number) {
-    const type = this.typeList.filter(item => item.id == id)[0] 
+    const type = this.typeList.filter(item => item.id == id)[0];
     return (type && type.description) || "";
   }
 
@@ -192,7 +198,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * Methodo para visualizar un modelo dado el identificador
    */
   showModel(id: number) {
-    const model = this.modelList.filter(item => item.id == id)[0]
+    const model = this.modelList.filter(item => item.id == id)[0];
     return (model && model.description) || "";
   }
 
@@ -237,6 +243,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     let index = -1;
 
     if (row["Estado"] != "Mantenimiento") {
+      this.addMask("createMaintenance");
       this.vehicleService
         .createMaintenance({
           id: row["ID"]
@@ -268,6 +275,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             return item;
           });
           Order.save("Orden de mantenimiento.pdf");
+          this.removeMask("createMaintenance");
         });
     } else {
       Order.save("Orden de mantenimiento.pdf");
@@ -335,6 +343,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     if (this.form.valid) {
       this.modalService.dismissAll();
 
+      this.addMask("updateVehicle");
       // Consumimos el servicio para editarlo
       this.vehicleService
         .updateVehicle({
@@ -372,6 +381,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             }
             return item;
           });
+          this.removeMask("updateVehicle");
         });
     }
   }
@@ -383,8 +393,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
   onCreate() {
     this.formSubmitted = true;
-debugger;
     if (this.form.valid) {
+      this.addMask("createVehicle");
       this.modalService.dismissAll();
       this.vehicleService
         .createVehicle({
@@ -409,6 +419,7 @@ debugger;
             "Horometro Configurado": this.form.value.horometer,
             "Tipo Mantenimiento": resp.tipo_mantenimiento
           });
+          this.removeMask("createVehicle");
         });
     }
   }
@@ -469,60 +480,61 @@ debugger;
           maxlength: "",
           required: "Se debe registrar un tipo valido"
         }
-      },  
+      },
       configuraciones: {
         value: this.formBuilder.array([this.addConfigurationsGroup()]),
         basicData: true
-      },
+      }
     };
     super.ngOnInit();
   }
 
-
   addConfigurationsGroup() {
-
-    const formResult =  this.createForm(["horometro", "intervalos_mantenimiento", "distancia"], {
-      horometro: {
-        minlength: "",
-        maxlength: "",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Unidades de horometro entre mantenimientos",
+    const formResult = this.createForm(
+      ["horometro", "intervalos_mantenimiento", "distancia"],
+      {
+        horometro: {
           minlength: "",
           maxlength: "",
-          required: ""
-        }
-      },
-      intervalos_mantenimiento: {
-        minlength: "",
-        maxlength: "",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Horas entre mantenimientos",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Unidades de horometro entre mantenimientos",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        intervalos_mantenimiento: {
           minlength: "",
           maxlength: "",
-          required: ""
-        }
-      },
-      distancia: {
-        minlength: "",
-        maxlength: "",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Distancia recorrida entre mantenimientos",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Horas entre mantenimientos",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        distancia: {
           minlength: "",
           maxlength: "",
-          required: ""
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Distancia recorrida entre mantenimientos",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
         }
       }
-    });
-    this.auxFormLength = formResult.validationLengths
-    this.auxFormMessage = formResult.validationMessages
+    );
+    this.auxFormLength = formResult.validationLengths;
+    this.auxFormMessage = formResult.validationMessages;
 
-    return formResult.form
+    return formResult.form;
   }
 
   addConfiguration() {
@@ -532,7 +544,6 @@ debugger;
     this.configurationsArray.removeAt(index);
   }
   get configurationsArray() {
-    return <FormArray>this.form.get('configuraciones');
+    return <FormArray>this.form.get("configuraciones");
   }
-
 }

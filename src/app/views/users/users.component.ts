@@ -185,6 +185,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
+    this.addMask("userInfo");
     // Obtenemos la información de los usuarios
     this.userService.userInfo().then(
       (resp: any) => {
@@ -233,12 +234,14 @@ export class UsersComponent extends BaseComponent implements OnInit {
           }
           return blFilter;
         };
+        this.removeMask("userInfo");
       },
       (error: any) => {
         console.error("Unable to load users data");
       }
     );
 
+    this.addMask("stateList");
     // Obtenemos la información de los estados
     this.userService.stateList().then(
       (resp: any) => {
@@ -248,12 +251,14 @@ export class UsersComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("stateList");
       },
       (error: any) => {
         console.error("Unable to load state data");
       }
     );
-    
+
+    this.addMask("rolsList");
     // Obtenemos la información de los roles
     this.userService.rolsList().then(
       (resp: any) => {
@@ -263,6 +268,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("rolsList");
       },
       (error: any) => {
         console.error("Unable to load rols data");
@@ -363,6 +369,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     if (this.form.valid) {
       this.modalService.dismissAll();
 
+      this.addMask("editUser");
       // Consumimos el servicio para editarlo
       this.userService
         .editUser({
@@ -393,6 +400,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
             }
             return item;
           });
+          this.removeMask("editUser");
         });
     }
   }
@@ -406,6 +414,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.valid) {
+      this.addMask("saveUser");
       this.modalService.dismissAll();
       this.userService
         .saveUser({
@@ -428,6 +437,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
             Estado: this.form.value.status,
             Detalle: resp.id
           });
+          this.removeMask("saveUser");
         });
     }
   }

@@ -29,14 +29,12 @@ export class GridComponent extends BaseComponent implements OnInit {
 
 
   ngOnInit() {
-    debugger
     this.nestedForm = this.formBuilder.group({
       name: [null, [Validators.required, Validators.minLength(3)]],
       type: [null, Validators.required],
       model: [null, Validators.required],
       configurations: this.formBuilder.array([this.addConfigurationsGroup()])
     });
-    debugger
   }
 
   addConfigurationsGroup() {

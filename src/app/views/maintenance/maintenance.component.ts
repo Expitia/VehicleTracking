@@ -4,6 +4,7 @@ import { BaseComponent } from "../base.component";
 import { toGTMformat } from "../../utils/dateutils";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ExcelService } from "../../services/excel.services";
+import { UserService } from "../../services/user.services";
 import { MaintenancesService } from "../../services/maintenances.services";
 import {
   MatDatepicker,
@@ -39,7 +40,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     "Detalle"
   ];
 
-  alertsColumns = ["ID", "Nombre", "Detalle"];
+  alertsColumns = ["ID", "Nombre", "Usuario", "Detalle"];
 
   rowsExcel = {
     ID: true,
@@ -53,9 +54,10 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     Estado: true
   };
 
+  // Listas
   statesList = ["En proceso", "Resuelto"];
-
   typeList = ["Correctivo", "Preventivo"];
+  usersList = [];
 
   searchData = {
     type: "",
@@ -64,13 +66,16 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     start: null
   };
 
+  // Sources
   dataSource: MatTableDataSource<any>;
   alertsSource: MatTableDataSource<any>;
 
+  // MatTab
   @ViewChild("matGroup") matTabGroup: MatTabGroup;
   @ViewChild("alertsPaginator") alertsPaginator: MatPaginator;
   @ViewChild(MatSort) alertsSort: MatSort;
 
+  // Picker
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -85,7 +90,8 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     formBuilder: FormBuilder,
     private modalService: NgbModal,
     private excelService: ExcelService,
-    private maintenancesService: MaintenancesService
+    private maintenancesService: MaintenancesService,
+    private usersService: UserService
   ) {
     super(router, formBuilder);
   }
@@ -99,7 +105,6 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     this.addMask("getMaintenances");
     //Se debe cargar de base de datos
     this.maintenancesService.getMaintenances().then((resp: any) => {
-      //Se debe cargar de base de datos
       let maintenances = [];
       for (let i = 0; i < resp.length; i++) {
         let maintenance = resp[i];
@@ -181,13 +186,24 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
         let alert = resp[i];
         alerts.push({
           ID: alert.id,
-          Nombre: alert.descripcion
+          Nombre: alert.descripcion,
+          Usuario: alert.usuario_id
         });
       }
       this.alertsSource = new MatTableDataSource(alerts);
       this.alertsSource.paginator = this.alertsPaginator;
       this.alertsSource.sort = this.alertsSort;
       this.removeMask("getAlerts");
+    });
+
+    // Lista de usuarios
+    this.usersService.userInfo().then((resp: any) => {
+      this.usersList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.nombres + " " + item.apellidos
+        };
+      });
     });
   }
   /**
@@ -275,6 +291,17 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
 
   showDate(date: Date) {
     return date ? toGTMformat(date) : "-";
+  }
+
+  /**
+   * @private
+   * @method showUser
+   * Metodo para visualizar un usuario dado el identificador
+   */
+  showUser(id: number) {
+    if (this.usersList.length > 0 && id > 0) {
+      return this.usersList.filter(item => item.id == id)[0].description;
+    }
   }
 
   /**

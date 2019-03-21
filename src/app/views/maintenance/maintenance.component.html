@@ -140,6 +140,14 @@
               {{ row["Nombre"] }}</mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="Usuario">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Usuario
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ showUser(row["Usuario"]) }}</mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="Detalle">
             <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
               Detalle

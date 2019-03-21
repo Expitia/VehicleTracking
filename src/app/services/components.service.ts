@@ -10,6 +10,7 @@ export class ComponentsService {
   sbModelsUrl = "/safe/api/services/models/";
   sbSystemsUrl = "/safe/api/services/systems/";
   sbVehiclesUrl = "/safe/api/services/vehicles/";
+  sbCatalogsUrl = "/safe/api/services/catalogs/";
   sbActivitiesUrl = "/safe/api/services/activities/";
   sbCompartmentsUrl = "/safe/api/services/compartments/";
 
@@ -46,6 +47,20 @@ export class ComponentsService {
    */
   getActivities() {
     return this.httputils.post(`${this.sbActivitiesUrl}get_activities.php`, {});
+  }
+
+  /**
+   * Método que realiza petición para traer los catálogos
+   */
+  getCatalogs() {
+    return this.httputils.post(`${this.sbCatalogsUrl}get_catalogs.php`, {});
+  }
+
+  /**
+   * Método que realiza petición para traer las actividades
+   */
+  getSymptoms() {
+    return this.httputils.post(`${this.sbCatalogsUrl}get_symptoms.php`, {});
   }
 
   /**

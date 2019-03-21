@@ -28,18 +28,26 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   systemsColumns = ["ID", "Nombre", "Modelo"];
   componentsColumns = ["ID", "Nombre", "Sistema", "Modelo"];
   activitiesColumns = ["ID", "Nombre", "Compartimiento", "Sistema", "Modelo"];
+  catalogsColumns = ["ID", "Nombre"];
+  symptomsColumns = ["ID", "Nombre", "Catalogo"];
 
+  // Modales
   vehicleTypeModal = null;
   modelModal = null;
   systemModal = null;
   componentModal = null;
   activityModal = null;
+  catalogModal = null;
+  symptomModal = null;
 
-  modelList = [];
+  // Listas
   typeList = [];
+  modelList = [];
   systemList = [];
+  catalogList = [];
   componentList = [];
-
+  
+  // Mensajes de validación
   validateMessages1 = null;
   validateMessages2 = null;
   validateMessages3 = null;
@@ -52,11 +60,14 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   validateLength4 = null;
   validateLength5 = null;
 
+  // Sources
   typesSource: MatTableDataSource<any>;
   modelsSource: MatTableDataSource<any>;
   systemsSource: MatTableDataSource<any>;
   componentsSource: MatTableDataSource<any>;
   activitiesSource: MatTableDataSource<any>;
+  catalogsSource: MatTableDataSource<any>;
+  symptomsSource: MatTableDataSource<any>;
 
   searchData = {
     type: "",
@@ -66,6 +77,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     maxNext: ""
   };
 
+  // MatSorts - Paginators
   @ViewChild('matGroup') matTabGroup: MatTabGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -85,6 +97,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
   @ViewChild('activitiesPaginator') activitiesPaginator: MatPaginator;
   @ViewChild(MatSort) activitiesSort: MatSort;
+
+  @ViewChild('catalogsPaginator') catalogsPaginator: MatPaginator;
+  @ViewChild(MatSort) catalogsSort: MatSort;
+
+  @ViewChild('symptomsPaginator') symptomsPaginator: MatPaginator;
+  @ViewChild(MatSort) symptomsSort: MatSort;
   
   /**
    * @private
@@ -241,6 +259,47 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.activitiesSource = new MatTableDataSource(activities);
       this.activitiesSource.paginator = this.activitiesPaginator;
       this.activitiesSource.sort = this.activitiesSort;
+    });
+
+     // Catálogos
+     this.componentsService.getCatalogs().then((resp: any) => {
+      let catalogs = [];
+
+      // Lista de catálogos
+      this.catalogList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.descripcion
+        };
+      });
+
+      for (let i = 0; i < resp.length; i++) {
+        let catalog = resp[i];
+        catalogs.push({
+          ID: catalog.id,
+          Nombre: catalog.descripcion
+        });
+      }
+      this.catalogsSource = new MatTableDataSource(catalogs);
+      this.catalogsSource.paginator = this.catalogsPaginator;
+      this.catalogsSource.sort = this.catalogsSort;
+    });
+
+    // Síntomas
+     this.componentsService.getSymptoms().then((resp: any) => {
+      let symptoms = [];
+
+      for (let i = 0; i < resp.length; i++) {
+        let symptom = resp[i];
+        symptoms.push({
+          ID: symptom.id,
+          Nombre: symptom.descripcion,
+          Catalogo: symptom.catalogo_id
+        });
+      }
+      this.symptomsSource = new MatTableDataSource(symptoms);
+      this.symptomsSource.paginator = this.symptomsPaginator;
+      this.symptomsSource.sort = this.symptomsSort;
     });
   }
 
@@ -630,4 +689,15 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       return this.componentList.filter(item => item.id == id)[0].description;
     }
   }
+
+  /**
+   * @private
+   * @method showCatalog
+   * Metodo para visualizar un compartimiento dado el identificador
+  */
+ showCatalog(id: number) {
+  if(this.catalogList.length > 0 && id > 0){
+    return this.catalogList.filter(item => item.id == id)[0].description;
+  }
+}
 }

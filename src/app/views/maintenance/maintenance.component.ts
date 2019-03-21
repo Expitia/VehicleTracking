@@ -40,7 +40,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     "Detalle"
   ];
 
-  alertsColumns = ["ID", "Nombre", "Usuario", "Detalle"];
+  alertsColumns = ["ID", "Nombre", "Usuario", "Equipo", "Detalle"];
 
   rowsExcel = {
     ID: true,
@@ -187,7 +187,8 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
         alerts.push({
           ID: alert.id,
           Nombre: alert.descripcion,
-          Usuario: alert.usuario_id
+          Usuario: alert.usuario_id,
+          Equipo: alert.equipo_id
         });
       }
       this.alertsSource = new MatTableDataSource(alerts);
@@ -243,23 +244,26 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * @method onExport
    * Methodo handler lanzado al momento de exportar los estilos
    */
-  onCreateMaintenance = function() {
-    this.addMask("createMaintenanceByAlert");
+  onCreateMaintenance = function(parameters) {
+    //this.addMask("createMaintenanceByAlert");
     // Actividades
-    this.maintenancesService.createMaintenanceByAlert().then((resp: any) => {
-      let alerts = [];
-      for (let i = 0; i < resp.length; i++) {
-        let alert = resp[i];
-        alerts.push({
-          ID: alert.id,
-          Nombre: alert.descripcion
-        });
-      }
-      this.alertsSource = new MatTableDataSource(alerts);
-      this.alertsSource.paginator = this.alertsPaginator;
-      this.alertsSource.sort = this.alertsSort;
-      this.removeMask("createMaintenanceByAlert");
-    });
+    debugger;
+    this.maintenancesService
+      .createMaintenanceByAlert(parameters)
+      .then((resp: any) => {
+        let alerts = [];
+        for (let i = 0; i < resp.length; i++) {
+          let alert = resp[i];
+          alerts.push({
+            ID: alert.id,
+            Nombre: alert.descripcion
+          });
+        }
+        this.alertsSource = new MatTableDataSource(alerts);
+        this.alertsSource.paginator = this.alertsPaginator;
+        this.alertsSource.sort = this.alertsSort;
+        this.removeMask("createMaintenanceByAlert");
+      });
   };
 
   /**

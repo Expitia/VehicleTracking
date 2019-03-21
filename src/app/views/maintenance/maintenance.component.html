@@ -103,10 +103,7 @@
             <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
               Detalle
             </mat-header-cell>
-            <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row">
-              <button class="btn btn-outline-dark py-0 px-1 mx-1">
-                <i class="fa fa-search nav-item-icon small"></i>
-              </button>
+            <mat-cell class="d-flex align-items-center justify-content-center" style="max-width: 137px;" *matCellDef="let row">
               <button *ngIf="
                     row['Estado'] == 'En proceso' || row['Estado'] == 'Pendiente'
                   "
@@ -148,12 +145,20 @@
               {{ showUser(row["Usuario"]) }}</mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="Equipo">
+            <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+              Equipo
+            </mat-header-cell>
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              {{ row["Equipo"] }}</mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="Detalle">
             <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
               Detalle
             </mat-header-cell>
-            <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row">
-              <button (click)="onCreateMaintenance();" class="btn btn-outline-dark py-0 px-1 mx-1">
+            <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+              <button (click)="onCreateMaintenance({alerta_id: row.ID, equipos_id: row.Equipo});" class="btn btn-outline-dark py-0 px-1 mx-1">
                 <i class="fa fa-download nav-item-icon small"></i>
               </button>
             </mat-cell>

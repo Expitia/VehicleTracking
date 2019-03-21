@@ -39,7 +39,10 @@ export class ComponentsService {
    * Método que realiza petición para traer los compartimientos
    */
   getCompartments() {
-    return this.httputils.post(`${this.sbCompartmentsUrl}get_compartments.php`, {});
+    return this.httputils.post(
+      `${this.sbCompartmentsUrl}get_compartments.php`,
+      {}
+    );
   }
 
   /**
@@ -67,32 +70,59 @@ export class ComponentsService {
    * Método que realiza petición para crear un nuevo modelo
    */
   createModel(parameters) {
-    return this.httputils.post(`${this.sbModelsUrl}create_model.php`, parameters);
+    return this.httputils.post(
+      `${this.sbModelsUrl}create_model.php`,
+      parameters
+    );
   }
 
   /**
    * Método que realiza petición para crear un nuevo sistema
    */
   createSystem(parameters) {
-    return this.httputils.post(`${this.sbSystemsUrl}create_system.php`, parameters);
+    return this.httputils.post(
+      `${this.sbSystemsUrl}create_system.php`,
+      parameters
+    );
   }
 
   /**
    * Método que realiza petición para crear un nuevo compartimiento
    */
   createCompartment(parameters) {
-    return this.httputils.post(`${this.sbCompartmentsUrl}create_compartment.php`, parameters);
+    return this.httputils.post(
+      `${this.sbCompartmentsUrl}create_compartment.php`,
+      parameters
+    );
   }
-
 
   /**
    * Método que realiza petición para crear una nueva actividad
    */
   createActivity(parameters) {
-    return this.httputils.post(`${this.sbActivitiesUrl}create_activity.php`, parameters);
+    return this.httputils.post(
+      `${this.sbActivitiesUrl}create_activity.php`,
+      parameters
+    );
   }
 
+  /**
+   * Método que realiza petición para crear un nuevo catálogo
+   */
+  createCatalog(parameters) {
+    return this.httputils.post(
+      `${this.sbCatalogsUrl}create_catalog.php`,
+      parameters
+    );
+  }
 
-
-  
+  /**
+   * Método que realiza petición para crear un nuevo síntoma
+   */
+  createSymptom(parameters) {
+    return this.httputils.post(
+      `${this.sbCatalogsUrl}create_symptom.php`,
+      parameters
+    );
+  }
 }

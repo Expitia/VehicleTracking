@@ -2,8 +2,8 @@ import { Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
 import { BaseComponent } from "../base.component";
 import { toGTMformat } from "../../utils/dateutils";
-import { MaintenancesService } from "../../services/maintenances.services";
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { UserService } from "src/app/services/user.services";
 
 @Component({
   selector: "app-detailsusers",
@@ -22,7 +22,7 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
   // Lista de roles
   roleList = [];
   // Mantenimiento actual
-  currentMaintenance = {
+  currentUser = {
     ID: null,
     email: null,
     date: null,
@@ -34,12 +34,11 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
    * @private
    * @method constructor
    */
-
   constructor(
     router: Router,
     formBuilder: FormBuilder,
     private routerView: Router,
-    private maintenanceService: MaintenancesService
+    private userService: UserService
   ) {
     super(router, formBuilder);
   }
@@ -49,43 +48,33 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
    * @method ngOnInit
    * Methodo del ciclo de vida de la vista
    */
-
-  ngOnInit() {}
-
-  /**
-   * @private
-   * @method ngAfterViewInit
-   * Methodo del ciclo de vida de la vista
-   */
-
-  ngAfterViewInit() {
+  ngOnInit() {
     // Identificador del usuario
     var userId = parseInt(
       this.routerView.routerState.snapshot.root.queryParams.id
     );
-    this.addMask("getMaintenanceDetail");
+    this.addMask("userDetail");
     // Petición a base de datos
-    this.maintenanceService.getMaintenanceDetail({ id: userId }).then(
+    this.userService.userDetail({ id: userId }).then(
       (resp: any) => {
         // Asignación de respuesta a usuario actual
-        this.currentMaintenance = {
+        this.currentUser = {
           ID: userId,
           email: resp.email,
           date: new Date(resp.fecha_registro),
           role: resp.rol,
           state: resp.estado
         };
-        this.removeMask("getMaintenanceDetail");
+        this.removeMask("userDetail");
       },
       (error: any) => {
         console.error("Unable to load data");
       }
     );
 
-    /* 
     this.addMask("stateList");
     // Obtenemos la información de los estados
-     this.userService.stateList().then(
+    this.userService.stateList().then(
       (resp: any) => {
         this.statesList = resp.map(item => {
           return {
@@ -98,9 +87,8 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
       (error: any) => {
         console.error("Unable to load state data");
       }
-    ); */
+    );
 
-    /*
     this.addMask("rolsList");
     // Obtenemos la información de los roles
     this.userService.rolsList().then(
@@ -117,37 +105,44 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
         console.error("Unable to load rols data");
       }
     );
-  } */
+  }
 
-    /**
-     * @private
-     * @method onMaxHours
-     * Methodo para visualizar las fechas
-     */
-    /* showDate(date: Date){
-    return date ? toGTMformat(date) : "-";
-  } */
-
-    /**
-     * @private
-     * @method showState
-     * Metodo para visualizar un estado dado el identificador
-     */
-    /* showState(id: number) {
-    if(this.statesList.length > 0){
+  /**
+   * @private
+   * @method showState
+   * Metodo para visualizar un estado dado el identificador
+   */
+  showState(id: number) {
+    if (this.statesList.length > 0) {
       return this.statesList.filter(item => item.id == id)[0].description;
     }
-  } */
+  }
 
-    /**
-     * @private
-     * @method showRol
-     * Metodo para visualizar un rol dado el identificador
-     */
-    /*  showRol(id: number) {
-    if(this.roleList.length > 0){
+  /**
+   * @private
+   * @method showRol
+   * Metodo para visualizar un rol dado el identificador
+   */
+  showRol(id: number) {
+    if (this.roleList.length > 0) {
       return this.roleList.filter(item => item.id == id)[0].description;
     }
-  } */
   }
+
+  /**
+   * @private
+   * @method onMaxHours
+   * Methodo para visualizar las fechas
+   */
+  showDate(date: Date) {
+    return date ? toGTMformat(date) : "-";
+  }
+
+  /**
+   * @private
+   * @method ngAfterViewInit
+   * Methodo del ciclo de vida de la vista
+   */
+
+  ngAfterViewInit() {}
 }

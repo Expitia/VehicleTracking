@@ -59,8 +59,8 @@ export class ComponentsService {
   /**
    * Método que realiza petición para traer las actividades
    */
-  getAlerts() {
-    return this.httputils.post(`${this.sbCatalogsUrl}get_alerts.php.php`, {});
+  getSymptoms() {
+    return this.httputils.post(`${this.sbCatalogsUrl}get_symptoms.php`, {});
   }
 
   /**

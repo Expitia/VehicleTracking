@@ -284,6 +284,23 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.catalogsSource.paginator = this.catalogsPaginator;
       this.catalogsSource.sort = this.catalogsSort;
     });
+
+    // Síntomas
+     this.componentsService.getSymptoms().then((resp: any) => {
+      let symptoms = [];
+
+      for (let i = 0; i < resp.length; i++) {
+        let symptom = resp[i];
+        symptoms.push({
+          ID: symptom.id,
+          Nombre: symptom.descripcion,
+          Catalogo: symptom.catalogo_id
+        });
+      }
+      this.symptomsSource = new MatTableDataSource(symptoms);
+      this.symptomsSource.paginator = this.symptomsPaginator;
+      this.symptomsSource.sort = this.symptomsSort;
+    });
   }
 
   /**
@@ -672,4 +689,15 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       return this.componentList.filter(item => item.id == id)[0].description;
     }
   }
+
+  /**
+   * @private
+   * @method showCatalog
+   * Metodo para visualizar un compartimiento dado el identificador
+  */
+ showCatalog(id: number) {
+  if(this.catalogList.length > 0 && id > 0){
+    return this.catalogList.filter(item => item.id == id)[0].description;
+  }
+}
 }

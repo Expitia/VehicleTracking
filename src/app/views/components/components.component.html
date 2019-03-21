@@ -368,7 +368,7 @@
             <div
               class="bg-white shadow border-left border-right border-bottom border-2"
             >
-              <mat-table [dataSource]="activitiesSource" matSort>
+              <mat-table [dataSource]="symptomsSource" matSort>
                 <ng-container matColumnDef="ID">
                   <mat-header-cell
                     style="max-width: 60px;"
@@ -398,61 +398,29 @@
                   </mat-cell>
                 </ng-container>
     
-                <ng-container matColumnDef="Compartimiento">
+                <ng-container matColumnDef="Catalogo">
                   <mat-header-cell
                     class="d-flex align-items-center justify-content-start"
                     *matHeaderCellDef
                     mat-sort-header
                   >
-                    Compartimiento
+                    Catálogo
                   </mat-header-cell>
                   <mat-cell
                     class="d-flex align-items-center justify-content-start"
                     *matCellDef="let row"
                   >
-                    {{ showComponent(row["Compartimiento"]) }}
+                    {{ showCatalog(row["Catalogo"]) }}
                   </mat-cell>
                 </ng-container>
-    
-                <ng-container matColumnDef="Sistema">
-                  <mat-header-cell
-                    class="d-flex align-items-center justify-content-start"
-                    *matHeaderCellDef
-                    mat-sort-header
-                  >
-                    Sistema
-                  </mat-header-cell>
-                  <mat-cell
-                    class="d-flex align-items-center justify-content-start"
-                    *matCellDef="let row"
-                  >
-                    {{ row["Sistema"] }}
-                  </mat-cell>
-                </ng-container>
-    
-                <ng-container matColumnDef="Modelo">
-                  <mat-header-cell
-                    class="d-flex align-items-center justify-content-start"
-                    *matHeaderCellDef
-                    mat-sort-header
-                  >
-                    Modelo
-                  </mat-header-cell>
-                  <mat-cell
-                    class="d-flex align-items-center justify-content-start"
-                    *matCellDef="let row"
-                  >
-                    {{ showModel(row["Modelo"]) }}
-                  </mat-cell>
-                </ng-container>
-    
+
                 <mat-header-row
-                  *matHeaderRowDef="activitiesColumns"
+                  *matHeaderRowDef="symptomsColumns"
                 ></mat-header-row>
-                <mat-row *matRowDef="let row; columns: activitiesColumns">
+                <mat-row *matRowDef="let row; columns: symptomsColumns">
                 </mat-row>
               </mat-table>
-              <mat-paginator #activitiesPaginator [pageSizeOptions]="[8]"></mat-paginator>
+              <mat-paginator #sypmtomsPaginator [pageSizeOptions]="[8]"></mat-paginator>
             </div>
           </mat-tab>
     </mat-tab-group>

@@ -775,24 +775,20 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     debugger;
     if (this.catalogModal.valid) {
       this.modalService.dismissAll();
-      /* this.componentsService
-        .createActivity({
+      this.componentsService
+        .createCatalog({
           id: null,
-          descripcion: this.activityModal.value.activity,
-          compartimientos_id: this.activityModal.value.component
+          descripcion: this.catalogModal.value.description
         })
         .then((resp: any) => {
-           this.activitiesSource.data = this.activitiesSource.data.concat({
+          this.catalogsSource.data = this.catalogsSource.data.concat({
             ID: resp.id,
-            Nombre: this.activityModal.value.activity,
-            Compartimiento: this.activityModal.value.component,
-            Sistema: this.activityModal.value.system,
-            Modelo: this.activityModal.value.modelo_id
+            Nombre: this.catalogModal.value.description
           });
 
-          // Posiciona en el tab de actividades
-          this.matTabGroup.selectedIndex = 4;
-        }); */
+          // Posiciona en el tab de catálogos
+          this.matTabGroup.selectedIndex = 5;
+        });
     }
   }
 
@@ -821,7 +817,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           });
 
           // Posiciona en el tab de actividades
-          this.matTabGroup.selectedIndex = 4;
+          this.matTabGroup.selectedIndex = 6;
         }); */
     }
   }

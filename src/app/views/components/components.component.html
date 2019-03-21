@@ -479,9 +479,9 @@
             </app-textfield>
           </section>
           <section>
-            <app-textfield [inputForm]="symptomModal" [fieldName]="'id_catalog'" [formSubmitted]="formSubmitted"
-              [validationLengths]="validateLength7" [validationMessages]="validateMessages7">
-            </app-textfield>
+            <app-selectfield [inputForm]="symptomModal" [options]="catalogList" [fieldName]="'id_catalog'"
+              [formSubmitted]="formSubmitted" [validationMessages]="validateMessages7">
+            </app-selectfield>
           </section>
         </form>
       </div>

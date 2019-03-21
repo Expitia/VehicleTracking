@@ -442,5 +442,27 @@
         </button>
       </div>
     </ng-template>
+    <ng-template #contentCreate6 let-modal>
+      <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
+        <span class="modal-title text-white"><b>Nuevo catálogo</b></span>
+        <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
+      </div>
+      <div class="modal-body">
+        <form class="p-3" [formGroup]="catalogModal" onsubmit="return false">
+          <span class="lead">Datos del nuevo catálogo</span>
+          <hr />
+          <section>
+            <app-textfield [inputForm]="catalogModal" [fieldName]="'description'" [formSubmitted]="formSubmitted"
+              [validationLengths]="validateLength6" [validationMessages]="validateMessages6">
+            </app-textfield>
+          </section>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate6(); modal.close('Close click')">
+          <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+        </button>
+      </div>
+    </ng-template>
   </div>
 </div>

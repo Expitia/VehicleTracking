@@ -2,11 +2,8 @@ import { Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
 import { BaseComponent } from "../base.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ExcelService } from "../../services/excel.services";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { VehicleService } from "src/app/services/vehicles.services";
 import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from "@angular/material";
-import Order from "../../utils/pdf";
 import { ComponentsService } from "src/app/services/components.service";
 
 
@@ -53,12 +50,16 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   validateMessages3 = null;
   validateMessages4 = null;
   validateMessages5 = null;
+  validateMessages6 = null;
+  validateMessages7 = null;
 
   validateLength1 = null;
   validateLength2 = null;
   validateLength3 = null;
   validateLength4 = null;
   validateLength5 = null;
+  validateLength6 = null;
+  validateLength7 = null;
 
   // Sources
   typesSource: MatTableDataSource<any>;
@@ -492,6 +493,37 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.activityModal = createForm5.form;
     this.validateLength5 = createForm5.validationLengths;
     this.validateMessages5 = createForm5.validationMessages;
+
+    // Formulario de catálogos
+    const createForm6 = this.createForm(["id_catalog", "description"], {
+      id_catalog: {
+        minlength: "",
+        maxlength: "",
+        required: false,
+        messages: {
+          label: "",
+          placeholder: "",
+          minlength: "",
+          maxlength: "",
+          required: ""
+        }
+      },
+      description: {
+        minlength: "3",
+        maxlength: "100",
+        required: true,
+        messages: {
+          label: "",
+          placeholder: "Catálogo",
+          minlength: "El nombre debe tener un mínimo de 3 carracteres",
+          maxlength: "El nombre no puede superar los 100 carracteres",
+          required: "Debe ingresar un nombre"
+        }}
+    });
+
+    this.catalogModal = createForm6.form;
+    this.validateLength6 = createForm6.validationLengths;
+    this.validateMessages6 = createForm6.validationMessages;
   }
 
   /**
@@ -500,6 +532,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento dar click sobre una opción
    */
   onOpenModal(content, long) {
+    debugger;
     const size = long || "lg";
     this.modalService.open(content, { centered: true, size });
   }
@@ -516,7 +549,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
+   * @method onOpenCreate3
    * Methodo handler lanzado al momento dar click sobre la opción de crear
    */
   onOpenCreate3() {
@@ -527,7 +560,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
+   * @method onOpenCreate4
    * Methodo handler lanzado al momento dar click sobre la opción de crear
    */
   onOpenCreate4() {
@@ -538,7 +571,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
-   * @method onOpenCreate
+   * @method onOpenCreate5
    * Methodo handler lanzado al momento dar click sobre la opción de crear
    */
   onOpenCreate5() {
@@ -547,6 +580,17 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.activityModal.controls.component.setValue("");
     this.activityModal.controls.system.setValue("");
     this.activityModal.controls.modelo_id.setValue("");
+  }
+
+  /**
+   * @private
+   * @method onOpenCreate6
+   * Methodo handler lanzado al momento dar click sobre la opción de crear un catálogo
+   */
+  onOpenCreate6() {
+    debugger;
+    this.catalogModal.controls.id_catalog.setValue("");
+    this.catalogModal.controls.description.setValue("");
   }
 
   /**
@@ -654,6 +698,36 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           // Posiciona en el tab de actividades
           this.matTabGroup.selectedIndex = 4;
         });
+    }
+  }
+
+  /**
+   * @private
+   * @method onCreate6
+   * Metodo para crear un nuevo catálogo
+   */
+  onCreate6(){
+    debugger;
+    if (this.catalogModal.valid) {
+      this.modalService.dismissAll();
+      /* this.componentsService
+        .createActivity({
+          id: null,
+          descripcion: this.activityModal.value.activity,
+          compartimientos_id: this.activityModal.value.component
+        })
+        .then((resp: any) => {
+           this.activitiesSource.data = this.activitiesSource.data.concat({
+            ID: resp.id,
+            Nombre: this.activityModal.value.activity,
+            Compartimiento: this.activityModal.value.component,
+            Sistema: this.activityModal.value.system,
+            Modelo: this.activityModal.value.modelo_id
+          });
+
+          // Posiciona en el tab de actividades
+          this.matTabGroup.selectedIndex = 4;
+        }); */
     }
   }
 

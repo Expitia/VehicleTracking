@@ -3,9 +3,13 @@ import { FormBuilder } from "@angular/forms";
 import { BaseComponent } from "../base.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from "@angular/material";
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatTabGroup
+} from "@angular/material";
 import { ComponentsService } from "src/app/services/components.service";
-
 
 @Component({
   selector: "app-components",
@@ -19,7 +23,6 @@ import { ComponentsService } from "src/app/services/components.service";
  * Clase para la visualización de componentes
  */
 export class ComponentsComponent extends BaseComponent implements OnInit {
-
   typesColumns = ["ID", "Nombre"];
   modelsColumns = ["ID", "Nombre"];
   systemsColumns = ["ID", "Nombre", "Modelo"];
@@ -43,7 +46,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   systemList = [];
   catalogList = [];
   componentList = [];
-  
+
   // Mensajes de validación
   validateMessages1 = null;
   validateMessages2 = null;
@@ -79,32 +82,32 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   };
 
   // MatSorts - Paginators
-  @ViewChild('matGroup') matTabGroup: MatTabGroup;
+  @ViewChild("matGroup") matTabGroup: MatTabGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  @ViewChild('typesPaginator') typesPaginator: MatPaginator;
+  @ViewChild("typesPaginator") typesPaginator: MatPaginator;
   @ViewChild(MatSort) typesSort: MatSort;
 
-  @ViewChild('modelsPaginator') modelsPaginator: MatPaginator;
+  @ViewChild("modelsPaginator") modelsPaginator: MatPaginator;
   @ViewChild(MatSort) modelsSort: MatSort;
 
-  @ViewChild('systemsPaginator') systemsPaginator: MatPaginator;
+  @ViewChild("systemsPaginator") systemsPaginator: MatPaginator;
   @ViewChild(MatSort) systemsSort: MatSort;
 
-  @ViewChild('componentsPaginator') componentsPaginator: MatPaginator;
+  @ViewChild("componentsPaginator") componentsPaginator: MatPaginator;
   @ViewChild(MatSort) componentsSort: MatSort;
 
-  @ViewChild('activitiesPaginator') activitiesPaginator: MatPaginator;
+  @ViewChild("activitiesPaginator") activitiesPaginator: MatPaginator;
   @ViewChild(MatSort) activitiesSort: MatSort;
 
-  @ViewChild('catalogsPaginator') catalogsPaginator: MatPaginator;
+  @ViewChild("catalogsPaginator") catalogsPaginator: MatPaginator;
   @ViewChild(MatSort) catalogsSort: MatSort;
 
-  @ViewChild('symptomsPaginator') symptomsPaginator: MatPaginator;
+  @ViewChild("symptomsPaginator") symptomsPaginator: MatPaginator;
   @ViewChild(MatSort) symptomsSort: MatSort;
-  
+
   /**
    * @private
    * @method constructor
@@ -117,7 +120,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     private componentsService: ComponentsService
   ) {
     super(router, formBuilder);
-
   }
 
   /**
@@ -224,13 +226,13 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
 
     // Compartimientos
     this.componentsService.getCompartments().then((resp: any) => {
-        // Lista de compartimientos
-        this.componentList = resp.map(item => {
-          return {
-            id: item.id,
-            description: item.descripcion
-          };
-        });
+      // Lista de compartimientos
+      this.componentList = resp.map(item => {
+        return {
+          id: item.id,
+          description: item.descripcion
+        };
+      });
 
       let compartments = [];
       for (let i = 0; i < resp.length; i++) {
@@ -262,8 +264,8 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.activitiesSource.sort = this.activitiesSort;
     });
 
-     // Catálogos
-     this.componentsService.getCatalogs().then((resp: any) => {
+    // Catálogos
+    this.componentsService.getCatalogs().then((resp: any) => {
       let catalogs = [];
 
       // Lista de catálogos
@@ -287,7 +289,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     });
 
     // Síntomas
-     this.componentsService.getSymptoms().then((resp: any) => {
+    this.componentsService.getSymptoms().then((resp: any) => {
       let symptoms = [];
 
       for (let i = 0; i < resp.length; i++) {
@@ -310,7 +312,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngOnInit() {
-
     const createForm2 = this.createForm(["id_model", "modelo_id"], {
       id_model: {
         minlength: "",
@@ -341,7 +342,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
     this.modelModal = createForm2.form;
     this.validateLength2 = createForm2.validationLengths;
     this.validateMessages2 = createForm2.validationMessages;
-
 
     const createForm3 = this.createForm(["id_system", "system", "modelo_id"], {
       id_system: {
@@ -382,113 +382,121 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       }
     });
 
-
     this.systemModal = createForm3.form;
     this.validateLength3 = createForm3.validationLengths;
     this.validateMessages3 = createForm3.validationMessages;
 
-    const createForm4 = this.createForm(["id_component", "component", "system"], {
-      id_component: {
-        minlength: "",
-        maxlength: "",
-        required: false,
-        messages: {
-          label: "",
-          placeholder: "",
+    const createForm4 = this.createForm(
+      ["id_component", "component", "system"],
+      {
+        id_component: {
           minlength: "",
           maxlength: "",
-          required: ""
-        }
-      },
-      component: {
-        minlength: "3",
-        maxlength: "30",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Componente",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 30 carracteres",
-          required: "Debe ingresar un nombre"
-        }
-      },
-      system: {
-        minlength: "1",
-        maxlength: "30",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Sistema",
-          minlength: "El nombre debe tener un mínimo de 1 carracteres",
-          maxlength: "El nombre no puede superar los 30 carracteres",
-          required: "Debe ingresar un nombre"
+          required: false,
+          messages: {
+            label: "",
+            placeholder: "",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        component: {
+          minlength: "3",
+          maxlength: "30",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Componente",
+            minlength: "El nombre debe tener un mínimo de 3 carracteres",
+            maxlength: "El nombre no puede superar los 30 carracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        system: {
+          minlength: "1",
+          maxlength: "30",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Sistema",
+            minlength: "El nombre debe tener un mínimo de 1 carracteres",
+            maxlength: "El nombre no puede superar los 30 carracteres",
+            required: "Debe ingresar un nombre"
+          }
         }
       }
-    });
+    );
 
     this.componentModal = createForm4.form;
     this.validateLength4 = createForm4.validationLengths;
     this.validateMessages4 = createForm4.validationMessages;
 
-    const createForm5 = this.createForm(["id_activity", "activity", "component", "system", "modelo_id"], {
-      id_activity: {
-        minlength: "",
-        maxlength: "",
-        required: false,
-        messages: {
-          label: "",
-          placeholder: "",
+    const createForm5 = this.createForm(
+      ["id_activity", "activity", "component", "system", "modelo_id"],
+      {
+        id_activity: {
           minlength: "",
           maxlength: "",
-          required: ""
-        }
-      },
-      activity: {
-        minlength: "3",
-        maxlength: "100",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Actividad",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
-        }},
-      component: {
-        minlength: "1",
-        maxlength: "30",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Componente",
-          minlength: "El nombre debe tener un mínimo de 3 carracteres",
-          maxlength: "El nombre no puede superar los 10 carracteres",
-          required: "Debe ingresar un nombre"
-        }},
-      system: {
-        minlength: "1",
-        maxlength: "30",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Sistema",
-          minlength: "El nombre debe tener un mínimo de 1 caracter",
-          maxlength: "El nombre no puede superar los 30 caracteres",
-          required: "Debe ingresar un nombre"
-        }},
-      modelo_id: {
-        minlength: "1",
-        maxlength: "30",
-        required: true,
-        messages: {
-          label: "",
-          placeholder: "Modelo",
-          minlength: "El nombre debe tener un mínimo de 1 caracter",
-          maxlength: "El nombre no puede superar los 30 caracteres",
-          required: "Debe ingresar un nombre"
+          required: false,
+          messages: {
+            label: "",
+            placeholder: "",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        activity: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Actividad",
+            minlength: "El nombre debe tener un mínimo de 3 carracteres",
+            maxlength: "El nombre no puede superar los 10 carracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        component: {
+          minlength: "1",
+          maxlength: "30",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Componente",
+            minlength: "El nombre debe tener un mínimo de 3 carracteres",
+            maxlength: "El nombre no puede superar los 10 carracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        system: {
+          minlength: "1",
+          maxlength: "30",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Sistema",
+            minlength: "El nombre debe tener un mínimo de 1 caracter",
+            maxlength: "El nombre no puede superar los 30 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        modelo_id: {
+          minlength: "1",
+          maxlength: "30",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 1 caracter",
+            maxlength: "El nombre no puede superar los 30 caracteres",
+            required: "Debe ingresar un nombre"
+          }
         }
       }
-    });
+    );
 
     this.activityModal = createForm5.form;
     this.validateLength5 = createForm5.validationLengths;
@@ -518,12 +526,60 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           minlength: "El nombre debe tener un mínimo de 3 carracteres",
           maxlength: "El nombre no puede superar los 100 carracteres",
           required: "Debe ingresar un nombre"
-        }}
+        }
+      }
     });
 
     this.catalogModal = createForm6.form;
     this.validateLength6 = createForm6.validationLengths;
     this.validateMessages6 = createForm6.validationMessages;
+
+    // Formulario de síntomas
+    const createForm7 = this.createForm(
+      ["id_symptom", "description", "id_catalog"],
+      {
+        id_symptom: {
+          minlength: "",
+          maxlength: "",
+          required: false,
+          messages: {
+            label: "",
+            placeholder: "",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        description: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Síntoma",
+            minlength: "El nombre debe tener un mínimo de 3 carracteres",
+            maxlength: "El nombre no puede superar los 100 carracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        id_catalog: {
+          minlength: "1",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Catálogo",
+            minlength: "El nombre debe tener un mínimo de 3 carracteres",
+            maxlength: "El nombre no puede superar los 100 carracteres",
+            required: "Debe ingresar un síntoma"
+          }
+        }
+      }
+    );
+
+    this.symptomModal = createForm7.form;
+    this.validateLength7 = createForm7.validationLengths;
+    this.validateMessages7 = createForm7.validationMessages;
   }
 
   /**
@@ -532,7 +588,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento dar click sobre una opción
    */
   onOpenModal(content, long) {
-    debugger;
     const size = long || "lg";
     this.modalService.open(content, { centered: true, size });
   }
@@ -588,9 +643,19 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento dar click sobre la opción de crear un catálogo
    */
   onOpenCreate6() {
-    debugger;
     this.catalogModal.controls.id_catalog.setValue("");
     this.catalogModal.controls.description.setValue("");
+  }
+
+  /**
+   * @private
+   * @method onOpenCreate7
+   * Methodo handler lanzado al momento dar click sobre la opción de crear un síntoma
+   */
+  onOpenCreate7() {
+    this.symptomModal.controls.id_symptom.setValue("");
+    this.symptomModal.controls.description.setValue("");
+    this.symptomModal.controls.id_catalog.setValue("");
   }
 
   /**
@@ -598,7 +663,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @method onCreate2
    * Metodo para crear un nuevo modelo
    */
-  onCreate2(){
+  onCreate2() {
     if (this.modelModal.valid) {
       this.modalService.dismissAll();
       this.componentsService
@@ -623,7 +688,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @method onCreate3
    * Metodo para crear un nuevo sistema
    */
-  onCreate3(){
+  onCreate3() {
     if (this.systemModal.valid) {
       this.modalService.dismissAll();
       this.componentsService
@@ -649,7 +714,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @method onCreate4
    * Metodo para crear un nuevo compartimiento
    */
-  onCreate4(){
+  onCreate4() {
     if (this.componentModal.valid) {
       this.modalService.dismissAll();
       this.componentsService
@@ -659,7 +724,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           sistemas_id: this.componentModal.value.system
         })
         .then((resp: any) => {
-           this.componentsSource.data = this.componentsSource.data.concat({
+          this.componentsSource.data = this.componentsSource.data.concat({
             ID: resp.id,
             Nombre: this.componentModal.value.component,
             Sistema: this.componentModal.value.system,
@@ -677,7 +742,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @method onCreate5
    * Metodo para crear una nueva actividad
    */
-  onCreate5(){
+  onCreate5() {
     if (this.activityModal.valid) {
       this.modalService.dismissAll();
       this.componentsService
@@ -687,7 +752,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
           compartimientos_id: this.activityModal.value.component
         })
         .then((resp: any) => {
-           this.activitiesSource.data = this.activitiesSource.data.concat({
+          this.activitiesSource.data = this.activitiesSource.data.concat({
             ID: resp.id,
             Nombre: this.activityModal.value.activity,
             Compartimiento: this.activityModal.value.component,
@@ -706,7 +771,37 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @method onCreate6
    * Metodo para crear un nuevo catálogo
    */
-  onCreate6(){
+  onCreate6() {
+    debugger;
+    if (this.catalogModal.valid) {
+      this.modalService.dismissAll();
+      /* this.componentsService
+        .createActivity({
+          id: null,
+          descripcion: this.activityModal.value.activity,
+          compartimientos_id: this.activityModal.value.component
+        })
+        .then((resp: any) => {
+           this.activitiesSource.data = this.activitiesSource.data.concat({
+            ID: resp.id,
+            Nombre: this.activityModal.value.activity,
+            Compartimiento: this.activityModal.value.component,
+            Sistema: this.activityModal.value.system,
+            Modelo: this.activityModal.value.modelo_id
+          });
+
+          // Posiciona en el tab de actividades
+          this.matTabGroup.selectedIndex = 4;
+        }); */
+    }
+  }
+
+  /**
+   * @private
+   * @method onCreate7
+   * Metodo para crear un nuevo síntoma
+   */
+  onCreate7() {
     debugger;
     if (this.catalogModal.valid) {
       this.modalService.dismissAll();
@@ -735,31 +830,31 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @private
    * @method showModel
    * Metodo para visualizar un modelo dado el identificador
-  */
+   */
   showModel(id: number) {
-    if(this.modelList.length > 0 && id > 0){
+    if (this.modelList.length > 0 && id > 0) {
       return this.modelList.filter(item => item.id == id)[0].description;
     }
-  } 
+  }
 
   /**
    * @private
    * @method showSystem
    * Metodo para visualizar un sistema dado el identificador
-  */
+   */
   showSystem(id: number) {
-    if(this.systemList.length > 0 && id > 0){
+    if (this.systemList.length > 0 && id > 0) {
       return this.systemList.filter(item => item.id == id)[0].description;
-    } 
-  } 
+    }
+  }
 
   /**
    * @private
    * @method showComponent
    * Metodo para visualizar un compartimiento dado el identificador
-  */
+   */
   showComponent(id: number) {
-    if(this.componentList.length > 0 && id > 0){
+    if (this.componentList.length > 0 && id > 0) {
       return this.componentList.filter(item => item.id == id)[0].description;
     }
   }
@@ -768,10 +863,10 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * @private
    * @method showCatalog
    * Metodo para visualizar un compartimiento dado el identificador
-  */
- showCatalog(id: number) {
-  if(this.catalogList.length > 0 && id > 0){
-    return this.catalogList.filter(item => item.id == id)[0].description;
+   */
+  showCatalog(id: number) {
+    if (this.catalogList.length > 0 && id > 0) {
+      return this.catalogList.filter(item => item.id == id)[0].description;
+    }
   }
-}
 }

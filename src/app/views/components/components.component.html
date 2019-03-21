@@ -330,9 +330,9 @@
           <i class="fa fa-plus-circle nav-item-icon"></i>
           <span class="pl-2">Crear nuevo catálogo</span>
         </div>
-        <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate5, 'md');
+        <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentCreate7, 'md');
                       optionPopover.close();
-                      onOpenCreate5()"
+                      onOpenCreate7()"
           style="cursor: pointer">
           <i class="fa fa-plus-circle nav-item-icon"></i>
           <span class="pl-2">Crear nuevo síntoma</span>
@@ -460,6 +460,33 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate6(); modal.close('Close click')">
+          <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
+        </button>
+      </div>
+    </ng-template>
+    <ng-template #contentCreate7 let-modal>
+      <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
+        <span class="modal-title text-white"><b>Nuevo síntoma</b></span>
+        <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
+      </div>
+      <div class="modal-body">
+        <form class="p-3" [formGroup]="symptomModal" onsubmit="return false">
+          <span class="lead">Datos del nuevo síntoma</span>
+          <hr />
+          <section>
+            <app-textfield [inputForm]="symptomModal" [fieldName]="'description'" [formSubmitted]="formSubmitted"
+              [validationLengths]="validateLength7" [validationMessages]="validateMessages7">
+            </app-textfield>
+          </section>
+          <section>
+            <app-textfield [inputForm]="symptomModal" [fieldName]="'id_catalog'" [formSubmitted]="formSubmitted"
+              [validationLengths]="validateLength7" [validationMessages]="validateMessages7">
+            </app-textfield>
+          </section>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate7(); modal.close('Close click')">
           <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
         </button>
       </div>

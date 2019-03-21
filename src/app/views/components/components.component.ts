@@ -26,8 +26,8 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
   typesColumns = ["ID", "Nombre"];
   modelsColumns = ["ID", "Nombre"];
   systemsColumns = ["ID", "Nombre", "Modelo"];
-  componentsColumns = ["ID", "Nombre", "Sistema", "Modelo"];
-  activitiesColumns = ["ID", "Nombre", "Compartimiento", "Sistema", "Modelo"];
+  componentsColumns = ["ID", "Nombre", "Sistema"];
+  activitiesColumns = ["ID", "Nombre", "Compartimiento"];
   catalogsColumns = ["ID", "Nombre"];
   symptomsColumns = ["ID", "Nombre", "Catalogo"];
 
@@ -128,6 +128,8 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
+    // Máscara tipos de vehículo
+    this.addMask("getVehiclesType");
     // Carga tipos de vehículos
     this.componentsService.getVehiclesType().then((resp: any) => {
       let types = [];
@@ -150,6 +152,7 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.typesSource = new MatTableDataSource(types);
       this.typesSource.paginator = this.typesPaginator;
       this.typesSource.sort = this.typesSort;
+
       this.typesSource.filterPredicate = (data, filter) => {
         let blFilter = true;
 
@@ -174,8 +177,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
         }
         return blFilter;
       };
+      // Remueve máscara
+      this.removeMask("getVehiclesType");
     });
 
+    // Máscara modelos
+    this.addMask("getModels");
     // Modelos
     this.componentsService.getModels().then((resp: any) => {
       let models = [];
@@ -198,8 +205,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.modelsSource = new MatTableDataSource(models);
       this.modelsSource.paginator = this.modelsPaginator;
       this.modelsSource.sort = this.modelsSort;
+      // Remueve máscara
+      this.removeMask("getModels");
     });
 
+    // Máscara sistemas
+    this.addMask("getSystems");
     // Sistemas
     this.componentsService.getSystems().then((resp: any) => {
       // Lista de sistemas
@@ -222,8 +233,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.systemsSource = new MatTableDataSource(systems);
       this.systemsSource.paginator = this.systemsPaginator;
       this.systemsSource.sort = this.systemsSort;
+      // Remueve máscara
+      this.removeMask("getSystems");
     });
 
+    // Máscara compartimientos
+    this.addMask("getCompartments");
     // Compartimientos
     this.componentsService.getCompartments().then((resp: any) => {
       // Lista de compartimientos
@@ -246,8 +261,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.componentsSource = new MatTableDataSource(compartments);
       this.componentsSource.paginator = this.componentsPaginator;
       this.componentsSource.sort = this.componentsSort;
+      // Remueve máscara
+      this.removeMask("getCompartments");
     });
 
+    // Máscara actividades
+    this.addMask("getActivities");
     // Actividades
     this.componentsService.getActivities().then((resp: any) => {
       let activities = [];
@@ -262,8 +281,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.activitiesSource = new MatTableDataSource(activities);
       this.activitiesSource.paginator = this.activitiesPaginator;
       this.activitiesSource.sort = this.activitiesSort;
+      // Remueve máscara
+      this.removeMask("getActivities");
     });
 
+    // Máscara actividades
+    this.addMask("getCatalogs");
     // Catálogos
     this.componentsService.getCatalogs().then((resp: any) => {
       let catalogs = [];
@@ -286,8 +309,12 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.catalogsSource = new MatTableDataSource(catalogs);
       this.catalogsSource.paginator = this.catalogsPaginator;
       this.catalogsSource.sort = this.catalogsSort;
+      // Remueve máscara
+      this.removeMask("getCatalogs");
     });
 
+    // Máscara actividades
+    this.addMask("getSymptoms");
     // Síntomas
     this.componentsService.getSymptoms().then((resp: any) => {
       let symptoms = [];
@@ -303,6 +330,8 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
       this.symptomsSource = new MatTableDataSource(symptoms);
       this.symptomsSource.paginator = this.symptomsPaginator;
       this.symptomsSource.sort = this.symptomsSort;
+      // Remueve máscara
+      this.removeMask("getSymptoms");
     });
   }
 
@@ -772,7 +801,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Metodo para crear un nuevo catálogo
    */
   onCreate6() {
-    debugger;
     if (this.catalogModal.valid) {
       this.modalService.dismissAll();
       this.componentsService
@@ -799,26 +827,24 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    */
   onCreate7() {
     debugger;
-    if (this.catalogModal.valid) {
+    if (this.symptomModal.valid) {
       this.modalService.dismissAll();
-      /* this.componentsService
-        .createActivity({
+      this.componentsService
+        .createSymptom({
           id: null,
-          descripcion: this.activityModal.value.activity,
-          compartimientos_id: this.activityModal.value.component
+          descripcion: this.symptomModal.value.description,
+          catalogo_id: this.symptomModal.value.id_catalog
         })
         .then((resp: any) => {
-           this.activitiesSource.data = this.activitiesSource.data.concat({
+          this.symptomsSource.data = this.symptomsSource.data.concat({
             ID: resp.id,
-            Nombre: this.activityModal.value.activity,
-            Compartimiento: this.activityModal.value.component,
-            Sistema: this.activityModal.value.system,
-            Modelo: this.activityModal.value.modelo_id
+            Nombre: this.symptomModal.value.description,
+            Catalogo: this.symptomModal.value.id_catalog
           });
 
-          // Posiciona en el tab de actividades
+          // Posiciona en el tab de catálogos
           this.matTabGroup.selectedIndex = 6;
-        }); */
+        });
     }
   }
 

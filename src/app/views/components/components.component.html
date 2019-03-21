@@ -146,16 +146,6 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Modelo">
-              <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef
-                mat-sort-header>
-                Modelo
-              </mat-header-cell>
-              <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row">
-                {{ showModel(row["Modelo"]) }}
-              </mat-cell>
-            </ng-container>
-
             <mat-header-row *matHeaderRowDef="componentsColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: componentsColumns">
             </mat-row>
@@ -193,26 +183,6 @@
               </mat-header-cell>
               <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row">
                 {{ showComponent(row["Compartimiento"]) }}
-              </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Sistema">
-              <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef
-                mat-sort-header>
-                Sistema
-              </mat-header-cell>
-              <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row">
-                {{ row["Sistema"] }}
-              </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Modelo">
-              <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef
-                mat-sort-header>
-                Modelo
-              </mat-header-cell>
-              <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row">
-                {{ showModel(row["Modelo"]) }}
               </mat-cell>
             </ng-container>
 
@@ -289,7 +259,7 @@
             <mat-row *matRowDef="let row; columns: symptomsColumns">
             </mat-row>
           </mat-table>
-          <mat-paginator #sypmtomsPaginator [pageSizeOptions]="[8]"></mat-paginator>
+          <mat-paginator #symptomsPaginator [pageSizeOptions]="[8]"></mat-paginator>
         </div>
       </mat-tab>
     </mat-tab-group>

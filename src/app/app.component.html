@@ -1,5 +1,4 @@
 
-<ngx-loading [show]="loading"></ngx-loading>
 <!--app-header></app-header-->
 <div *ngIf="isOpen" (click)="onToggleMenu(false)" class="overlay" [ngClass]="{'show-overlay': isOpen, 'hide.overlay': !isOpen}"></div>
 <div *ngIf="!isLogin" class="float-content">
@@ -41,7 +40,7 @@
     </nav>
 </div>
 <div class="content">
-    <router-outlet #routerOutlet="outlet"></router-outlet>
+    <router-outlet #routerOutlet="outlet" (showMask)="addMask($event)"></router-outlet>
 </div>
 
 

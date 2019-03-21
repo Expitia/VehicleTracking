@@ -94,13 +94,10 @@ export class DetailsvehicleComponent extends BaseComponent implements OnInit {
    */
   ngAfterViewInit() {
     // Sistemas
-    debugger;
     var vehicleId = parseInt(this.routerView.routerState.snapshot.root.queryParams.id);
-    
+    this.addMask("getVehicleDetail")
     this.vehicleService.getVehicleDetail({id: vehicleId}).then((resp: any) => {
       let general = [];
-      debugger;
-     
       // Datos principales del vehículo
       this.id = resp.id;
       this.name = resp.nombre;
@@ -117,6 +114,7 @@ export class DetailsvehicleComponent extends BaseComponent implements OnInit {
         "Tipo Mantenimiento": "Horas" //Dato usado para calcular no se despliega en pantalla
       });
       this.generalSource = new MatTableDataSource(general);
+      this.removeMask("getVehicleDetail")
     });
 
     this.availableSource = new MatTableDataSource([

@@ -5,9 +5,14 @@ import { toGTMformat } from "../../utils/dateutils";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ExcelService } from "../../services/excel.services";
 import { MaintenancesService } from "../../services/maintenances.services";
-import { MatDatepicker, MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from "@angular/material";
+import {
+  MatDatepicker,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatTabGroup
+} from "@angular/material";
 import { Component, OnInit, ViewChild } from "@angular/core";
-
 
 @Component({
   selector: "app-maintenance",
@@ -21,9 +26,6 @@ import { Component, OnInit, ViewChild } from "@angular/core";
  * Clase para visualizar el listado de mantenimientos
  */
 export class MaintenanceComponent extends BaseComponent implements OnInit {
-
-
-
   displayedColumns = [
     "ID",
     "ID Vehiculo",
@@ -37,11 +39,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     "Detalle"
   ];
 
-  alertsColumns = [
-    "ID",
-    "Nombre",
-    "Detalle"
-  ];
+  alertsColumns = ["ID", "Nombre", "Detalle"];
 
   rowsExcel = {
     ID: true,
@@ -66,15 +64,13 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     start: null
   };
 
-  
   dataSource: MatTableDataSource<any>;
   alertsSource: MatTableDataSource<any>;
 
-  @ViewChild('matGroup') matTabGroup: MatTabGroup;
-  @ViewChild('alertsPaginator') alertsPaginator: MatPaginator;
+  @ViewChild("matGroup") matTabGroup: MatTabGroup;
+  @ViewChild("alertsPaginator") alertsPaginator: MatPaginator;
   @ViewChild(MatSort) alertsSort: MatSort;
 
-  
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -89,7 +85,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
     formBuilder: FormBuilder,
     private modalService: NgbModal,
     private excelService: ExcelService,
-    private maintenancesService: MaintenancesService,
+    private maintenancesService: MaintenancesService
   ) {
     super(router, formBuilder);
   }
@@ -100,6 +96,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
+    this.addMask("getMaintenances");
     //Se debe cargar de base de datos
     this.maintenancesService.getMaintenances().then((resp: any) => {
       //Se debe cargar de base de datos
@@ -124,58 +121,59 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
       this.dataSource.sort = this.sort;
 
       this.dataSource.filterPredicate = (data, filter) => {
-      let blFilter = true;
+        let blFilter = true;
 
-      for (let key in this.searchData) {
-        if (this.searchData[key]) {
-          if (key == "minNext")
-            blFilter =
-              blFilter &&
-              data["Próximo Mantenimiento"] >= this.searchData[key];
-          else if (key == "maxNext")
-            blFilter =
-              blFilter &&
-              data["Próximo Mantenimiento"] <= this.searchData[key];
-          else if (key == "type")
-            blFilter = blFilter && data["Tipo"] == this.searchData[key];
-          else if (key == "model")
-            blFilter = blFilter && data["Modelo"] == this.searchData[key];
-          else if (key == "state")
-            blFilter =
-              blFilter && data["Estado"].includes(this.searchData[key]);
+        for (let key in this.searchData) {
+          if (this.searchData[key]) {
+            if (key == "minNext")
+              blFilter =
+                blFilter &&
+                data["Próximo Mantenimiento"] >= this.searchData[key];
+            else if (key == "maxNext")
+              blFilter =
+                blFilter &&
+                data["Próximo Mantenimiento"] <= this.searchData[key];
+            else if (key == "type")
+              blFilter = blFilter && data["Tipo"] == this.searchData[key];
+            else if (key == "model")
+              blFilter = blFilter && data["Modelo"] == this.searchData[key];
+            else if (key == "state")
+              blFilter =
+                blFilter && data["Estado"].includes(this.searchData[key]);
+          }
         }
-      }
-      return blFilter;
-    };
+        return blFilter;
+      };
 
-    this.dataSource.filterPredicate = (data, filter) => {
-      let blFilter = true;
+      this.dataSource.filterPredicate = (data, filter) => {
+        let blFilter = true;
 
-      for (let key in this.searchData) {
-        if (this.searchData[key]) {
-          if (key == "start" || key == "end") {
-            let values = this.searchData[key].split("-"),
-              value = new Date(values[0], values[1] - 1, values[2]);
+        for (let key in this.searchData) {
+          if (this.searchData[key]) {
+            if (key == "start" || key == "end") {
+              let values = this.searchData[key].split("-"),
+                value = new Date(values[0], values[1] - 1, values[2]);
 
-            key == "end"
-              ? (blFilter = blFilter && data["Fecha Final"] <= value)
-              : null;
-            key == "start"
-              ? (blFilter = blFilter && data["Fecha Inicial"] >= value)
-              : null;
-          } else if (key == "type")
-            blFilter =
-              blFilter && data["Tipo"].includes(this.searchData[key]);
-          else if (key == "state")
-            blFilter =
-              blFilter && data["Estado"].includes(this.searchData[key]);
+              key == "end"
+                ? (blFilter = blFilter && data["Fecha Final"] <= value)
+                : null;
+              key == "start"
+                ? (blFilter = blFilter && data["Fecha Inicial"] >= value)
+                : null;
+            } else if (key == "type")
+              blFilter =
+                blFilter && data["Tipo"].includes(this.searchData[key]);
+            else if (key == "state")
+              blFilter =
+                blFilter && data["Estado"].includes(this.searchData[key]);
+          }
         }
-      }
-      return blFilter;
-    };
-      
+        return blFilter;
+      };
+      this.removeMask("getMaintenances");
     });
 
+    this.addMask("getAlerts");
     // Actividades
     this.maintenancesService.getAlerts().then((resp: any) => {
       let alerts = [];
@@ -189,11 +187,8 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
       this.alertsSource = new MatTableDataSource(alerts);
       this.alertsSource.paginator = this.alertsPaginator;
       this.alertsSource.sort = this.alertsSort;
+      this.removeMask("getAlerts");
     });
-
-
-
-    
   }
   /**
    * @private
@@ -233,8 +228,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento de exportar los estilos
    */
   onCreateMaintenance = function() {
-    debugger;
-
+    this.addMask("createMaintenanceByAlert");
     // Actividades
     this.maintenancesService.createMaintenanceByAlert().then((resp: any) => {
       let alerts = [];
@@ -248,6 +242,7 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
       this.alertsSource = new MatTableDataSource(alerts);
       this.alertsSource.paginator = this.alertsPaginator;
       this.alertsSource.sort = this.alertsSort;
+      this.removeMask("createMaintenanceByAlert");
     });
   };
 

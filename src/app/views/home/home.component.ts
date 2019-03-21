@@ -162,6 +162,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngAfterViewInit() {
+    this.addMask("getVehicles")
     this.dashboardService.getVehicles().then(
       resp => {
         this.users = resp.usuarios_totales;
@@ -170,6 +171,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
         this.vehicles = resp.vehiculos_totales;
         this.maintenances = resp.mantenimientos_totales;
         this.oils = resp.galones_consumidos;
+        this.removeMask("getVehicles")
       },
       err => {
         console.log(err);

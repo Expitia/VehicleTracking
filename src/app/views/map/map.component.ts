@@ -99,34 +99,31 @@ export class MapComponent extends BaseComponent implements OnInit {
     super(router, formBuilder);
   }
 
-  computeHeading(lat1, long1, lat2, long2)
-  {
+  computeHeading(lat1, long1, lat2, long2) {
+    const math = Math as any;
+    // Converts from degrees to radians.
+    math.radians = function(degrees) {
+      return (degrees * Math.PI) / 180;
+    };
 
-      const math = Math as any;
-      // Converts from degrees to radians.
-      math.radians = function(degrees) {
-          return degrees * Math.PI / 180;
-      };
+    // Converts from radians to degrees.
+    math.degrees = function(radians) {
+      return (radians * 180) / Math.PI;
+    };
 
-      // Converts from radians to degrees.
-      math.degrees = function(radians) {
-          return radians * 180 / Math.PI;
-      };
+    var rlat1 = math.radians(lat1);
+    var rlat2 = math.radians(lat2);
 
+    var dlong = math.radians(long2 - long1);
 
-     var rlat1 = math.radians(lat1);
-     var rlat2 = math.radians(lat2);
+    var y = math.cos(rlat2) * math.sin(dlong);
+    var x =
+      math.cos(rlat1) * math.sin(rlat2) -
+      math.sin(rlat1) * math.cos(rlat2) * math.cos(dlong);
+    var heading = math.round(math.degrees(math.atan2(y, x)) + 360, 4) % 360;
 
-     var dlong = math.radians(long2 - long1);
-
-     var y = math.cos(rlat2) * math.sin(dlong);
-     var x = math.cos(rlat1) * math.sin(rlat2) - math.sin(rlat1) * math.cos(rlat2) * math.cos(dlong);
-     var heading = math.round(math.degrees(math.atan2(y, x)) + 360, 4) % 360;
-
-      return heading;
-
+    return heading;
   }
-
 
   /**
    * @private
@@ -134,6 +131,7 @@ export class MapComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngOnInit() {
+    this.addMask("getVehicles");
     this.mapService.getVehicles().then((resp: any) => {
       // Solo para datos de pruebas debe eliminarse
       for (let i = 0; i < resp.length; i++) {
@@ -159,7 +157,12 @@ export class MapComponent extends BaseComponent implements OnInit {
             iconAnchor: [40, 40],
             iconUrl: car.icon
           }),
-          rotationAngle: this.computeHeading(car.lat, car.long, car.nextLat, car.nextLong),
+          rotationAngle: this.computeHeading(
+            car.lat,
+            car.long,
+            car.nextLat,
+            car.nextLong
+          )
         } as any);
 
         newMarker.bindTooltip(`
@@ -195,15 +198,13 @@ export class MapComponent extends BaseComponent implements OnInit {
             <div>
         `);
 
-        newMarker.on("click", function(ev){
-          debugger;
-          car.isOpen ? newMarker.closeTooltip() : newMarker.openTooltip()
-        })
+        newMarker.on("click", function(ev) {
+          car.isOpen ? newMarker.closeTooltip() : newMarker.openTooltip();
+        });
 
         this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
       }
+      this.removeMask("getVehicles");
     });
-
-
   }
 }

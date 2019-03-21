@@ -1,19 +1,19 @@
-import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
-import { BaseComponent } from '../base.component';
-import { toGTMformat } from '../../utils/dateutils';
-import { MaintenancesService } from '../../services/maintenances.services';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from "@angular/router";
+import { FormBuilder } from "@angular/forms";
+import { BaseComponent } from "../base.component";
+import { toGTMformat } from "../../utils/dateutils";
+import { MaintenancesService } from "../../services/maintenances.services";
+import { Component, OnInit, ViewChild } from "@angular/core";
 
 @Component({
-  selector: 'app-detailsusers',
-  templateUrl: './detailsusers.component.html'
+  selector: "app-detailsusers",
+  templateUrl: "./detailsusers.component.html"
 })
 
 /**
  * @public
  * @class UsersComponent
- * 
+ *
  * Clase para la información de los usuarios
  */
 export class DetailsUsersComponent extends BaseComponent implements OnInit {
@@ -28,52 +28,63 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
     date: null,
     role: null,
     state: null
-  }
-  
+  };
+
   /**
-	 * @private
-	 * @method constructor
-	 */	
+   * @private
+   * @method constructor
+   */
+
   constructor(
-    router: Router, 
-    formBuilder: FormBuilder, 
+    router: Router,
+    formBuilder: FormBuilder,
     private routerView: Router,
-    private maintenanceService:MaintenancesService
-    ) { 
+    private maintenanceService: MaintenancesService
+  ) {
     super(router, formBuilder);
   }
-  
+
   /**
-	 * @private
-	 * @method ngOnInit 
-	 * Methodo del ciclo de vida de la vista
-	 */	
+   * @private
+   * @method ngOnInit
+   * Methodo del ciclo de vida de la vista
+   */
+
   ngOnInit() {}
 
   /**
    * @private
-   * @method ngAfterViewInit 
+   * @method ngAfterViewInit
    * Methodo del ciclo de vida de la vista
-   */  
+   */
+
   ngAfterViewInit() {
     // Identificador del usuario
-    var userId = parseInt(this.routerView.routerState.snapshot.root.queryParams.id);
-    
+    var userId = parseInt(
+      this.routerView.routerState.snapshot.root.queryParams.id
+    );
+    this.addMask("getMaintenanceDetail");
     // Petición a base de datos
-    this.maintenanceService.getMaintenanceDetail({id: userId}).then((resp: any) => {
-      // Asignación de respuesta a usuario actual
-      this.currentMaintenance = {
-        ID: userId,
-        email: resp.email,
-        date: new Date(resp.fecha_registro),
-        role: resp.rol,
-        state: resp.estado
+    this.maintenanceService.getMaintenanceDetail({ id: userId }).then(
+      (resp: any) => {
+        // Asignación de respuesta a usuario actual
+        this.currentMaintenance = {
+          ID: userId,
+          email: resp.email,
+          date: new Date(resp.fecha_registro),
+          role: resp.rol,
+          state: resp.estado
+        };
+        this.removeMask("getMaintenanceDetail");
+      },
+      (error: any) => {
+        console.error("Unable to load data");
       }
-    }, (error: any) => {
-      console.error("Unable to load data");
-    });
+    );
 
-     /* // Obtenemos la información de los estados
+    /* 
+    this.addMask("stateList");
+    // Obtenemos la información de los estados
      this.userService.stateList().then(
       (resp: any) => {
         this.statesList = resp.map(item => {
@@ -82,13 +93,16 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("stateList");
       },
       (error: any) => {
         console.error("Unable to load state data");
       }
     ); */
 
-    /* // Obtenemos la información de los roles
+    /*
+    this.addMask("rolsList");
+    // Obtenemos la información de los roles
     this.userService.rolsList().then(
       (resp: any) => {
         this.roleList = resp.map(item => {
@@ -97,6 +111,7 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
             description: item.descripcion
           };
         });
+        this.removeMask("rolsList");
       },
       (error: any) => {
         console.error("Unable to load rols data");
@@ -104,37 +119,35 @@ export class DetailsUsersComponent extends BaseComponent implements OnInit {
     );
   } */
 
-  /**
-   * @private
-   * @method onMaxHours 
-   * Methodo para visualizar las fechas
-   */  
-  /* showDate(date: Date){
+    /**
+     * @private
+     * @method onMaxHours
+     * Methodo para visualizar las fechas
+     */
+    /* showDate(date: Date){
     return date ? toGTMformat(date) : "-";
   } */
 
-  /**
-   * @private
-   * @method showState
-   * Metodo para visualizar un estado dado el identificador
-   */
-  /* showState(id: number) {
+    /**
+     * @private
+     * @method showState
+     * Metodo para visualizar un estado dado el identificador
+     */
+    /* showState(id: number) {
     if(this.statesList.length > 0){
       return this.statesList.filter(item => item.id == id)[0].description;
     }
   } */
 
-  /**
-   * @private
-   * @method showRol
-   * Metodo para visualizar un rol dado el identificador
-   */
- /*  showRol(id: number) {
+    /**
+     * @private
+     * @method showRol
+     * Metodo para visualizar un rol dado el identificador
+     */
+    /*  showRol(id: number) {
     if(this.roleList.length > 0){
       return this.roleList.filter(item => item.id == id)[0].description;
     }
   } */
-
-
-}
+  }
 }

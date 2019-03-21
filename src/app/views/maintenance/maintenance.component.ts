@@ -245,9 +245,8 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento de exportar los estilos
    */
   onCreateMaintenance = function(parameters) {
-    //this.addMask("createMaintenanceByAlert");
+    this.addMask("createMaintenanceByAlert");
     // Actividades
-    debugger;
     this.maintenancesService
       .createMaintenanceByAlert(parameters)
       .then((resp: any) => {

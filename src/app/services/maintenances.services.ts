@@ -34,7 +34,6 @@ export class MaintenancesService {
   }
 
   createMaintenanceByAlert(parameters): any {
-    debugger;
     this.httputils.post(`${this.sbCreateMaintenanceUrl}`, parameters);
   }
 }

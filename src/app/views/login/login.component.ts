@@ -39,20 +39,24 @@ export class LoginComponent extends BaseComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.valid) {
-      this.addMask("userLogin")
-      this.authService.userLogin({
-       email: this.form.value.userName,
-       password: this.form.value.password
-      }).then(response => {
-        this.navigate("dashboard");
-        this.removeMask("userLogin")
-      },error =>{
-        console.error("Failed login");
-        console.error(error);
-      });
+      this.addMask("userLogin");
+      this.authService
+        .userLogin({
+          email: this.form.value.userName,
+          password: this.form.value.password
+        })
+        .then(
+          response => {
+            this.navigate("dashboard");
+            this.removeMask("userLogin");
+          },
+          error => {
+            console.error("Failed login");
+            console.error(error);
+            this.removeMask("userLogin");
+          }
+        );
     }
-
-    this.navigate("dashboard");
   }
 
   /**

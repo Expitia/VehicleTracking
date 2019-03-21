@@ -18,37 +18,6 @@ import "leaflet-rotatedmarker";
  * Clase para los mapas y visualización de vehiculos
  */
 export class MapComponent extends BaseComponent implements OnInit {
-  //Se debe cargar de base de datos
-  typesMapList = [
-    {
-      type: "UX-02",
-      images: {
-        Trabajando: "",
-        Mantenimiento: "",
-        Desacoplado: "",
-        Acoplado: ""
-      }
-    },
-    {
-      type: "UX-08",
-      images: {
-        Trabajando: "",
-        Mantenimiento: "",
-        Desacoplado: "",
-        Acoplado: ""
-      }
-    },
-    {
-      type: "UX-05",
-      images: {
-        Trabajando: "",
-        Mantenimiento: "",
-        Desacoplado: "",
-        Acoplado: ""
-      }
-    }
-  ];
-
   streetMaps = tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     detectRetina: true,
     attribution:
@@ -71,11 +40,19 @@ export class MapComponent extends BaseComponent implements OnInit {
 
   layersVehicles = [];
 
+  layersById = {};
+
+  initialLoad = false;
+
   options = {
     layers: [this.streetMaps],
     zoom: 18,
     center: latLng([46.879966, -121.726909])
   };
+
+  map: Map = null;
+
+  openVehicle: boolean = false;
 
   /**
    * @private
@@ -83,7 +60,9 @@ export class MapComponent extends BaseComponent implements OnInit {
    * Evento lanzado al finalizar el reenderizado del mapa
    */
 
-  onMapReady(map: Map) {}
+  onMapReady(map: Map) {
+    this.map = map;
+  }
 
   /**
    * @private
@@ -91,7 +70,6 @@ export class MapComponent extends BaseComponent implements OnInit {
    */
 
   constructor(
-    private anotherRouter: Router,
     router: Router,
     formBuilder: FormBuilder,
     private mapService: MapService
@@ -131,41 +109,41 @@ export class MapComponent extends BaseComponent implements OnInit {
    * Methodo del ciclo de vida de la vista
    */
   ngOnInit() {
-    this.addMask("getVehicles");
-    this.mapService.getVehicles().then((resp: any) => {
-      // Solo para datos de pruebas debe eliminarse
-      for (let i = 0; i < resp.length; i++) {
-        const car = {
-          id: resp[i].equipo_id,
-          lat: resp[i].latitud,
-          long: resp[i].longitud,
-          nextLat: resp[i].latitud_vehiculo,
-          nextLong: resp[i].longitud_vehiculo,
-          //angle: resp[i].angulo,
-          type: resp[i].tipo,
-          state: resp[i].estado,
-          icon: resp[i].icono,
-          next: resp[i].siguiente,
-          horometer: resp[i].horometro_total,
-          typeNext: resp[i].tipo_mantenimiento,
-          isOpen: false
-        };
+    this.openVehicle = false;
+    if (!this.initialLoad) {
+      this.addMask("getVehicles");
+      this.mapService.getVehicles().then((resp: any) => {
+        for (let i = 0; i < resp.length; i++) {
+          const car = {
+            id: resp[i].equipo_id,
+            lat: resp[i].latitud,
+            long: resp[i].longitud,
+            nextLat: resp[i].latitud_vehiculo,
+            nextLong: resp[i].longitud_vehiculo,
+            type: resp[i].tipo,
+            state: resp[i].estado,
+            icon: resp[i].icono,
+            next: resp[i].siguiente,
+            horometer: resp[i].horometro_total,
+            typeNext: resp[i].tipo_mantenimiento,
+            isOpen: false
+          };
 
-        const newMarker = marker([car.lat, car.long], {
-          icon: icon({
-            iconSize: [80, 80],
-            iconAnchor: [40, 40],
-            iconUrl: car.icon
-          }),
-          rotationAngle: this.computeHeading(
-            car.lat,
-            car.long,
-            car.nextLat,
-            car.nextLong
-          )
-        } as any);
+          const newMarker = marker([car.lat, car.long], {
+            icon: icon({
+              iconSize: [80, 80],
+              iconAnchor: [40, 40],
+              iconUrl: car.icon
+            }),
+            rotationAngle: this.computeHeading(
+              car.lat,
+              car.long,
+              car.nextLat,
+              car.nextLong
+            )
+          } as any);
 
-        newMarker.bindTooltip(`
+          newMarker.bindTooltip(`
             <div class="px-1" py-1>
               <div class="w-100 py-1 border rounded border-secondary text-center text-wrap ${
                 car.state == "Trabajando"
@@ -198,13 +176,98 @@ export class MapComponent extends BaseComponent implements OnInit {
             <div>
         `);
 
-        newMarker.on("click", function(ev) {
-          car.isOpen ? newMarker.closeTooltip() : newMarker.openTooltip();
-        });
+          const scope = this;
 
-        this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
+          newMarker.on("click", function(ev) {
+            scope.openVehicle = true;
+            scope.router.navigate(["detailsvehicles"], {
+              queryParams: { id: car.id }
+            });
+          });
+
+          this.layersById[car.id] = newMarker;
+          this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
+        }
+        this.map.setView(latLng([resp[0].latitud, resp[0].longitud]), 20);
+        this.removeMask("getVehicles");
+        this.initialLoad = true;
+        this.timeLoad();
+      });
+    }
+  }
+
+  /**
+   * @private
+   * @method timeLoad
+   * Methodo para actualizar la información de los vehiculos
+   */
+  timeLoad() {
+    const scope = this;
+    setInterval(function() {
+      if (scope.router.url === "/map" && this.initialLoad) {
+        scope.mapService.getVehicles().then((resp: any) => {
+          for (let i = 0; i < resp.length; i++) {
+            const car = {
+              id: resp[i].equipo_id,
+              lat: resp[i].latitud,
+              long: resp[i].longitud,
+              nextLat: resp[i].latitud_vehiculo,
+              nextLong: resp[i].longitud_vehiculo,
+              type: resp[i].tipo,
+              state: resp[i].estado,
+              icon: resp[i].icono,
+              next: resp[i].siguiente,
+              horometer: resp[i].horometro_total,
+              typeNext: resp[i].tipo_mantenimiento,
+              isOpen: false
+            };
+
+            const marker = scope.layersById[car.id];
+
+            if (marker) {
+              marker.bindTooltip(`
+              <div class="px-1" py-1>
+                <div class="w-100 py-1 border rounded border-secondary text-center text-wrap ${
+                  car.state == "Trabajando"
+                    ? "bg-green"
+                    : car.state == "Mantenimiento"
+                    ? "bg-pink"
+                    : "bg-purple"
+                }">
+                  ${car.state}
+                </div>
+                <div class="py-1 w-100 text-left">ID: ${car.id}</div>
+                <div class="py-1 w-100 text-left">
+                  Horometro: 
+                  ${car.horometer}
+                </div>
+                <div class="py-1 w-100 text-left">
+                  Próximo Man.: 
+                  ${car.next} 
+                  ${
+                    car.typeNext == "Horometro" || car.typeNext == "Horas"
+                      ? "horas"
+                      : "kilometros"
+                  } 
+                </div>
+                <div class="w-100">
+                  <span class="w-100 text-truncate text-center">
+                    Da clic en el vehiculo para visualizar su información
+                  </span>
+                </div>
+              <div>
+          `);
+
+              marker.on("click", function(ev) {
+                scope.openVehicle = true;
+                scope.router.navigate(["detailsvehicles"], {
+                  queryParams: { id: car.id }
+                });
+              });
+            }
+          }
+        });
       }
-      this.removeMask("getVehicles");
-    });
+    }, 500);
   }
 }

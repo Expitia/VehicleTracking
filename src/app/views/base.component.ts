@@ -5,7 +5,6 @@ import {
   Validators,
   FormBuilder
 } from "@angular/forms";
-import { Output, EventEmitter } from "@angular/core";
 
 /**
  * @public
@@ -73,7 +72,7 @@ export class BaseComponent {
    * @method constructor
    */
 
-  constructor(private router: Router, protected formBuilder: FormBuilder) {
+  constructor(protected router: Router, protected formBuilder: FormBuilder) {
     //Indicamos que no existen errores en la forma
     this.errors = false;
     //Indicamos que el formulario no se envia
@@ -228,128 +227,4 @@ export class BaseComponent {
 
     if (form) return evalForm;
   }
-
-  /**/
-
-  /*
-  getControlValue(control) {
-
-    //return this.loginForm.controls[control]
-    //  ? this.loginForm.controls[control].value
-    //  : "";
-  }
-  /*
-  displayErrors(validations) {
-  
-    if (validations && validations.length > 0) {
-      this.errors = true;
-      if (!validations[0]["code"]) {
-        this.errorMessage = validations[0]["description"];
-      } else {
-        this.errorMessage = validations[0]["description"];
-      }
-    }
-    window.scrollTo(0, 0);*/
 }
-/*
-  displayError(message) {
-    this.displayErrors([
-      {
-        description: message
-      }
-    ]);
-  }
-
-  initMarketingContent() {
-    this.content = this.contentService.getPageContent(this.contentKeys);
-  }
-
-  createForm(request, properties?: any[]) {
-    if (!request) {
-      request = {};
-    }
-    this.fieldMap = {};
-    for (let i = 0; i < properties.length; i++) {
-      this.fieldMap[properties[i]] = properties[i];
-    }
-    this.loginForm = new FormGroup(
-      this.contentService.getFormValidators(this.FORM_NAME, request, properties)
-    );
-    this.validationMessages = this.contentService.getFormValidationMessages(
-      this.FORM_NAME
-    );
-    this.validationLengths = this.contentService.getFormValidationLengths(
-      this.FORM_NAME
-    );
-    this.copyDeck = this.contentService.getCopyDeck();
-    this.content = this.contentService.getContent();
-    this.formSubmitted = false;
-  }
-
-  getDate(key) {
-    let month = this.loginForm.controls[key].value["month"];
-    let day = this.loginForm.controls[key].value["day"];
-    let year = this.loginForm.controls[key].value["year"];
-
-    return month + "/" + day + "/" + year;
-  }
-
-  getToday() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-
-    return mm + "/" + dd + "/" + yyyy;
-  }
-
-  createFormByName(formName: string, properties?: any[]) {
-    let request = {};
-    if (!request) {
-      request = {};
-    }
-    this.fieldMap = {};
-    for (let i = 0; i < properties.length; i++) {
-      this.fieldMap[properties[i]] = properties[i];
-    }
-    this.loginForm = new FormGroup(
-      this.contentService.getFormValidators(formName, request, properties)
-    );
-    this.validationMessages = this.contentService.getFormValidationMessages(
-      formName
-    );
-    this.validationLengths = this.contentService.getFormValidationLengths(
-      formName
-    );
-    this.copyDeck = this.contentService.getCopyDeck();
-    this.formSubmitted = false;
-  }
-
-  getFormByName(request, formName: string, properties?: any[]) {
-    if (!request) {
-      request = {};
-    }
-    this.fieldMap = {};
-    for (let i = 0; i < properties.length; i++) {
-      this.fieldMap[properties[i]] = properties[i];
-    }
-    let ret = new FormGroup(
-      this.contentService.getFormValidators(formName, request, properties)
-    );
-    this.validationMessages = this.contentService.getFormValidationMessages(
-      formName
-    );
-    this.validationLengths = this.contentService.getFormValidationLengths(
-      formName
-    );
-    this.copyDeck = this.contentService.getCopyDeck();
-    this.formSubmitted = false;
-
-    return ret;
-  }
-
-
-
-  getDDValue(key) {
-    return this.dropdowns[key] || [];
-  }*/

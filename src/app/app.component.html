@@ -1,52 +1,103 @@
-
 <!--app-header></app-header-->
-<div *ngIf="isOpen" (click)="onToggleMenu(false)" class="overlay" [ngClass]="{'show-overlay': isOpen, 'hide.overlay': !isOpen}"></div>
+<div
+  *ngIf="isOpen"
+  (click)="onToggleMenu(false)"
+  class="overlay"
+  [ngClass]="{ 'show-overlay': isOpen, 'hide.overlay': !isOpen }"
+></div>
 <div *ngIf="!isLogin" class="float-content">
-    <nav class="navbar main-menu navbar-expand-lg navbar-light bg-darklight">
-        <a class="navbar-brand ml-5" (click)="onToggleMenu(false)" href="#"> <img style="height: 45px;" src="../assets/img/Logo.png"/></a>
-        <div (mouseover)="onToggleMenu(true)" (mouseout)="onToggleMenu(false)" class="float-menu bg-darklight float-menu-desktop" [ngClass]="{'float-menu-open': isOpen, 'float-menu-close': !isOpen}">           
-            <div class="bg-darknight nav-header d-flex justify-content-between align-items-center">
-                <div></div>
-                <a class="navbar-brand ml-5" href="#" (click)="onToggleMenu(false)"> <img style="height: 30px;" src="../assets/img/Logo2.png"/></a>
-                <a class="navbar-button"><img style="height: 25px;" src="../assets/img/menu.png"/></a>
-            </div>
-            <ul class="navbar-nav d-flex flex-column">
-                <li (click)="onOpenLink('dashboard')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Dashboard</a>
-                    <i class="fas fa-tachometer-alt text-whitenight nav-item-icon"></i>
-                </li>
-                <li (click)="onOpenLink('users')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Usuarios</a>
-                    <i class="fa fa-users text-whitenight nav-item-icon"></i>
-                </li>
-                <li (click)="onOpenLink('vehicles')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Vehiculos</a>
-                    <i class="fa fa-car text-whitenight nav-item-icon"></i>
-                </li>
-                <li (click)="onOpenLink('map')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Mapa</a>
-                    <i class="fas fa-globe text-whitenight nav-item-icon"></i>
-                </li>
-                <li (click)="onOpenLink('maintenance')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Mantenimientos</a>
-                    <i class="fas fa-ambulance text-whitenight nav-item-icon"></i>
-                </li>
-                <li (click)="onOpenLink('components')" class="nav-item d-flex justify-content-between align-items-center w-100 pl-3">
-                    <a class="nav-link text-whitenight" href="javascript:void(0)">Configuración de Vehiculos</a>
-                    <i class="fa fa-clipboard-list text-whitenight nav-item-icon"></i>
-                </li>
-            </ul>
-        </div>
-    </nav>
+  <nav
+    class="navbar main-menu navbar-expand-lg navbar-light bg-darklight m-0 p-0 pl-3"
+  >
+    <a class="navbar-brand ml-5 h-100" (click)="onToggleMenu(false)" href="#">
+      <img style="height: 45px;" src="../assets/img/Logo.png"
+    /></a>
+    <div
+      (mouseover)="onToggleMenu(true)"
+      (mouseout)="onToggleMenu(false)"
+      class="float-menu bg-darklight float-menu-desktop"
+      [ngClass]="{ 'float-menu-open': isOpen, 'float-menu-close': !isOpen }"
+    >
+      <div
+        class="bg-darknight nav-header d-flex justify-content-between align-items-center"
+      >
+        <div></div>
+        <a class="navbar-brand ml-5" href="#" (click)="onToggleMenu(false)">
+          <img style="height: 30px;" src="../assets/img/Logo2.png"
+        /></a>
+        <a class="navbar-button"
+          ><img style="height: 25px;" src="../assets/img/menu.png"
+        /></a>
+      </div>
+      <ul class="navbar-nav d-flex flex-column">
+        <li
+          (click)="onOpenLink('dashboard')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Dashboard</a
+          >
+          <i class="fas fa-tachometer-alt text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onOpenLink('users')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Usuarios</a
+          >
+          <i class="fa fa-users text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onOpenLink('vehicles')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Vehiculos</a
+          >
+          <i class="fa fa-car text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onOpenLink('map')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)">Mapa</a>
+          <i class="fas fa-globe text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onOpenLink('maintenance')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Mantenimientos</a
+          >
+          <i class="fas fa-ambulance text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onOpenLink('components')"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Configuración de Vehiculos</a
+          >
+          <i class="fa fa-clipboard-list text-whitenight nav-item-icon"></i>
+        </li>
+        <li
+          (click)="onCloseSession()"
+          class="nav-item d-flex justify-content-between align-items-center w-100 pl-3"
+        >
+          <a class="nav-link text-whitenight" href="javascript:void(0)"
+            >Cerrar sesión</a
+          >
+          <i class="fas fa-sign-out-alt text-whitenight nav-item-icon"></i>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </div>
 <div class="content">
-    <router-outlet #routerOutlet="outlet" (showMask)="addMask($event)"></router-outlet>
+  <router-outlet
+    #routerOutlet="outlet"
+    (showMask)="addMask($event)"
+  ></router-outlet>
 </div>
-
-
-
-
-
-
-
-

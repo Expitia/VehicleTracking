@@ -1,7 +1,7 @@
 import { FormBuilder } from "@angular/forms";
 import { Component, OnInit } from "@angular/core";
 import { BaseComponent } from "./views/base.component";
-import { Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd, NavigationStart } from "@angular/router";
 import { DeviceDetectorService } from "ngx-device-detector";
 
 @Component({
@@ -56,17 +56,37 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   /**
+   * @public
+   * @method onCloseSession
+   * Methodo handler lanzado al momento de solicitar el cierre se sesión
+   */
+  onCloseSession() {
+    this.isLogged = false;
+    this.onToggleMenu(false);
+    localStorage.setItem("token", "");
+    this.currentRouter.navigateByUrl("");
+  }
+
+  /**
    * @private
    * @method ngOnInit
    * Methodo del ciclo de vida de la vista
    */
-
   ngOnInit() {
     this.currentRouter.routeReuseStrategy.shouldReuseRoute = function() {
       return false;
     };
     //Suscribimos el evento para saber cuando ha terminado de cargar la nueva vista
     this.currentRouter.events.subscribe(evt => {
+      if (evt instanceof NavigationStart) {
+        if (evt.url !== "/" && !localStorage.getItem("token")) {
+          this.isLogged = false;
+          this.onToggleMenu(false);
+          this.currentRouter.navigateByUrl("");
+        } else if (evt.url === "/" && localStorage.getItem("token")) {
+          this.currentRouter.navigateByUrl("dashboard");
+        }
+      }
       if (evt instanceof NavigationEnd) {
         this.currentRouter.navigated = true;
         window.scrollTo(0, 0);

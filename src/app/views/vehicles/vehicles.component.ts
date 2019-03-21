@@ -310,7 +310,6 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * @method onExport
    * Methodo handler lanzado al momento de exportar los estilos
    */
-
   onExport = function() {
     this.excelService.exportAsExcelFile(
       this.dataSource.data.map(item => {

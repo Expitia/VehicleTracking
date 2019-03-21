@@ -13,6 +13,8 @@ import {
   MatTableDataSource,
   MatTabGroup
 } from "@angular/material";
+import Order from "../../utils/pdf";
+
 import { Component, OnInit, ViewChild } from "@angular/core";
 
 @Component({
@@ -247,8 +249,9 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
   onCreateMaintenance = function(parameters) {
     this.addMask("createMaintenanceByAlert");
     // Actividades
-    this.maintenancesService
-      .createMaintenanceByAlert(parameters)
+    this.maintenancesService.createMaintenanceByAlert(
+      parameters
+    ); /* 
       .then((resp: any) => {
         let alerts = [];
         for (let i = 0; i < resp.length; i++) {
@@ -260,10 +263,21 @@ export class MaintenanceComponent extends BaseComponent implements OnInit {
         }
         this.alertsSource = new MatTableDataSource(alerts);
         this.alertsSource.paginator = this.alertsPaginator;
-        this.alertsSource.sort = this.alertsSort;
-        this.removeMask("createMaintenanceByAlert");
-      });
+        this.alertsSource.sort = this.alertsSort; 
+
+        
+
+        
+      );}*/
+
+    // PDF
+    Order.save("Orden de mantenimiento preventivo.pdf");
+    this.removeMask("createMaintenanceByAlert");
   };
+
+  onDownloadMaintenance(){
+    Order.save("Orden de mantenimiento.pdf");
+  }
 
   /**
    * @private

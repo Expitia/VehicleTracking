@@ -104,7 +104,7 @@
               Detalle
             </mat-header-cell>
             <mat-cell class="d-flex align-items-center justify-content-center" style="max-width: 137px;" *matCellDef="let row">
-              <button *ngIf="
+              <button (click)="onDownloadMaintenance();" *ngIf="
                     row['Estado'] == 'En proceso' || row['Estado'] == 'Pendiente'
                   "
                 class="btn btn-outline-dark py-0 px-1 mx-1">

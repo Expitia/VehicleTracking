@@ -9,6 +9,8 @@ export class MaintenancesService {
 
   sbUrl = "/safe/api/services/maintenances/get_maintenances.php";
   sbAlertsUrl = "/safe/api/services/maintenances/get_alerts.php";
+  sbCreateMaintenanceUrl =
+    "/safe/api/services/maintenances/create_maintenance_alert.php";
 
   /**
    * Método que realiza petición de mantenimientos
@@ -31,4 +33,7 @@ export class MaintenancesService {
     return this.httputils.post(`${this.sbAlertsUrl}`, {});
   }
 
+  createMaintenanceByAlert(parameters): any {
+    this.httputils.post(`${this.sbCreateMaintenanceUrl}`, parameters);
+  }
 }

@@ -1,6 +1,6 @@
-projectKey=eportal:angular
+projectKey=safe:angular
 serverUrl=http://localhost:9000
 serverVersion=6.7.3.38370
-dashboardUrl=http://localhost:9000/dashboard/index/eportal:angular
+dashboardUrl=http://localhost:9000/dashboard/index/safe:angular
 ceTaskId=AWQ5PQ65jj4xLcqBEb0L
 ceTaskUrl=http://localhost:9000/api/ce/task?id=AWQ5PQ65jj4xLcqBEb0L

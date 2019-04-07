@@ -4,13 +4,26 @@
     <div class="p-3 d-flex justify-content-between align-items-center">
       <span class="lead"><b>Vehiculos</b></span>
       <div class="d-flex justify-content-end align-items-center">
-        <div class="d-flex justify-content-end align-items-center mr-2" style="cursor: pointer" [ngbPopover]="popSearch"
-          [popoverTitle]="popSearchTitle" [autoClose]="'outside'" placement="bottom">
+        <div
+          class="d-flex justify-content-end align-items-center mr-2"
+          style="cursor: pointer"
+          [ngbPopover]="popSearch"
+          [popoverTitle]="popSearchTitle"
+          [autoClose]="'outside'"
+          placement="bottom"
+        >
           <i class="fa fa-search nav-item-icon"></i>
           <span class="pl-2">Buscar</span>
         </div>
-        <div class="d-flex justify-content-end align-items-center ml-2" style="cursor: pointer" [ngbPopover]="popOptions"
-          [popoverTitle]="popOptionsTitle" [autoClose]="'outside'" #optionPopover="ngbPopover" placement="bottom">
+        <div
+          class="d-flex justify-content-end align-items-center ml-2"
+          style="cursor: pointer"
+          [ngbPopover]="popOptions"
+          [popoverTitle]="popOptionsTitle"
+          [autoClose]="'outside'"
+          #optionPopover="ngbPopover"
+          placement="bottom"
+        >
           <i class="fa fa-plus-circle nav-item-icon"></i>
           <span class="pl-2">Opciones</span>
         </div>
@@ -19,7 +32,11 @@
     <div class="bg-white shadow border border-2">
       <mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="ID">
-          <mat-header-cell style="max-width: 60px;" *matHeaderCellDef mat-sort-header>
+          <mat-header-cell
+            style="max-width: 60px;"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             ID
           </mat-header-cell>
           <mat-cell style="max-width: 60px;" *matCellDef="let row">
@@ -28,103 +45,170 @@
         </ng-container>
 
         <ng-container matColumnDef="Nombre">
-          <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef mat-sort-header
-            style="max-width: 150px;">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 150px;"
+          >
             Nombre
           </mat-header-cell>
-          <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row" style="max-width: 150px;">
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+            style="max-width: 150px;"
+          >
             {{ row["Nombre"] }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Tipo">
-          <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef mat-sort-header
-            style="max-width: 100px;">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 100px;"
+          >
             Tipo
           </mat-header-cell>
-          <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row" style="max-width: 100px;">
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+            style="max-width: 100px;"
+          >
             {{ showType(row["Tipo"]) }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Modelo">
-          <mat-header-cell class="d-flex align-items-center justify-content-start" *matHeaderCellDef mat-sort-header>
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-start"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             Modelo
           </mat-header-cell>
-          <mat-cell class="d-flex align-items-center justify-content-start" *matCellDef="let row">
+          <mat-cell
+            class="d-flex align-items-center justify-content-start"
+            *matCellDef="let row"
+          >
             {{ showModel(row["Modelo"]) }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Próximo Mantenimiento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="d-flex align-items-center justify-content-center">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="d-flex align-items-center justify-content-center"
+          >
             Próximo Mantenimiento
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
-            <div [ngClass]="{
+            <div
+              [ngClass]="{
                 'bg-gray':
                   row['Próximo Mantenimiento'] <= 50 &&
                   row['Próximo Mantenimiento'] >= 0,
                 'bg-green': row['Próximo Mantenimiento'] > 50,
                 'bg-pink': row['Próximo Mantenimiento'] < 0
               }"
-              *ngIf="row['Estado'] !== 'Mantenimiento'" class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap">
+              *ngIf="row['Estado'] !== 'Mantenimiento'"
+              class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
+            >
               {{ row["Próximo Mantenimiento"] }}
               {{
-              row["Tipo Mantenimiento"] == "Horometro" ||
-              row["Tipo Mantenimiento"] == "Horas"
-              ? "horas"
-              : "kilometros"
+                row["Tipo Mantenimiento"] == "Horometro" ||
+                row["Tipo Mantenimiento"] == "Horas"
+                  ? "horas"
+                  : "kilometros"
               }}
             </div>
-            <div *ngIf="row['Estado'] == 'Mantenimiento'" class="w-100 pt-1 pb-1 text-center text-wrap">
+            <div
+              *ngIf="row['Estado'] == 'Mantenimiento'"
+              class="w-100 pt-1 pb-1 text-center text-wrap"
+            >
               -
             </div>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Estado">
-          <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             Estado
           </mat-header-cell>
           <mat-cell class="p-2" *matCellDef="let row">
-            <div [ngClass]="{
+            <div
+              [ngClass]="{
                 'bg-green': row['Estado'] == 'Trabajando',
                 'bg-pink': row['Estado'] == 'Mantenimiento',
                 'bg-purple': row['Estado'] == 'Desacoplado'
               }"
-              class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap">
+              class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
+            >
               {{ row["Estado"] }}
             </div>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Disponibilidad">
-          <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header>
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             Disponibilidad Mes
           </mat-header-cell>
-          <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
-            {{ row["Disponibilidad"].substr(0, 6) }}%
+          <mat-cell
+            class="d-flex align-items-center justify-content-center"
+            *matCellDef="let row"
+          >
+            {{ (""  + row["Disponibilidad"]).substr(0, 6) }}%
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Detalle">
-          <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef mat-sort-header
-            style="max-width: 130px;">
+          <mat-header-cell
+            class="d-flex align-items-center justify-content-center"
+            *matHeaderCellDef
+            mat-sort-header
+            style="max-width: 130px;"
+          >
             Detalle
           </mat-header-cell>
-          <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row" style="max-width: 130px;">
-            <button (click)="this.router.navigate(['detailsvehicles'], { queryParams: { id: row.ID } });" class="btn btn-outline-dark py-0 px-1 mx-1">
+          <mat-cell
+            class="d-flex align-items-center justify-content-end"
+            *matCellDef="let row"
+            style="max-width: 130px;"
+          >
+            <button
+              (click)="
+                this.router.navigate(['detailsvehicles'], {
+                  queryParams: { id: row.ID }
+                })
+              "
+              class="btn btn-outline-dark py-0 px-1 mx-1"
+            >
               <i class="fa fa-search nav-item-icon small"></i>
             </button>
-            <button *ngIf="
+            <button
+              *ngIf="
                 row['Estado'] == 'Mantenimiento' ||
                 row['Próximo Mantenimiento'] <= 0
               "
-              (click)="onDownload(row)" class="btn btn-outline-dark py-0 px-1 mx-1">
+              (click)="onDownload(row)"
+              class="btn btn-outline-dark py-0 px-1 mx-1"
+            >
               <i class="fa fa-download nav-item-icon small"></i>
             </button>
-            <button (click)="onOpenModal(contentEdit, 'md'); onOpenEdit(row)" class="btn btn-outline-dark py-0 px-1 mx-1">
+            <button
+              (click)="onOpenModal(contentEdit, 'md'); onOpenEdit(row)"
+              class="btn btn-outline-dark py-0 px-1 mx-1"
+            >
               <i class="fa fa-edit nav-item-icon small"></i>
             </button>
           </mat-cell>
@@ -142,22 +226,44 @@
     <div class="d-flex align-items-start flex-column pb-5">
       <b>Horas para mantenimiento</b>
       <div class="d-flex justify-content-between align-items-center">
-        <input type="number" style="width: 40%" autocomplete="off" placeholder="Desde" value="{{ this.searchData.minNext }}"
-          (keyup)="onChangeFilter($event.currentTarget.value, 'minNext')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0" />
-        <input type="number" style="width: 40%" autocomplete="off" placeholder="Hasta" value="{{ this.searchData.maxNext }}"
-          (keyup)="onChangeFilter($event.currentTarget.value, 'maxNext')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0" />
+        <input
+          type="number"
+          style="width: 40%"
+          autocomplete="off"
+          placeholder="Desde"
+          value="{{ this.searchData.minNext }}"
+          (keyup)="onChangeFilter($event.currentTarget.value, 'minNext')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0  pb-0"
+        />
+        <input
+          type="number"
+          style="width: 40%"
+          autocomplete="off"
+          placeholder="Hasta"
+          value="{{ this.searchData.maxNext }}"
+          (keyup)="onChangeFilter($event.currentTarget.value, 'maxNext')"
+          class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0"
+        />
       </div>
-      <select value="{{ this.searchData.state }}" (change)="onChangeFilter($event.currentTarget.value, 'state')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
+      <select
+        value="{{ this.searchData.state }}"
+        (change)="onChangeFilter($event.currentTarget.value, 'state')"
+        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
+      >
         <option selected value="">Estado</option>
         <option *ngFor="let option of statesList" value="{{ option }}">{{
           option
-          }}</option>
+        }}</option>
       </select>
-      <select value="{{ this.searchData.type }}" (change)="onChangeFilter($event.currentTarget.value, 'type')" class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2">
+      <select
+        value="{{ this.searchData.type }}"
+        (change)="onChangeFilter($event.currentTarget.value, 'type')"
+        class="form-control border-2 border-right-0 border-left-0 border-top-0 border-bottom rounded-0 text-secondary pl-0 pb-0 mt-2"
+      >
         <option selected value="">Tipo de vehiculo</option>
         <option *ngFor="let option of typesList" value="{{ option }}">{{
           option
-          }}</option>
+        }}</option>
       </select>
     </div>
   </ng-template>
@@ -165,17 +271,23 @@
 
   <ng-template #popOptions>
     <div class="d-flex justify-content-start flex-column">
-      <div class="d-flex justify-content-start align-items-center" (click)="onOpenModal(contentExport); optionPopover.close()"
-        style="cursor: pointer">
+      <div
+        class="d-flex justify-content-start align-items-center"
+        (click)="onOpenModal(contentExport); optionPopover.close()"
+        style="cursor: pointer"
+      >
         <i class="fa fa-download nav-item-icon"></i>
         <span class="pl-2">Descargar Excel</span>
       </div>
-      <div class="d-flex justify-content-start align-items-center mt-1" (click)="
+      <div
+        class="d-flex justify-content-start align-items-center mt-1"
+        (click)="
           onOpenModal(contentCreate, 'md');
           optionPopover.close();
           onOpenCreate()
         "
-        style="cursor: pointer">
+        style="cursor: pointer"
+      >
         <i class="fa fa-plus-circle nav-item-icon"></i>
         <span class="pl-2">Crear Nuevo</span>
       </div>
@@ -184,37 +296,68 @@
   <ng-template #popOptionsTitle></ng-template>
 
   <ng-template #contentExport let-modal>
-    <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
       <span class="modal-title text-white"><b>Exportar</b></span>
-      <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
     </div>
     <div class="modal-body">
-      <span class="mt-2 mb-2">Selecciona las variables que desea exportar:</span>
+      <span class="mt-2 mb-2"
+        >Selecciona las variables que desea exportar:</span
+      >
       <div class="row pl-3 pr-3">
         <div class="col-lg-4 col-md-12 pl-4 pr-4">
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">ID:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="idCheck" (change)="onChangeCheck('ID')" name="check" [checked]="rowsExcel['ID']" />
+                <input
+                  type="checkbox"
+                  id="idCheck"
+                  (change)="onChangeCheck('ID')"
+                  name="check"
+                  [checked]="rowsExcel['ID']"
+                />
                 <label for="idCheck"></label>
               </div>
             </section>
           </div>
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">Nombre:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="nameCheck" (change)="onChangeCheck('Nombre')" name="check" [checked]="rowsExcel['Nombre']" />
+                <input
+                  type="checkbox"
+                  id="nameCheck"
+                  (change)="onChangeCheck('Nombre')"
+                  name="check"
+                  [checked]="rowsExcel['Nombre']"
+                />
                 <label for="nameCheck"></label>
               </div>
             </section>
           </div>
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">Tipo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="typeCheck" name="check" (change)="onChangeCheck('Tipo')" [checked]="rowsExcel['Tipo']" />
+                <input
+                  type="checkbox"
+                  id="typeCheck"
+                  name="check"
+                  (change)="onChangeCheck('Tipo')"
+                  [checked]="rowsExcel['Tipo']"
+                />
                 <label for="typeCheck"></label>
               </div>
             </section>
@@ -223,7 +366,13 @@
             <span class="text-wrap">Modelo:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="modelCheck" name="check" (change)="onChangeCheck('Modelo')" [checked]="rowsExcel['Modelo']" />
+                <input
+                  type="checkbox"
+                  id="modelCheck"
+                  name="check"
+                  (change)="onChangeCheck('Modelo')"
+                  [checked]="rowsExcel['Modelo']"
+                />
                 <label for="stateCheck"></label>
               </div>
             </section>
@@ -232,39 +381,66 @@
             <span class="text-wrap">Estado:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="stateCheck" name="check" (change)="onChangeCheck('Estado')" [checked]="rowsExcel['Estado']" />
+                <input
+                  type="checkbox"
+                  id="stateCheck"
+                  name="check"
+                  (change)="onChangeCheck('Estado')"
+                  [checked]="rowsExcel['Estado']"
+                />
                 <label for="stateCheck"></label>
               </div>
             </section>
           </div>
         </div>
         <div class="col-lg-4 col-md-12 pl-4 pr-4">
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">Disponibilidad:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="availabilityCheck" (change)="onChangeCheck('Disponibilidad')" name="check"
-                  [checked]="rowsExcel['Disponibilidad']" />
+                <input
+                  type="checkbox"
+                  id="availabilityCheck"
+                  (change)="onChangeCheck('Disponibilidad')"
+                  name="check"
+                  [checked]="rowsExcel['Disponibilidad']"
+                />
                 <label for="availabilityCheck"></label>
               </div>
             </section>
           </div>
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">Próximo Mantenimiento:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="nextCheck" name="check" (change)="onChangeCheck('Próximo Mantenimiento')"
-                  [checked]="rowsExcel['Próximo Mantenimiento']" />
+                <input
+                  type="checkbox"
+                  id="nextCheck"
+                  name="check"
+                  (change)="onChangeCheck('Próximo Mantenimiento')"
+                  [checked]="rowsExcel['Próximo Mantenimiento']"
+                />
                 <label for="nextCheck"></label>
               </div>
             </section>
           </div>
-          <div class="d-flex align-items-center justify-content-between mt-3 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 mb-3"
+          >
             <span class="text-wrap">No. Mantenimientos:</span>
             <section title=".slideThree">
               <div class="slideThree">
-                <input type="checkbox" id="noMaintenanceCheck" name="check" (change)="onChangeCheck('No. Mantenimientos')"
-                  [checked]="rowsExcel['No. Mantenimientos']" />
+                <input
+                  type="checkbox"
+                  id="noMaintenanceCheck"
+                  name="check"
+                  (change)="onChangeCheck('No. Mantenimientos')"
+                  [checked]="rowsExcel['No. Mantenimientos']"
+                />
                 <label for="noMaintenanceCheck"></label>
               </div>
             </section>
@@ -273,160 +449,291 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onExport(); modal.close('Close click')">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onExport(); modal.close('Close click')"
+      >
         <i class="fa fa-download nav-item-icon"></i> Exportar
       </button>
     </div>
   </ng-template>
 
   <ng-template #contentCreate let-modal>
-    <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
       <span class="modal-title text-white"><b>Nuevo vehiculo</b></span>
-      <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
     </div>
     <div class="modal-body">
       <form class="p-3" [formGroup]="form" onsubmit="return false">
         <span class="lead">Datos del vehiculo</span>
         <hr />
         <section>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted" [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages">
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'name'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
           </app-textfield>
-          <app-selectfield [inputForm]="form" [options]="typeList" [fieldName]="'type'" [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages">
+          <app-selectfield
+            [inputForm]="form"
+            [options]="typeList"
+            [fieldName]="'type'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
           </app-selectfield>
-          <app-selectfield [inputForm]="form" [options]="modelList" [fieldName]="'model'" [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages">
+          <app-selectfield
+            [inputForm]="form"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
           </app-selectfield>
         </section>
-        <span class="lead mt-2">Configuración de mantenimiento</span>
-        <img src="/assets/img/icons/add.svg" alt="" (click)="addConfiguration()">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="lead mt-2">Configuración de mantenimiento</span>
+          <img
+            src="/assets/img/icons/add.svg"
+            alt=""
+            (click)="addConfiguration()"
+          />
+        </div>
         <hr />
         <!-- Grid de configuraciones -->
         <div class="row" formArrayName="configuraciones">
-          <div class="col-12" *ngFor="let group of configurationsArray.controls; let i = index;" [formGroupName]="i">
+          <div
+            class="col-12"
+            *ngFor="let group of configurationsArray.controls; let i = index"
+            [formGroupName]="i"
+          >
             <div class="row">
               <div class="col-12">
                 <div class="row">
                   <div class="col-8">
-                    <p>Configuración {{i+1}}</p>
+                    <p>Configuración {{ i + 1 }}</p>
                   </div>
-                  <div class="control-buttons">
-                    <img src="/assets/img/icons/remove.svg" alt="" width="24" height="24" (click)="removeConfiguration(i)">
-                  </div>
-                </div>
-                <hr>
-              </div>
-<!--               <div class="col-12">
-                <div class="form-group">
-                  <label for="addText">Horometro</label>
-                  <input type="text" formControlName="horometer" placeholder="Ingresa horómetro">
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="row">
-                  <div class="col">
-                    <div class="form-group">
-                      <label for="hours">Horas</label>
-                      <input type="text" formControlName="hours" placeholder="Ingresa horas">
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end w-100">
+                      <img
+                        src="/assets/img/icons/remove.svg"
+                        alt=""
+                        width="24"
+                        height="24"
+                        (click)="removeConfiguration(i)"
+                      />
                     </div>
                   </div>
                 </div>
+                <hr />
               </div>
-              <div class="col-12">
-                <div class="form-group">
-                  <label for="distance">Distancia</label>
-                  <select id="inputDistance" formControlName="distance">
-                    <option selected [ngValue]="null">Seleccionar...</option>
-                    <option *ngFor="let item of distances" [value]="item">{{item}}</option>
-                  </select>
-                </div>
-              </div> -->
               <section class="col-12">
-                <app-textfield [inputForm]="group" [fieldName]="'horometro'" [formSubmitted]="formSubmitted"
-                  [validationLengths]="auxFormLength" [validationMessages]="auxFormMessage">
+                <app-textfield
+                  [inputType]="'number'"
+                  [inputForm]="group"
+                  [fieldName]="'horometro'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
                 </app-textfield>
-                <app-textfield [inputForm]="group" [fieldName]="'intervalos_mantenimiento'" [formSubmitted]="formSubmitted"
-                [validationLengths]="auxFormLength" [validationMessages]="auxFormMessage">
+                <app-textfield
+                  [inputType]="'number'"
+                  [inputForm]="group"
+                  [fieldName]="'intervalos_mantenimiento'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
                 </app-textfield>
-                <app-textfield [inputForm]="group" [fieldName]="'distancia'" [formSubmitted]="formSubmitted"
-                [validationLengths]="auxFormLength" [validationMessages]="auxFormMessage">
+                <app-textfield
+                  [inputType]="'number'"
+                  [inputForm]="group"
+                  [fieldName]="'distancia'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
                 </app-textfield>
+
+                <div><span class="m-0 text-secondary">Actividades</span></div>
+                <mat-form-field
+                  [formGroup]="group"
+                  [ngClass]="{
+                    'not-submited': formSubmitted == false
+                  }"
+                  class="select-multiple-field w-100"
+                >
+                  <mat-select
+                    multiple
+                    class="w-100"
+                    formControlName="actividades"
+                  >
+                    <mat-option
+                      *ngFor="let activity of activitiesList"
+                      [value]="activity.id"
+                      >{{ activity.description }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
               </section>
             </div>
           </div>
         </div>
-        <!--         <section>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'horometer'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
-          </app-textfield>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'hours'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
-          </app-textfield>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'distance'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
-          </app-textfield>
-        </section> -->
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate()">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onCreate()"
+      >
         <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>
     </div>
   </ng-template>
   <ng-template #contentEdit let-modal>
-    <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
+    <div
+      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
+    >
       <span class="modal-title text-white"><b>Editar vehiculo</b></span>
-      <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
+      <i
+        class="text-white ti ti-close"
+        (click)="modal.dismiss('Cross click')"
+      ></i>
     </div>
     <div class="modal-body">
       <form class="p-3" [formGroup]="form" onsubmit="return false">
         <span class="lead">Datos del vehiculo</span>
         <hr />
         <section>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted" [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages">
+          <app-textfield
+            [inputForm]="form"
+            [fieldName]="'name'"
+            [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths"
+            [validationMessages]="validationMessages"
+          >
           </app-textfield>
-          <app-selectfield [inputForm]="form" [options]="typeList" [fieldName]="'type'" [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages">
+          <app-selectfield
+            [inputForm]="form"
+            [options]="typeList"
+            [fieldName]="'type'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
           </app-selectfield>
-          <app-selectfield [inputForm]="form" [options]="modelList" [fieldName]="'model'" [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages">
+          <app-selectfield
+            [inputForm]="form"
+            [options]="modelList"
+            [fieldName]="'model'"
+            [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages"
+          >
           </app-selectfield>
         </section>
-        <span class="lead mt-2">Configuración de mantenimiento</span>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="lead mt-2">Configuración de mantenimiento</span>
+          <img
+            src="/assets/img/icons/add.svg"
+            alt=""
+            (click)="addConfiguration()"
+          />
+        </div>
         <hr />
-        <section>
-          <app-textfield [inputForm]="form" [fieldName]="'horometer'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
-          </app-textfield>
-          <app-textfield [inputForm]="form" [fieldName]="'hours'" [formSubmitted]="formSubmitted" [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages">
-          </app-textfield>
-          <app-textfield [inputForm]="form" [fieldName]="'distance'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
-          </app-textfield>
-        </section>
+        <!-- Grid de configuraciones -->
+        <div class="row" formArrayName="configuraciones">
+          <div
+            class="col-12"
+            *ngFor="let group of configurationsArray.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-8">
+                    <p>Configuración {{ i + 1 }}</p>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end w-100">
+                      <img
+                        src="/assets/img/icons/remove.svg"
+                        alt=""
+                        width="24"
+                        height="24"
+                        (click)="removeConfiguration(i)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <hr />
+              </div>
+              <section class="col-12">
+                <app-textfield
+                  [inputForm]="group"
+                  [fieldName]="'horometro'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
+                </app-textfield>
+                <app-textfield
+                  [inputForm]="group"
+                  [fieldName]="'intervalos_mantenimiento'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
+                </app-textfield>
+                <app-textfield
+                  [inputForm]="group"
+                  [fieldName]="'distancia'"
+                  [formSubmitted]="formSubmitted"
+                  [validationLengths]="auxFormLength"
+                  [validationMessages]="auxFormMessage"
+                >
+                </app-textfield>
+
+                <div><span class="m-0 text-secondary">Actividades</span></div>
+                <mat-form-field
+                  [formGroup]="group"
+                  [ngClass]="{
+                    'not-submited': formSubmitted == false
+                  }"
+                  class="select-multiple-field w-100"
+                >
+                  <mat-select
+                    multiple
+                    class="w-100"
+                    formControlName="actividades"
+                  >
+                    <mat-option
+                      *ngFor="let activity of activitiesList"
+                      [value]="activity.id"
+                      >{{ activity.description }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </section>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onEdit()">
+      <button
+        type="button"
+        class="btn btn-outline-dark pt-1 pb-1"
+        (click)="onEdit()"
+      >
         <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>
     </div>

@@ -42,12 +42,12 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     "No. Mantenimientos": true
   };
 
-  distances: Array<Number> = [10, 20];
-
   //Lista de modelos
   modelList = [];
   //Lista de tipos
   typeList = [];
+  //Lista de actividades
+  activitiesList = [];
 
   searchData = {
     type: "",
@@ -99,14 +99,12 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           Detalle: car.id,
           Nombre: car.nombre,
           Estado: car.estado_vehiculo,
-          Disponibilidad: car.disponibilidad,
+          Disponibilidad: "" + car.disponibilidad,
           "Próximo Mantenimiento": car.proximo_mantenimiento,
           "No. Mantenimientos": car.numero_mantenimientos,
           Modelo: car.modelo_id, //Dato usaro para creación no se despliega en pantalla
-          "Horas Configuradas": car.horas_configuradas, //Dato usaro para creación no se despliega en pantalla
-          "Distancia Configurada": car.distancia_configurada, //Dato usaro para creación no se despliega en pantalla
-          "Horometro Configurado": car.horometro_configurado, //Dato usaro para creación no se despliega en pantalla
-          "Tipo Mantenimiento": car.tipo_mantenimiento //Dato usado para calcular no se despliega en pantalla
+          "Tipo Mantenimiento": car.tipo_mantenimiento, //Dato usado para calcular no se despliega en pantalla
+          Configuraciones: car.configuraciones //Dato usado para la edición de la información no se despliega en pantalla
         });
       }
       this.dataSource = new MatTableDataSource(cars);
@@ -152,6 +150,22 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
       },
       (error: any) => {
         console.error("No es posible cargar los modelos");
+      }
+    );
+    this.addMask("getActivities");
+    // Obtenemos la lista de actividades
+    this.vehicleService.getActivities().then(
+      (resp: any) => {
+        this.activitiesList = resp.map(item => {
+          return {
+            id: item.id,
+            description: item.descripcion
+          };
+        });
+        this.removeMask("getActivities");
+      },
+      (error: any) => {
+        console.error("No es posible cargar las actividades");
       }
     );
     this.addMask("getTypes");
@@ -208,13 +222,45 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    * Methodo handler lanzado al momento dar click sobre la opción de editar
    */
   onOpenEdit(row) {
+    const configs = (row["Configuraciones"] &&
+      row["Configuraciones"].length > 0 &&
+      row["Configuraciones"].map(item => {
+        return {
+          distancia: item.distancia,
+          horometro: item.horometro,
+          actividades: item.actividades,
+          intervalos_mantenimiento: item.horas || item.intervalos_mantenimiento
+        };
+      })) || [
+      {
+        distancia: "",
+        horometro: "",
+        actividades: [],
+        intervalos_mantenimiento: ""
+      }
+    ];
+
     this.form.controls.id.setValue(row["ID"]);
     this.form.controls.name.setValue(row["Nombre"]);
     this.form.controls.type.setValue(row["Tipo"]);
     this.form.controls.model.setValue(row["Modelo"]);
-    //this.form.controls.configuration.setValue([]);
-    //this.form.controls.horometer.setValue(row["Horometro Configurado"]);
-    //this.form.controls.hours.setValue(row["Horas Configuradas"]);
+    //Se limpia las configuraciones previamentes definidad
+    for (let i = 0; i < this.configurationsArray.length; i++) {
+      this.removeConfiguration(i);
+      i--;
+    }
+    //Se recorren las nuevas configuraciones a visualizar
+    configs.map(item => {
+      const form = this.addConfigurationsGroup();
+      form.controls.horometro.setValue(item["horometro"]);
+      form.controls.distancia.setValue(item["distancia"]);
+      form.controls.actividades.setValue(item["actividades"]);
+      form.controls.intervalos_mantenimiento.setValue(
+        item["intervalos_mantenimiento"]
+      );
+      this.configurationsArray.push(form);
+    });
+
     this.formSubmitted = false;
   }
 
@@ -228,9 +274,12 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     this.form.controls.name.setValue("");
     this.form.controls.type.setValue("");
     this.form.controls.model.setValue("");
-    //this.form.controls.configurations && this.form.controls.configurations.setValue([]);
-    //this.form.controls.horometer.setValue("");
-    //this.form.controls.hours.setValue("");
+    //Se limpia las configuraciones previamentes definidad
+    for (let i = 0; i < this.configurationsArray.length; i++) {
+      this.removeConfiguration(i);
+      i--;
+    }
+    this.addConfiguration();
     this.formSubmitted = false;
   }
 
@@ -266,10 +315,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
                 Disponibilidad: item["Disponibilidad"],
                 "Próximo Mantenimiento": resp.proximo_mantenimiento,
                 "No. Mantenimientos": item["No. Mantenimientos"],
-                "Horas Configuradas": item["Horas Configuradas"],
-                "Distancia Configurada": item["Distancia Configurada"],
-                "Horometro Configurado": item["Horometro"],
-                "Tipo Mantenimiento": resp.tipo_mantenimiento
+                "Tipo Mantenimiento": resp.tipo_mantenimiento,
+                Configuraciones: item["Configuraciones"]
               };
             }
             return item;
@@ -338,9 +385,17 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
   onEdit() {
     let index = -1;
+    let isValid = true;
     this.formSubmitted = true;
 
-    if (this.form.valid) {
+    const controls = { ...this.form.controls[0] };
+    delete controls["configuraciones"];
+
+    for (let key in controls) {
+      isValid = isValid && controls[key].valid;
+    }
+
+    if (isValid) {
       this.modalService.dismissAll();
 
       this.addMask("updateVehicle");
@@ -351,9 +406,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           nombre: this.form.value.name,
           tipos_id: this.form.value.type,
           modelo_id: this.form.value.model,
-          distancia: this.form.value.distance,
-          horometro: this.form.value.horometer,
-          intervalos_mantenimiento: this.form.value.hours
+          configuraciones: this.form.value.configuraciones
         })
         .then((resp: any) => {
           index = this.dataSource.data.findIndex(item => {
@@ -373,10 +426,8 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
                 "Próximo Mantenimiento": resp.proximo_mantenimiento,
                 "No. Mantenimientos": item["No. Mantenimientos"],
                 Modelo: this.form.value.model,
-                "Horas Configuradas": this.form.value.hours,
-                "Distancia Configurada": this.form.value.distance,
-                "Horometro Configurado": this.form.value.horometer,
-                "Tipo Mantenimiento": resp.tipo_mantenimiento
+                "Tipo Mantenimiento": resp.tipo_mantenimiento,
+                Configuraciones: this.form.value.configuraciones
               };
             }
             return item;
@@ -410,14 +461,12 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             Detalle: resp.id,
             Nombre: this.form.value.name,
             Estado: "Trabajando",
-            Disponibilidad: 100,
+            Disponibilidad: "100",
             "Próximo Mantenimiento": resp.proximo_mantenimiento,
             "No. Mantenimientos": 0,
             Modelo: this.form.value.model,
-            "Horas Configuradas": this.form.value.hours,
-            "Distancia Configurada": this.form.value.distance,
-            "Horometro Configurado": this.form.value.horometer,
-            "Tipo Mantenimiento": resp.tipo_mantenimiento
+            "Tipo Mantenimiento": resp.tipo_mantenimiento,
+            Configuraciones: this.form.value.configuraciones
           });
           this.removeMask("createVehicle");
         });
@@ -447,7 +496,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
       },
       name: {
         minlength: "3",
-        maxlength: "10",
+        maxlength: "50",
         required: true,
         messages: {
           label: "",
@@ -491,7 +540,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   addConfigurationsGroup() {
     const formResult = this.createForm(
-      ["horometro", "intervalos_mantenimiento", "distancia"],
+      ["horometro", "intervalos_mantenimiento", "distancia", "actividades"],
       {
         horometro: {
           minlength: "",
@@ -528,9 +577,22 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             maxlength: "",
             required: ""
           }
+        },
+        actividades: {
+          minlength: "",
+          maxlength: "",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Actividades asociadas",
+            minlength: "",
+            maxlength: "",
+            required: "Se debe registrar al menos una actividad"
+          }
         }
       }
     );
+
     this.auxFormLength = formResult.validationLengths;
     this.auxFormMessage = formResult.validationMessages;
 

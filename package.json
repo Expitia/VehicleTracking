@@ -1,5 +1,5 @@
 {
-  "name": "eportal",
+  "name": "safe",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -24,6 +24,7 @@
     "@angular/router": "^7.0.2",
     "@asymmetrik/ngx-leaflet": "^5.0.1",
     "@ng-bootstrap/ng-bootstrap": "^4.0.0",
+    "@ng-select/ng-select": "^2.16.2",
     "@swimlane/ngx-datatable": "^14.0.0",
     "angular-fusioncharts": "^2.0.2",
     "angular-google-recaptcha": "^1.0.3",

@@ -31,7 +31,6 @@ import { HomeService } from "./services/home.services";
 import { TextfieldComponent } from "./components/forms/textfield/textfield.component";
 import { SelectfieldComponent } from "./components/forms/selectfield/selectfield.component";
 import { PasswordComponent } from "./components/forms/password/password.component";
-import { GridComponent } from "./components/grid/grid.component";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 //Vistas
 import { LoginComponent } from "./views/login/login.component";
@@ -80,6 +79,7 @@ import { CdkTableModule } from "@angular/cdk/table";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatPaginatorIntl } from "@angular/material";
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 FusionChartsModule.fcRoot(FusionCharts, Charts, FintTheme);
 
@@ -194,10 +194,10 @@ export class MatPaginatorIntlCro extends MatPaginatorIntl {
     TextfieldComponent,
     SelectfieldComponent,
     PasswordComponent,
-    GridComponent,
     HomeComponent
   ],
   imports: [
+    NgSelectModule,
     StorageServiceModule,
     NgxDatatableModule,
     NgbModule.forRoot(),

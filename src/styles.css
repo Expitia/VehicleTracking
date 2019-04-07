@@ -211,3 +211,104 @@ body {
 .slideThree input[type="checkbox"]:checked + label {
   left: 43px;
 }
+
+.cdk-overlay-container {
+  z-index: 1500;
+}
+
+.mat-pseudo-checkbox-checked::after {
+  display: none;
+}
+
+.mat-pseudo-checkbox-checked::before {
+  content: "\f00c" !important;
+  font-size: 0.75rem !important;
+  color: #333 !important;
+  opacity: 0.8 !important;
+}
+
+.mat-pseudo-checkbox-checked {
+  background-color: white !important;
+  border: 1px solid #333 !important;
+  padding-left: 1px !important;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  -webkit-font-smoothing: antialiased !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+}
+
+.mat-option-text {
+  color: #6c757d !important;
+  font-family: "Rubik", sans-serif !important;
+}
+
+.select-multiple-field .ng-star-inserted {
+  color: #6c757d !important;
+}
+
+.not-submited .mat-select.mat-select-invalid .mat-select-arrow {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.not-submited.mat-form-field-invalid .mat-form-field-ripple {
+  background-color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.not-submited .mat-select.mat-select-invalid .mat-select-arrow {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.not-submited.mat-form-field-invalid .mat-form-field-ripple {
+  background-color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.chartWrapper {
+  position: relative;
+}
+
+.chartWrapper > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.chartAreaWrapper {
+  width: 100%;
+  height: 375px;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.chartAreaWrapper2 {
+  position: relative;
+  height: 425px;
+  padding-top: 50px;
+  overflow-y: hidden;
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #6c757d;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #6c757d;
+}

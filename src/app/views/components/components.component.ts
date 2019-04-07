@@ -826,7 +826,6 @@ export class ComponentsComponent extends BaseComponent implements OnInit {
    * Metodo para crear un nuevo síntoma
    */
   onCreate7() {
-    debugger;
     if (this.symptomModal.valid) {
       this.modalService.dismissAll();
       this.componentsService

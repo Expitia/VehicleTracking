@@ -8,6 +8,7 @@ export class VehicleService {
   constructor(public httputils: HttputilsService) {}
 
   sbUrl = "/safe/api/services/vehicles/";
+  sbActivitiesUrl = "/safe/api/services/activities/";
 
   /**
    * Método que realiza petición para traer los vehiculos
@@ -21,6 +22,13 @@ export class VehicleService {
    */
   getTypes() {
     return this.httputils.post(`${this.sbUrl}get_types.php`, {});
+  }
+
+    /**
+   * Método que realiza petición para traer los tipos de vehiculos
+   */
+  getActivities() {
+    return this.httputils.post(`${this.sbActivitiesUrl}get_activities.php`, {});
   }
 
   /**
@@ -52,7 +60,6 @@ export class VehicleService {
   }
 
   getVehicleDetail(parameters){
-    console.log("Este es ob",parameters);
     return this.httputils.post(`${this.sbUrl}get_vehicle_detail.php`, parameters);
   }
 }

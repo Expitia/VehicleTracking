@@ -122,7 +122,10 @@ export class BaseComponent {
     let fields = Object.keys(this.fieldProps);
 
     if (fields) {
-      this.form = this.createForm(fields, this.fieldProps).form;
+      const createdForm = this.createForm(fields, this.fieldProps);
+      this.form = createdForm.form;
+      this.validationLengths = createdForm.validationLengths;
+      this.validationMessages = createdForm.validationMessages;
     }
   }
 
@@ -138,9 +141,9 @@ export class BaseComponent {
     //Obtenemos la configuración de los campos
     let fieldsConfig = {};
     //Inicializamos los mensajes de validación
-    this.validationMessages = {};
+    let validationMessages = {};
     //Inicializamos la validación de longitud
-    this.validationLengths = {};
+    let validationLengths = {};
 
     properties.map(field => {
       //Agregamos las validaciones de los campos
@@ -150,9 +153,9 @@ export class BaseComponent {
       ];
       if (!fieldsConfig[field].basicData) {
         //Agregamos sus mensajes de error
-        this.validationMessages[field] = fieldProps[field].messages;
+        validationMessages[field] = fieldProps[field].messages;
         //Agregamos las validaciones de longitud
-        this.validationLengths[field] = {
+        validationLengths[field] = {
           maxLength: fieldProps[field].maxlength,
           minLength: fieldProps[field].minlength
         };
@@ -161,8 +164,8 @@ export class BaseComponent {
     //Creamos las reglas del formulario
     return {
       form: this.formBuilder.group(fieldsConfig),
-      validationMessages: this.validationMessages,
-      validationLengths: this.validationLengths
+      validationMessages,
+      validationLengths
     };
   }
 

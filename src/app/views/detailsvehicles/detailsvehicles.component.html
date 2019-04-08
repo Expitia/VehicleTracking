@@ -1,7 +1,7 @@
 <ngx-loading [show]="loading"></ngx-loading>
 <div class="w-100 h-100">
   <div class="container h-75">
-    <div class="p-3 d-flex justify-content-between align-items-center">
+    <!--  <div class="p-3 d-flex justify-content-between align-items-center">
       <span class="lead"><b>Detalles del vehiculo</b></span>
       <div class="d-flex justify-content-end align-items-center">
         <div
@@ -15,12 +15,11 @@
           <span class="pl-2">Editar</span>
         </div>
       </div>
-    </div>
+    </div> -->
+    <br>
     <mat-tab-group>
       <mat-tab label="Información">
-        <div
-          class="bg-white shadow border-left border-right border-bottom border-2"
-        >
+        <div class="bg-white shadow border-left border-right border-bottom border-2">
           <section class="p-3">
             <span class="lead font-weight-bold">
               <strong>{{ name }}</strong>
@@ -36,86 +35,50 @@
             </div>
             <mat-table [dataSource]="generalSource">
               <ng-container matColumnDef="Horometro">
-                <mat-header-cell
-                  class="pl-0 d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="pl-0 d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Horometro
                 </mat-header-cell>
-                <mat-cell
-                  class="pl-0 d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="pl-0 d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Horometro"] }} horas
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Temperatura">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Temperatura
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Temperatura"] }}°
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Combustible">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Combustible
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Combustible"] }} galones
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="RPM">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   RPM
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["RPM"] }}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Estado">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Estado
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Estado"] }}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Proximo Mantenimiento">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Proximo Mantenimiento
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Proximo Mantenimiento"] }}
                   {{
                     row["Tipo Mantenimiento"] == "Horometro" ||
@@ -125,9 +88,7 @@
                   }}
                 </mat-cell>
               </ng-container>
-              <mat-header-row
-                *matHeaderRowDef="generalColumns"
-              ></mat-header-row>
+              <mat-header-row *matHeaderRowDef="generalColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: generalColumns"> </mat-row>
             </mat-table>
           </section>
@@ -137,359 +98,209 @@
             </div>
             <mat-table [dataSource]="availableSource">
               <ng-container matColumnDef="Mes">
-                <mat-header-cell
-                  class="pl-0 d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="pl-0 d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Mes
                 </mat-header-cell>
-                <mat-cell
-                  class="pl-0 d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="pl-0 d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Mes"] }}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="No. Mantenimientos">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   No. Mantenimientos
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["No. Mantenimientos"] }}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="No. Averias">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   No. Averias
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["No. Averias"] }}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Disponibilidad">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Disponibilidad
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Disponibilidad"] }}%
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Tiempo Abajo">
-                <mat-header-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matHeaderCellDef
-                >
+                <mat-header-cell class="d-flex justify-content-center align-items-center" *matHeaderCellDef>
                   Tiempo Abajo
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex justify-content-center align-items-center"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex justify-content-center align-items-center" *matCellDef="let row">
                   {{ row["Tiempo Abajo"] }} horas
                 </mat-cell>
               </ng-container>
-              <mat-header-row
-                *matHeaderRowDef="availableColumns"
-              ></mat-header-row>
+              <mat-header-row *matHeaderRowDef="availableColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: availableColumns">
               </mat-row>
             </mat-table>
-            <mat-paginator
-              #availableMatPaginator
-              [pageSizeOptions]="[12]"
-            ></mat-paginator>
+            <mat-paginator #availableMatPaginator [pageSizeOptions]="[12]"></mat-paginator>
           </section>
         </div>
       </mat-tab>
-      <mat-tab label="Mantenimientos">
-        <div
-          class="bg-white shadow border-left border-right border-bottom border-2"
-        >
+      <!-- <mat-tab label="Mantenimientos">
+        <div class="bg-white shadow border-left border-right border-bottom border-2">
           <section>
             <mat-table [dataSource]="maintenanceSource" matSort>
               <ng-container matColumnDef="ID">
-                <mat-header-cell
-                  style="max-width: 60px"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell style="max-width: 60px" *matHeaderCellDef mat-sort-header>
                   ID
                 </mat-header-cell>
                 <mat-cell style="max-width: 60px" *matCellDef="let row">
-                  {{ row["ID"] }}</mat-cell
-                >
+                  {{ row["ID"] }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="ID Vehiculo">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   ID Vehiculo
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ row["ID Vehiculo"] }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ row["ID Vehiculo"] }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Tipo del Vehiculo">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Tipo del Vehiculo
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ row["Tipo del Vehiculo"] }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ row["Tipo del Vehiculo"] }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Fecha Inicial">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Fecha Inicial
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ showDate(row["Fecha Inicial"]) }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ showDate(row["Fecha Inicial"]) }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Fecha Final">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Fecha Final
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ showDate(row["Fecha Final"]) }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ showDate(row["Fecha Final"]) }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Tipo">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Tipo
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ row["Tipo"] }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ row["Tipo"] }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Usuario">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Usuario
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ row["Usuario"] }}</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ row["Usuario"] }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Tiempo Abajo">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Tiempo Abajo
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matCellDef="let row"
-                >
-                  {{ row["Tiempo Abajo"] }} %</mat-cell
-                >
+                <mat-cell class="d-flex align-items-center justify-content-center" *matCellDef="let row">
+                  {{ row["Tiempo Abajo"] }} %</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Estado">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Estado
                 </mat-header-cell>
                 <mat-cell class="p-2" *matCellDef="let row">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                       'bg-green': row['Estado'] == 'Resuelto',
                       'bg-pink': row['Estado'] == 'En proceso',
                       'bg-gray': row['Estado'] == 'Pendiente'
-                    }"
-                    class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap"
-                  >
+                    }" class="w-100 pt-1 pb-1 border rounded border-secondary text-center text-wrap">
                     {{ row["Estado"] }}
                   </div>
                 </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Detalle">
-                <mat-header-cell
-                  class="d-flex align-items-center justify-content-center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
+                <mat-header-cell class="d-flex align-items-center justify-content-center" *matHeaderCellDef
+                  mat-sort-header>
                   Detalle
                 </mat-header-cell>
-                <mat-cell
-                  class="d-flex align-items-center justify-content-end"
-                  *matCellDef="let row"
-                >
+                <mat-cell class="d-flex align-items-center justify-content-end" *matCellDef="let row">
                   <button class="btn btn-outline-dark py-0 px-1 mx-1">
                     <i class="fa fa-search nav-item-icon small"></i>
                   </button>
-                  <button
-                    *ngIf="
+                  <button *ngIf="
                       row['Estado'] == 'En proceso' ||
                       row['Estado'] == 'Pendiente'
-                    "
-                    class="btn btn-outline-dark py-0 px-1 mx-1"
-                  >
+                    " class="btn btn-outline-dark py-0 px-1 mx-1">
                     <i class="fa fa-download nav-item-icon small"></i>
                   </button>
                 </mat-cell>
               </ng-container>
 
-              <mat-header-row
-                *matHeaderRowDef="maintenanceColumns"
-              ></mat-header-row>
+              <mat-header-row *matHeaderRowDef="maintenanceColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: maintenanceColumns">
               </mat-row>
             </mat-table>
-            <mat-paginator
-              #maintenanceMatPaginator
-              [pageSizeOptions]="[8]"
-            ></mat-paginator>
+            <mat-paginator #maintenanceMatPaginator [pageSizeOptions]="[8]"></mat-paginator>
           </section>
         </div>
-      </mat-tab>
+      </mat-tab> -->
     </mat-tab-group>
   </div>
   <ng-template #contentEdit let-modal>
-    <div
-      class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center"
-    >
+    <div class="modal-header p-3 bg-darklight d-flex align-items-center align-items-center">
       <span class="modal-title text-white"><b>Editar vehiculo</b></span>
-      <i
-        class="text-white ti ti-close"
-        (click)="modal.dismiss('Cross click')"
-      ></i>
+      <i class="text-white ti ti-close" (click)="modal.dismiss('Cross click')"></i>
     </div>
     <div class="modal-body">
       <form class="p-3" [formGroup]="form" onsubmit="return false">
         <span class="lead">Datos del vehiculo</span>
         <hr />
         <section>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'name'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
+          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
           </app-textfield>
-          <app-selectfield
-            [inputForm]="form"
-            [options]="typeList"
-            [fieldName]="'type'"
-            [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages"
-          >
+          <app-selectfield [inputForm]="form" [options]="typeList" [fieldName]="'type'" [formSubmitted]="formSubmitted"
+            [validationMessages]="validationMessages">
           </app-selectfield>
-          <app-selectfield
-            [inputForm]="form"
-            [options]="modelList"
-            [fieldName]="'model'"
-            [formSubmitted]="formSubmitted"
-            [validationMessages]="validationMessages"
-          >
+          <app-selectfield [inputForm]="form" [options]="modelList" [fieldName]="'model'"
+            [formSubmitted]="formSubmitted" [validationMessages]="validationMessages">
           </app-selectfield>
         </section>
         <span class="lead mt-2">Configuración de mantenimiento</span>
         <hr />
         <section>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'horometer'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
+          <app-textfield [inputForm]="form" [fieldName]="'horometer'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
           </app-textfield>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'hours'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
+          <app-textfield [inputForm]="form" [fieldName]="'hours'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
           </app-textfield>
-          <app-textfield
-            [inputForm]="form"
-            [fieldName]="'distance'"
-            [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths"
-            [validationMessages]="validationMessages"
-          >
+          <app-textfield [inputForm]="form" [fieldName]="'distance'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
           </app-textfield>
         </section>
       </form>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-dark pt-1 pb-1"
-        (click)="onCreate(); modal.close('Close click')"
-      >
+      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate(); modal.close('Close click')">
         <i class="fa fa-plus-circle nav-item-icon"></i><span>Crear</span>
       </button>
     </div>

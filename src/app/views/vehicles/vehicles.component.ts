@@ -503,7 +503,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
 
   ngOnInit() {
-    const createForm2 = this.createForm(
+    const createFormTest = this.createForm(
       [
         "vehiculo_id",
         "latitud",
@@ -588,77 +588,10 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
       }
     );
 
-    /* // Formulario test
-    const createFormTest = this.createForm(
-      ["id_vehiculo", "latitud", "longitud", "distancia", "horometro", "hora"],
-      {
-        id_vehiculo: {
-          minlength: "",
-          maxlength: "",
-          required: false,
-          messages: {
-            label: "",
-            placeholder: "",
-            minlength: "",
-            maxlength: "",
-            required: ""
-          }
-        },
-        latitud: {
-          minlength: "3",
-          maxlength: "100",
-          required: true,
-          messages: {
-            label: "",
-            placeholder: "Latitud",
-            minlength: "La latitud debe tener un mínimo de 3 carracteres",
-            maxlength: "La latitud no puede superar los 100 carracteres",
-            required: "Debe ingresar una latitud"
-          }
-        },
-        longitud: {
-          minlength: "3",
-          maxlength: "100",
-          required: true,
-          messages: {
-            label: "",
-            placeholder: "Longitud",
-            minlength: "La longitud debe tener un mínimo de 3 carracteres",
-            maxlength: "La longitud no puede superar los 100 carracteres",
-            required: "Debe ingresar una longitud"
-          }
-        },
-        distancia: {
-          minlength: "3",
-          maxlength: "100",
-          required: true,
-          messages: {
-            label: "",
-            placeholder: "Distancia",
-            minlength: "La distancia debe tener un mínimo de 3 carracteres",
-            maxlength: "La distancia no puede superar los 100 carracteres",
-            required: "Debe ingresar una distancia"
-          }
-        },
-        horometro: {
-          minlength: "3",
-          maxlength: "100",
-          required: true,
-          messages: {
-            label: "",
-            placeholder: "Horómetro",
-            minlength: "El horómetro debe tener un mínimo de 3 carracteres",
-            maxlength: "El horómetro no puede superar los 100 carracteres",
-            required: "Debe ingresar un horómetro"
-          }
-        }
-      }
-    );
-
     this.testModal = createFormTest.form;
     this.validateLengthTest = createFormTest.validationLengths;
     this.validateMessagesTest = createFormTest.validationMessages;
- */
+
     //Indicamos las reglas de los campos
     this.fieldProps = {
       id: {

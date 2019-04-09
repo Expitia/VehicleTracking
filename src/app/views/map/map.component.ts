@@ -46,7 +46,7 @@ export class MapComponent extends BaseComponent implements OnInit {
 
   options = {
     layers: [this.streetMaps],
-    zoom: 18,
+    zoom: 6,
     center: latLng([46.879966, -121.726909])
   };
 
@@ -188,7 +188,7 @@ export class MapComponent extends BaseComponent implements OnInit {
           this.layersById[car.id] = newMarker;
           this.layersVehicles = this.layersVehicles.concat([newMarker as any]);
         }
-        this.map.setView(latLng([resp[0].latitud, resp[0].longitud]), 20);
+        this.map.setView(latLng([resp[0].latitud, resp[0].longitud]), 6);
         this.removeMask("getVehicles");
         this.initialLoad = true;
         this.timeLoad();

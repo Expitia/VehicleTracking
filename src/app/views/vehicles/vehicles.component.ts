@@ -42,12 +42,17 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
     "No. Mantenimientos": true
   };
 
+  // Modales
+  testModal = null;
   //Lista de modelos
   modelList = [];
   //Lista de tipos
   typeList = [];
   //Lista de actividades
   activitiesList = [];
+  // Mensajes de validación
+  validateMessagesTest = null;
+  validateLengthTest = null;
 
   searchData = {
     type: "",
@@ -266,6 +271,25 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method onOpenTest
+   * Methodo handler lanzado al momento dar click sobre la opción editar
+   */
+  onOpenTest() {
+    /* this.form.controls.id.setValue("");
+    this.form.controls.name.setValue("");
+    this.form.controls.type.setValue("");
+    this.form.controls.model.setValue("");
+    //Se limpia las configuraciones previamentes definidad
+    for (let i = 0; i < this.configurationsArray.length; i++) {
+      this.removeConfiguration(i);
+      i--;
+    }
+    this.addConfiguration(); */
+    this.formSubmitted = false;
+  }
+
+  /**
+   * @private
    * @method onOpenCreate
    * Methodo handler lanzado al momento dar click sobre la opción de crear
    */
@@ -479,6 +503,162 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
    */
 
   ngOnInit() {
+    const createForm2 = this.createForm(
+      [
+        "vehiculo_id",
+        "latitud",
+        "longitud",
+        "distancia_ultima",
+        "horometro_ultimo",
+        "hora_ultima"
+      ],
+      {
+        vehiculo_id: {
+          minlength: "",
+          maxlength: "",
+          required: false,
+          messages: {
+            label: "",
+            placeholder: "",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        latitud: {
+          minlength: "3",
+          maxlength: "20",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 3 caracteres",
+            maxlength: "El nombre no puede superar los 20 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        longitud: {
+          minlength: "3",
+          maxlength: "20",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 3 caracteres",
+            maxlength: "El nombre no puede superar los 20 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        distancia_ultima: {
+          minlength: "3",
+          maxlength: "20",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 3 caracteres",
+            maxlength: "El nombre no puede superar los 20 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        horometro_ultimo: {
+          minlength: "3",
+          maxlength: "20",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 3 caracteres",
+            maxlength: "El nombre no puede superar los 20 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        },
+        hora_ultima: {
+          minlength: "3",
+          maxlength: "20",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Modelo",
+            minlength: "El nombre debe tener un mínimo de 3 caracteres",
+            maxlength: "El nombre no puede superar los 20 caracteres",
+            required: "Debe ingresar un nombre"
+          }
+        }
+      }
+    );
+
+    /* // Formulario test
+    const createFormTest = this.createForm(
+      ["id_vehiculo", "latitud", "longitud", "distancia", "horometro", "hora"],
+      {
+        id_vehiculo: {
+          minlength: "",
+          maxlength: "",
+          required: false,
+          messages: {
+            label: "",
+            placeholder: "",
+            minlength: "",
+            maxlength: "",
+            required: ""
+          }
+        },
+        latitud: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Latitud",
+            minlength: "La latitud debe tener un mínimo de 3 carracteres",
+            maxlength: "La latitud no puede superar los 100 carracteres",
+            required: "Debe ingresar una latitud"
+          }
+        },
+        longitud: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Longitud",
+            minlength: "La longitud debe tener un mínimo de 3 carracteres",
+            maxlength: "La longitud no puede superar los 100 carracteres",
+            required: "Debe ingresar una longitud"
+          }
+        },
+        distancia: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Distancia",
+            minlength: "La distancia debe tener un mínimo de 3 carracteres",
+            maxlength: "La distancia no puede superar los 100 carracteres",
+            required: "Debe ingresar una distancia"
+          }
+        },
+        horometro: {
+          minlength: "3",
+          maxlength: "100",
+          required: true,
+          messages: {
+            label: "",
+            placeholder: "Horómetro",
+            minlength: "El horómetro debe tener un mínimo de 3 carracteres",
+            maxlength: "El horómetro no puede superar los 100 carracteres",
+            required: "Debe ingresar un horómetro"
+          }
+        }
+      }
+    );
+
+    this.testModal = createFormTest.form;
+    this.validateLengthTest = createFormTest.validationLengths;
+    this.validateMessagesTest = createFormTest.validationMessages;
+ */
     //Indicamos las reglas de los campos
     this.fieldProps = {
       id: {
@@ -534,6 +714,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
         basicData: true
       }
     };
+
     super.ngOnInit();
   }
 
@@ -606,5 +787,10 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   }
   get configurationsArray() {
     return <FormArray>this.form.get("configuraciones");
+  }
+
+  // Método encargado de lanzar petición de prueba para actualizar vehículo
+  onCreateTest() {
+    debugger;
   }
 }

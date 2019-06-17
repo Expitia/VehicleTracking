@@ -203,6 +203,16 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method onOpenModal
+   * Methodo handler lanzado al momento dar click sobre una opción
+   */
+  onOpenModalTest(content, long) {
+    const size = long || "lg";
+    this.modalService.open(content, { centered: true, size });
+  }
+
+  /**
+   * @private
    * @method showType
    * Methodo para visualizar los tipos dado el identificador
    */
@@ -219,6 +229,16 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   showModel(id: number) {
     const model = this.modelList.filter(item => item.id == id)[0];
     return (model && model.description) || "";
+  }
+
+  /**
+   * @private
+   * @method onOpenEdit
+   * Methodo handler lanzado al momento dar click sobre la opción de editar
+   */
+  onOpenEditTest(row) {
+    this.formSubmitted = false;
+    this.testModal.controls.vehiculo_id.setValue(row["ID"]);
   }
 
   /**
@@ -266,25 +286,6 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
       this.configurationsArray.push(form);
     });
 
-    this.formSubmitted = false;
-  }
-
-  /**
-   * @private
-   * @method onOpenTest
-   * Methodo handler lanzado al momento dar click sobre la opción editar
-   */
-  onOpenTest() {
-    /* this.form.controls.id.setValue("");
-    this.form.controls.name.setValue("");
-    this.form.controls.type.setValue("");
-    this.form.controls.model.setValue("");
-    //Se limpia las configuraciones previamentes definidad
-    for (let i = 0; i < this.configurationsArray.length; i++) {
-      this.removeConfiguration(i);
-      i--;
-    }
-    this.addConfiguration(); */
     this.formSubmitted = false;
   }
 
@@ -462,6 +463,42 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
 
   /**
    * @private
+   * @method onEditTest
+   * Methodo lanzado por un evento, realiza la petición para registrar un vehiculo
+   */
+  onEditTest(row) {
+    debugger;
+    this.formSubmitted = true;
+    if (this.testModal.valid) {
+      this.modalService.dismissAll();
+      this.vehicleService
+        .updateVehicleTest({
+          id: this.testModal.value.vehiculo_id,
+          latitud: this.testModal.value.latitud,
+          longitud: this.testModal.value.longitud,
+          horometro_ultimo: this.testModal.value.horometro_ultimo,
+          distancia_ultima: this.testModal.value.distancia_ultima,
+          hora_ultima: this.testModal.value.hora_ultima
+        })
+        .then((resp: any) => {
+          debugger;
+          /*           this.dataSource.data = this.dataSource.data.concat({
+            ID: resp.id,
+            "Próximo Mantenimiento": resp.proximo_mantenimiento,
+            "Tipo Mantenimiento": resp.tipo_mantenimiento
+          }); */
+          this.dataSource.data[this.testModal.value.vehiculo_id - 1][
+            "Próximo Mantenimiento"
+          ] = resp.proximo_mantenimiento;
+          this.dataSource.data[this.testModal.value.vehiculo_id - 1][
+            "Tipo Mantenimiento"
+          ] = resp.tipo_mantenimiento;
+        });
+    }
+  }
+
+  /**
+   * @private
    * @method onCreate
    * Methodo lanzado por un evento, realiza la petición para registrar un vehiculo
    */
@@ -531,7 +568,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           required: true,
           messages: {
             label: "",
-            placeholder: "Modelo",
+            placeholder: "Latitud",
             minlength: "El nombre debe tener un mínimo de 3 caracteres",
             maxlength: "El nombre no puede superar los 20 caracteres",
             required: "Debe ingresar un nombre"
@@ -543,43 +580,43 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
           required: true,
           messages: {
             label: "",
-            placeholder: "Modelo",
+            placeholder: "Longitud",
             minlength: "El nombre debe tener un mínimo de 3 caracteres",
             maxlength: "El nombre no puede superar los 20 caracteres",
             required: "Debe ingresar un nombre"
           }
         },
         distancia_ultima: {
-          minlength: "3",
+          minlength: "1",
           maxlength: "20",
           required: true,
           messages: {
             label: "",
-            placeholder: "Modelo",
+            placeholder: "Distancia",
             minlength: "El nombre debe tener un mínimo de 3 caracteres",
             maxlength: "El nombre no puede superar los 20 caracteres",
             required: "Debe ingresar un nombre"
           }
         },
         horometro_ultimo: {
-          minlength: "3",
+          minlength: "1",
           maxlength: "20",
           required: true,
           messages: {
             label: "",
-            placeholder: "Modelo",
+            placeholder: "Horometro",
             minlength: "El nombre debe tener un mínimo de 3 caracteres",
             maxlength: "El nombre no puede superar los 20 caracteres",
             required: "Debe ingresar un nombre"
           }
         },
         hora_ultima: {
-          minlength: "3",
+          minlength: "1",
           maxlength: "20",
           required: true,
           messages: {
             label: "",
-            placeholder: "Modelo",
+            placeholder: "Hora",
             minlength: "El nombre debe tener un mínimo de 3 caracteres",
             maxlength: "El nombre no puede superar los 20 caracteres",
             required: "Debe ingresar un nombre"
@@ -720,10 +757,5 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   }
   get configurationsArray() {
     return <FormArray>this.form.get("configuraciones");
-  }
-
-  // Método encargado de lanzar petición de prueba para actualizar vehículo
-  onCreateTest() {
-    debugger;
   }
 }

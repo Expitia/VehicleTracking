@@ -134,7 +134,7 @@
               class="btn btn-outline-dark py-0 px-1 mx-1">
               <i class="fa fa-edit nav-item-icon small"></i>
             </button>
-            <button (click)="onOpenModal(contentTest, 'md'); onOpenEdit(row)"
+            <button (click)="onOpenModalTest(contentTest, 'md'); onOpenEditTest(row)"
               class="btn btn-outline-dark py-0 px-1 mx-1">
               <i class="fa fa-cog nav-item-icon small"></i>
             </button>
@@ -308,32 +308,36 @@
         <span class="lead">Datos del vehículo</span>
         <hr />
         <section>
+          <label>ID del vehículo</label>
+          <app-textfield [inputForm]="testModal" [fieldName]="'vehiculo_id'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
+          </app-textfield>
           <label>Latitud</label>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
+          <app-textfield [inputForm]="testModal" [fieldName]="'latitud'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
           </app-textfield>
           <label>Longitud</label>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
+          <app-textfield [inputForm]="testModal" [fieldName]="'longitud'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
           </app-textfield>
-          <label>Distancia</label>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
+          <label>Última istancia</label>
+          <app-textfield [inputForm]="testModal" [fieldName]="'distancia_ultima'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
           </app-textfield>
-          <label>Horómetro</label>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
+          <label>Último horómetro</label>
+          <app-textfield [inputForm]="testModal" [fieldName]="'horometro_ultimo'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
           </app-textfield>
-          <label>Hora</label>
-          <app-textfield [inputForm]="form" [fieldName]="'name'" [formSubmitted]="formSubmitted"
-            [validationLengths]="validationLengths" [validationMessages]="validationMessages">
+          <label>Intervalos de hora</label>
+          <app-textfield [inputForm]="testModal" [fieldName]="'hora_ultima'" [formSubmitted]="formSubmitted"
+            [validationLengths]="validateLengthTest" [validationMessages]="validateMessagesTest">
           </app-textfield>
 
         </section>
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onCreate()">
+      <button type="button" class="btn btn-outline-dark pt-1 pb-1" (click)="onEditTest(row);">
         <i class="fa fa-plus-circle nav-item-icon"></i><span>Guardar</span>
       </button>
     </div>

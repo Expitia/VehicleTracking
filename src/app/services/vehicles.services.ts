@@ -24,7 +24,7 @@ export class VehicleService {
     return this.httputils.post(`${this.sbUrl}get_types.php`, {});
   }
 
-    /**
+  /**
    * Método que realiza petición para traer los tipos de vehiculos
    */
   getActivities() {
@@ -56,10 +56,30 @@ export class VehicleService {
    * Método que realiza petición para crear un nuevo vehiculo
    */
   createMaintenance(parameters) {
-    return this.httputils.post(`${this.sbUrl}create_maintenance.php`, parameters);
+    return this.httputils.post(
+      `${this.sbUrl}create_maintenance.php`,
+      parameters
+    );
   }
 
-  getVehicleDetail(parameters){
-    return this.httputils.post(`${this.sbUrl}get_vehicle_detail.php`, parameters);
+  /**
+   * Método que realiza petición para obtener detalle del vehículo
+   */
+  getVehicleDetail(parameters) {
+    return this.httputils.post(
+      `${this.sbUrl}get_vehicle_detail.php`,
+      parameters
+    );
+  }
+
+  /**
+   * Método que realiza petición para obtener detalle del vehículo
+   */
+  updateVehicleTest(parameters) {
+    debugger;
+    return this.httputils.post(
+      `${this.sbUrl}update_vehicle_test.php`,
+      parameters
+    );
   }
 }

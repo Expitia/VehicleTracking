@@ -1,8 +1,8 @@
 import jsPDF from "jspdf";
 
 const doc = new jsPDF();
-const logo = require("../../assets/img/logoPDF.png");
-const game = require("../../assets/img/logoGAME.png");
+const logo = require("../../assets/img/LogoPDF.png");
+const game = require("../../assets/img/LogoGAME.png");
 
 function getImgFromUrl(logo, callback) {
   var img = new Image();
